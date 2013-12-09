@@ -12,8 +12,8 @@
 */
 
 // Call set_include_path() as needed to point to your client library.
-require_once 'Google_Client.php';
-require_once 'contrib/Google_YouTubeService.php';
+require_once 'Google/Client.php';
+require_once 'Google/Service/YouTube.php';
 session_start();
 
 /*
@@ -23,25 +23,26 @@ session_start();
  * <https://developers.google.com/youtube/v3/guides/authentication>
  * Please ensure that you have enabled the YouTube Data API for your project.
  */
-$OAUTH2_CLIENT_ID = 'REPLACE ME';
-$OAUTH2_CLIENT_SECRET = 'REPLACE ME';
+$OAUTH2_CLIENT_ID = 'REPLACE_ME';
+$OAUTH2_CLIENT_SECRET = 'REPLACE_ME';
 
 $client = new Google_Client();
 $client->setClientId($OAUTH2_CLIENT_ID);
 $client->setClientSecret($OAUTH2_CLIENT_SECRET);
+$client->setScopes('https://www.googleapis.com/auth/youtube');
 $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],
     FILTER_SANITIZE_URL);
 $client->setRedirectUri($redirect);
 
 // Define an object that will be used to make all API requests.
-$youtube = new Google_YoutubeService($client);
+$youtube = new Google_Service_YouTube($client);
 
 if (isset($_GET['code'])) {
   if (strval($_SESSION['state']) !== strval($_GET['state'])) {
     die('The session state did not match.');
   }
 
-  $client->authenticate();
+  $client->authenticate($_GET['code']);
   $_SESSION['token'] = $client->getAccessToken();
   header('Location: ' . $redirect);
 }
@@ -61,17 +62,14 @@ if ($client->getAccessToken()) {
     $listResponse = $youtube->videos->listVideos("snippet",
         array('id' => $videoId));
 
-    $videoList = $listResponse['items'];
-
-    // If the videoList variable is empty, the specified video was not found.
-    if (empty($videoList)) {
+    // If $listResponse is empty, the specified video was not found.
+    if (empty($listResponse)) {
       $htmlBody .= sprintf('<h3>Can\'t find a video with video id: %s</h3>', $videoId);
     } else {
       // Since the request specified a video ID, the response only
       // contains one video resource.
-      $video = $videoList[0];
+      $video = $listResponse[0];
       $videoSnippet = $video['snippet'];
-
       $tags = $videoSnippet['tags'];
 
       // Preserve any tags already associated with the video. If the video does
@@ -83,15 +81,11 @@ if ($client->getAccessToken()) {
         array_push($tags, "tag1", "tag2");
       }
 
-      // Construct the video resource, using the updated tags, to send in the
-      // videos.update API request.
-      $updateVideo = new Google_Video($video);
-      $updateSnippet = new Google_VideoSnippet($videoSnippet);
-      $updateSnippet->setTags($tags);
-      $updateVideo -> setSnippet($updateSnippet);
+      // Set the tags array for the video snippet
+      $videoSnippet['tags'] = $tags;
 
       // Update the video resource by calling the videos.update() method.
-      $updateResponse = $youtube->videos->update("snippet", $updateVideo);
+      $updateResponse = $youtube->videos->update("snippet", $video);
 
       $responseTags = $updateResponse['snippet']['tags'];
 
@@ -99,7 +93,7 @@ if ($client->getAccessToken()) {
     $htmlBody .= "<h3>Video Updated</h3><ul>";
     $htmlBody .= sprintf('<li>Tags "%s" and "%s" added for video %s (%s) </li>',
         array_pop($responseTags), array_pop($responseTags),
-        $videoId, $updateResponse['snippet']['title']);
+        $videoId, $video['snippet']['title']);
 
     $htmlBody .= '</ul>';
   }
