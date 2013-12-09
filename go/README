@@ -1,0 +1,36 @@
+Minimum Go version: go 1.1+
+
+To run these code samples, you will need to install the dependent libraries via
+the "go get" command. These code samples require the goauth2 and google-api-go-client
+libraries which can be installed with the following commands:
+
+   go get code.google.com/p/goauth2/oauth
+   go get code.google.com/p/google-api-go-client/youtube/v3
+
+The keyword search and topic search samples can be run via the standard "go run" command
+once the developerKey constant is populated with an API key created at
+https://code.google.com/apis/console.
+
+Example usage:
+
+   go run search_key_keyword.go
+
+The Freebase API and YouTube Data APIs must be enabled for the project associated with this
+key.
+
+To run any sample that requires authorization on behalf of a user, such as checking
+for uploads, this requires the shared oauth.go file to be passed as a parameter to "go run".
+These samples require a "Web Application" client ID and client secret pair which can
+also be created at the Google API console at https://code.google.com/apis/console. Once
+a client ID and secret pair have been created, these values must be populated into
+client_secrets.json in the corresponding fields. A template client_secrets.json has been
+provided in client_secrets.json.sample. Rename this file and populate the fields.
+
+Example usage:
+
+   go run my_uploads.go oauth.go
+
+oauth.go contains code that is shared between the code samples that require OAuth 2.0 
+authorization, so it must be passed as a parameter to "go run".
+
+More information about the YouTube APIs can be found at https://developer.google.com/youtube.
