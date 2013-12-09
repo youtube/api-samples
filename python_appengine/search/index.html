@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <body>
+    <p>Videos: </p>
+    {% for video in videos %}
+    	{{ video }}<br>
+    {% endfor %}
+    
+    <p>Channels:</p>
+    {% for channel in channels %}
+    	{{ channel }} <br>
+    {% endfor %}
+    
+    <p>Playlists:</p>
+    {% for playlist in playlists %}
+    	{{ playlist }} <br>
+    {% endfor %}
+  </body>
+</html>
+{% endautoescape %}
