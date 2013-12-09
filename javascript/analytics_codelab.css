@@ -1,0 +1,28 @@
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+.pre-auth {
+  display: none;
+}
+
+.post-auth {
+  display: none;
+}
+
+#chart {
+  width: 500px;
+  height: 300px;
+  margin-bottom: 1em;
+}
+
+#video-list {
+  padding-left: 1em;
+  list-style-type: none;
+}
+#video-list > li {
+  cursor: pointer;
+}
+#video-list > li:hover {
+  color: blue;
+}
