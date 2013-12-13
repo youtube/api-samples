@@ -12,8 +12,8 @@
 
 
 // Call set_include_path() as needed to point to your client library.
-require_once 'Google_Client.php';
-require_once 'contrib/Google_YouTubeService.php';
+require_once 'Google/Client.php';
+require_once 'Google/Service/YouTube.php';
 session_start();
 
 /*
@@ -29,19 +29,20 @@ $OAUTH2_CLIENT_SECRET = 'REPLACE_ME';
 $client = new Google_Client();
 $client->setClientId($OAUTH2_CLIENT_ID);
 $client->setClientSecret($OAUTH2_CLIENT_SECRET);
+$client->setScopes('https://www.googleapis.com/auth/youtube');
 $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],
     FILTER_SANITIZE_URL);
 $client->setRedirectUri($redirect);
 
 // Define an object that will be used to make all API requests.
-$youtube = new Google_YoutubeService($client);
+$youtube = new Google_Service_YouTube($client);
 
 if (isset($_GET['code'])) {
   if (strval($_SESSION['state']) !== strval($_GET['state'])) {
     die('The session state did not match.');
   }
 
-  $client->authenticate();
+  $client->authenticate($_GET['code']);
   $_SESSION['token'] = $client->getAccessToken();
   header('Location: ' . $redirect);
 }
@@ -65,26 +66,41 @@ if ($client->getAccessToken()) {
     // value for better recovery on less reliable connections.
     $chunkSizeBytes = 1 * 1024 * 1024;
 
+    // Setting the defer flag to true tells the client to return a request which can be called
+    // with ->execute(); instead of making the API call immediately.
+    $client->setDefer(true);
+
+    // Create a request for the API's thumbnails.set method to upload the image and associate
+    // it with the appropriate video.
+    $setRequest = $youtube->thumbnails->set($videoId);
+
     // Create a MediaFileUpload object for resumable uploads.
-    $media = new Google_MediaFileUpload('image/png', null, true, $chunkSizeBytes);
+    $media = new Google_Http_MediaFileUpload(
+        $client,
+        $setRequest,
+        'image/png',
+        null,
+        true,
+        $chunkSizeBytes
+    );
     $media->setFileSize(filesize($imagePath));
 
-    // Call the API's thumbnails.set method to upload the image and associate
-    // it with the appropriate video.
-    $setResponse = $youtube->thumbnails->set($videoId, array('mediaUpload' => $media));
 
-    $uploadStatus = false;
-
-    // Read the image file and upload it chunk by chunk.
+    // Read the media file and upload it chunk by chunk.
+    $status = false;
     $handle = fopen($imagePath, "rb");
-    while (!$uploadStatus && !feof($handle)) {
+    while (!$status && !feof($handle)) {
       $chunk = fread($handle, $chunkSizeBytes);
-      $uploadStatus = $media->nextChunk($setResponse, $chunk);
+      $status = $media->nextChunk($chunk);
     }
 
     fclose($handle);
 
-    $thumbnailUrl = $uploadStatus['items'][0]['default']['url'];
+    // If you want to make other calls after the file upload, set setDefer back to false
+    $client->setDefer(false);
+
+
+    $thumbnailUrl = $status['items'][0]['default']['url'];
     $htmlBody .= "<h3>Thumbnail Uploaded</h3><ul>";
     $htmlBody .= sprintf('<li>%s (%s)</li>',
         $videoId,
