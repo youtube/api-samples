@@ -40,7 +40,7 @@ type FreebaseTopic struct {
 	Score   float64
 }
 
-// FreebaseResponse is struct for unmarshalling JSON values from the freebase API.
+// FreebaseResponse is struct for unmarshalling JSON values from the Freebase API.
 type FreebaseResponse struct {
 	Status string
 	Result []FreebaseTopic
@@ -60,9 +60,9 @@ func main() {
 	}
 }
 
-// getTopicID queries Freebase with the given string. Prompts user
-// to select a topic, then returns to search YouTube for videos,
-// channels or playlists with the given topic.
+// getTopicID queries Freebase with the given string. It then prompts the user
+// to select a topic, then returns the selected topic so that the topic can be
+// used to search YouTube for videos, channels or playlists.
 func getTopicID(topic string) (string, error) {
 	urlParams := url.Values{
 		"query": []string{topic},
@@ -95,7 +95,7 @@ func getTopicID(topic string) (string, error) {
 		return "", errors.New("No matching terms were found in Freebase.")
 	}
 
-	// Print a list of topics for the user to select
+	// Print a list of topics for the user to select.
 	fmt.Println("The following topics were found:")
 	for index, topic := range data.Result {
 		if topic.Notable.Name == "" {
@@ -114,8 +114,8 @@ func getTopicID(topic string) (string, error) {
 	return choice.Mid, nil
 }
 
-// readInt reads an integer from standard input, validating that the input is equal to or
-// greater than the min, while being equal to or lesser than the max value.
+// readInt reads an integer from standard input and verifies that the value
+// is between the allowed min and max values (inclusive).
 func readInt(prompt string, min int, max int) (int, error) {
 	// Loop until we have a valid input.
 	for {
@@ -133,8 +133,9 @@ func readInt(prompt string, min int, max int) (int, error) {
 	}
 }
 
-// youtubeSearch searches YouTube for the topic given in the query flag and prints the results.
-// Takes a mid parameter as supplied by Freebase.
+// youtubeSearch searches YouTube for the topic given in the query flag and
+// prints the results. This function takes a mid parameter, which specifies
+// a value retrieved using the Freebase API.
 func youtubeSearch(mid string) error {
 	client := &http.Client{
 		Transport: &transport.APIKey{Key: developerKey},
@@ -145,7 +146,7 @@ func youtubeSearch(mid string) error {
 		return err
 	}
 
-	// Make the API call to YouTube
+	// Make the API call to YouTube.
 	call := service.Search.List("id,snippet").
 		TopicId(mid).
 		Type(*resultType).
@@ -155,7 +156,7 @@ func youtubeSearch(mid string) error {
 		return err
 	}
 
-	// Iterate through each item and output it
+	// Iterate through each item and output it.
 	for _, item := range response.Items {
 		itemID := ""
 		switch item.Id.Kind {
