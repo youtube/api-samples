@@ -123,7 +123,7 @@ public class UploadVideo {
                     .insert("snippet,statistics,status", videoObjectDefiningMetadata, mediaContent);
 
             // Set the upload type and add an event listener.
-            MediaHttpUploader uploader = thumbnailSet.getMediaHttpUploader();
+            MediaHttpUploader uploader = videoInsert.getMediaHttpUploader();
 
             // Indicate whether direct media upload is enabled. A value of
             // "True" indicates that direct media upload is enabled and that
