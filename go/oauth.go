@@ -19,13 +19,13 @@ import (
 const missingClientSecretsMessage = `
 Please configure OAuth 2.0
 
-To make this sample run you will need to populate the client_secrets.json file
+To make this sample run, you need to populate the client_secrets.json file
 found at:
 
    %v
 
-with information from the APIs Console
-https://code.google.com/apis/console#access
+with information from the {{ Google Cloud Console }}
+{{ https://cloud.google.com/console }}
 
 For more information about the client_secrets.json file format, please visit:
 https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
@@ -36,8 +36,8 @@ var (
 	cacheFile         = flag.String("cache", "request.token", "Token cache file")
 )
 
-// ClientConfig is data structure definition for client_secrets.json.
-// This is what we'll unmarshal the JSON configuration file into.
+// ClientConfig is a data structure definition for the client_secrets.json file.
+// The code unmarshals the JSON configuration file into this structure.
 type ClientConfig struct {
 	ClientID     string   `json:"client_id"`
 	ClientSecret string   `json:"client_secret"`
@@ -46,14 +46,14 @@ type ClientConfig struct {
 	TokenURI     string   `json:"token_uri"`
 }
 
-// Config is root level configuration object.
+// Config is a root-level configuration object.
 type Config struct {
 	Installed ClientConfig `json:"installed"`
 	Web       ClientConfig `json:"web"`
 }
 
-// openURL opens a browser window to that location.
-// This code taken from:
+// openURL opens a browser window to the specified location.
+// This code originally appeared at:
 //   http://stackoverflow.com/questions/10377243/how-can-i-launch-a-process-that-is-not-a-file-in-go
 func openURL(url string) error {
 	var err error
@@ -71,7 +71,7 @@ func openURL(url string) error {
 }
 
 // readConfig reads the configuration from clientSecretsFile.
-// Returns an oauth configuration object to be used with the Google API client
+// It returns an oauth configuration object for use with the Google API client.
 func readConfig(scope string) (*oauth.Config, error) {
 	// Read the secrets file
 	data, err := ioutil.ReadFile(*clientSecretsFile)
@@ -104,16 +104,16 @@ func readConfig(scope string) (*oauth.Config, error) {
 		TokenURL:     cfg.Installed.TokenURI,
 		RedirectURL:  redirectUri,
 		TokenCache:   oauth.CacheFile(*cacheFile),
-		// This gives us a refresh token so we can use this access token indefinitely
+		// Get a refresh token so we can use the access token indefinitely
 		AccessType: "offline",
-		// If we want a refresh token, we must set this to force an approval prompt or
-		// this won't work
+		// If we want a refresh token, we must set this attribute
+		// to force an approval prompt or the code won't work.
 		ApprovalPrompt: "force",
 	}, nil
 }
 
 // startWebServer starts a web server that listens on http://localhost:8080.
-// The purpose of this webserver is to wait for a oauth code in the three-legged auth flow.
+// The webserver waits for an oauth code in the three-legged auth flow.
 func startWebServer() (codeCh chan string, err error) {
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
@@ -132,9 +132,10 @@ func startWebServer() (codeCh chan string, err error) {
 }
 
 // buildOAuthHTTPClient takes the user through the three-legged OAuth flow.
-// Opens a browser in the native OS or outputs a URL, blocking until the redirect
-// completes to the /oauth2callback URI. Returns an instance of an HTTP client
-// that can be passed to the constructor of the YouTube client.
+// It opens a browser in the native OS or outputs a URL, then blocks until
+// the redirect completes to the /oauth2callback URI.
+// It returns an instance of an HTTP client that can be passed to the
+// constructor of the YouTube client.
 func buildOAuthHTTPClient(scope string) (*http.Client, error) {
 	config, err := readConfig(scope)
 	if err != nil {
@@ -145,11 +146,13 @@ func buildOAuthHTTPClient(scope string) (*http.Client, error) {
 	transport := &oauth.Transport{Config: config}
 
 	// Try to read the token from the cache file.
-	// If there's an error, the token is invalid or doesn't exist, do the 3-legged OAuth flow.
+	// If an error occurs, do the three-legged OAuth flow because
+	// the token is invalid or doesn't exist.
 	token, err := config.TokenCache.Token()
 	if err != nil {
 		// Start web server.
-		// This is how this program receives the authorization code when the browser redirects.
+		// This is how this program receives the authorization code
+		// when the browser redirects.
 		codeCh, err := startWebServer()
 		if err != nil {
 			return nil, err
@@ -170,8 +173,9 @@ func buildOAuthHTTPClient(scope string) (*http.Client, error) {
 		// Wait for the web server to get the code.
 		code := <-codeCh
 
-		// This will take care of caching the code on the local filesystem, if necessary,
-		// as long as the TokenCache attribute in the config is set
+		// This code caches the authorization code on the local
+		// filesystem, if necessary, as long as the TokenCache
+		// attribute in the config is set.
 		token, err = transport.Exchange(code)
 		if err != nil {
 			return nil, err
