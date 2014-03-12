@@ -1,4 +1,3 @@
-/** START SECTION searchByTopic **/
 // TITLE: Search by topic
 // DESCRIPTION: use_function_comment
 // API_METHOD: youtube.search.list
@@ -20,9 +19,7 @@ function searchByTopic() {
     Logger.log('[%s] Title: %s', item.id.videoId, item.snippet.title);
   }
 }
-/** END SECTION searchByTopic **/
 
-/** START SECTION searchByKeyword **/
 // TITLE: Search by keyword
 // DESCRIPTION: use_function_comment
 // API_METHOD: youtube.search.list
@@ -42,10 +39,8 @@ function searchByKeyword() {
     Logger.log('[%s] Title: %s', item.id.videoId, item.snippet.title);
   }
 }
-/** END SECTION searchByKeyword **/
 
 
-/** START SECTION retrieveMyUploads **/
 // TITLE: Retrieve my uploads
 // DESCRIPTION: use_function_comment
 // API_METHOD: youtube.channels.list
@@ -97,9 +92,7 @@ function retrieveMyUploads() {
     }
   }
 }
-/** END SECTION retrieveMyUploads **/
 
-/** START SECTION updateVideo **/
 // TITLE: Update video
 // DESCRIPTION: use_function_comment
 // API_METHOD: youtube.videos.update
@@ -139,9 +132,7 @@ function updateVideo() {
     YouTube.Videos.update(resource, 'id,snippet');
   }
 }
-/** END SECTION updateVideo **/
 
-/** START SECTION addSubscription **/
 // TITLE: Subscribe to channel
 // DESCRIPTION: use_function_comment
 // API_METHOD: youtube.subscriptions.insert
@@ -173,9 +164,7 @@ function addSubscription() {
     }
   }
 }
-/** END SECTION addSubscription **/
 
-/** START SECTION postChannelBulletin **/
 // TITLE: Post channel bulletin
 // DESCRIPTION: use_function_comment
 // API_METHOD: youtube.activities.insert
@@ -204,25 +193,26 @@ function postChannelBulletin() {
   var response = YouTube.Activities.insert(resource, 'snippet,contentDetails');
   Logger.log(response);
 }
-/** END SECTION postChannelBulletin **/
 
-/** START SECTION spreadsheetAnalytics **/
-// TITLE: YouTube Analytics export Google Sheets
+// TITLE: Export YouTube Analytics data to Google Sheets
 // DESCRIPTION: use_function_comment
-// API_METHOD: youtubeanalytics.reports.query
+// API_METHOD: youtubeAnalytics.reports.query
 /**
- * This function uses the YouTube Analytics API to fetch data about our channel, creating
- * a new Google Sheet in our Drive with the data.
+ * This function uses the YouTube Analytics API to fetch data about the
+ * authenticated user's channel, creating a new Google Sheet in the user's Drive
+ * with the data.
  *
- * The first part of this sample demonstrates a simple YouTube Analytics API call. This function
- * first fetches the active user's channel ID. Using this channel ID, the function makes an
- * analytics API call to retrieve view, likes, dislike and share data for the last 30 days. This
- * is returned in a response object containing a 2D array.
+ * The first part of this sample demonstrates a simple YouTube Analytics API
+ * call. This function first fetches the active user's channel ID. Using that
+ * ID, the function makes a YouTube Analytics API call to retrieve views,
+ * likes, dislikes and shares for the last 30 days. The API returns the data
+ * in a response object that contains a 2D array.
  *
- * The second part of the sample constructs a Spreadsheet. This spreadsheet is placed in the active
- * user's Google Drive with the name 'YouTube Report' and date range in the title. The function
- * populates the spreadsheet with the API response, then locks columns and rows that will define
- * a chart axes. A stacked column chart is added for the spreadsheet.
+ * The second part of the sample constructs a Spreadsheet. This spreadsheet
+ * is placed in the authenticated user's Google Drive with the name
+ * 'YouTube Report' and date range in the title. The function populates the
+ * spreadsheet with the API response, then locks columns and rows that will
+ * define a chart axes. A stacked column chart is added for the spreadsheet.
  */
 function spreadsheetAnalytics() {
   // Get the channel ID
@@ -304,4 +294,3 @@ function spreadsheetAnalytics() {
   sheet.insertChart(chart);
 
 }
-/** END SECTION spreadsheetAnalytics **/
