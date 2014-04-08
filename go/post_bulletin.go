@@ -17,9 +17,9 @@ var (
 func main() {
 	flag.Parse()
 
-	// A bulletin must contain a message and may also contain a video or a
-	// playlist. You can post a message with or without an accompanying video
-	// or playlist, but you can't post a video and playlist at the same time.
+	// A bulletin needs to contain a message and either a video or playlist.
+	// You can post a message with or without an accompanying video or playlist.
+	// You can't post both a video and playlist at the same time.
 	if *message == "" {
 		log.Fatalf("Please provide a message.")
 	}
@@ -38,7 +38,7 @@ func main() {
 		log.Fatalf("Error creating YouTube client: %v", err)
 	}
 
-	// Start making YouTube API calls.
+	// Starting making YouTube API calls
 	parts := "snippet"
 	bulletin := &youtube.Activity{
 		Snippet: &youtube.ActivitySnippet{
@@ -49,7 +49,7 @@ func main() {
 	if *videoID != "" || *playlistID != "" {
 		parts = "snippet,contentDetails"
 
-		// The resource ID element value differs depending on
+		// The resource ID element will be different depending on
 		// whether a playlist or a video is being posted.
 		var resourceId *youtube.ResourceId
 		switch {
