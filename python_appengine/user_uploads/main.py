@@ -103,7 +103,7 @@ class MainHandler(webapp2.RequestHandler):
         for playlist_item in playlistitems_response['items']:
           videos.append(playlist_item)
           
-        next_page_token = playlistitems_response.get('tokenPagination', {}).get(
+        next_page_token = playlistitems_response.get(
             'nextPageToken')
         
         if len(videos) > 100:
