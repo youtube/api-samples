@@ -29,7 +29,7 @@ func main() {
 		log.Fatalf("Error creating new YouTube client: %v", err)
 	}
 
-	// Make the API call to YouTube.
+	// Make the API call to YouTube
 	call := service.Search.List("id,snippet").
 		Q(*query).
 		MaxResults(*maxResults)
@@ -38,12 +38,11 @@ func main() {
 		log.Fatalf("Error making search API call: %v", err)
 	}
 
-	// Group video, channel, and playlist results in separate lists.
 	videos := make(map[string]string)
 	channels := make(map[string]string)
 	playlists := make(map[string]string)
 
-	// Iterate through each item and add it to the correct list.
+	// Iterate through each item and add it to its respective list
 	for _, item := range response.Items {
 		switch item.Id.Kind {
 		case "youtube#video":
@@ -60,10 +59,8 @@ func main() {
 	printIDs("Playlists", playlists)
 }
 
-// Print the ID and title of each result in a list as well as a name that
-// identifies the list. For example, print the word section name "Videos"
-// above a list of video search results, followed by the video ID and title
-// of each matching video.
+// Given a string section name and list, prints the section name
+// and IDs separated by commas
 func printIDs(sectionName string, matches map[string]string) {
 	fmt.Printf("%v:\n", sectionName)
 	for id, title := range matches {
