@@ -13,7 +13,7 @@ To build this code sample from the command line, type:
 
 To run the code sample from the command line, enter the following:
 
-  mvn exec:java
+  mvn exec:java -Dexec.mainClass="FULL_CLASS_NAME"
 
 For more instructions about how to set up Maven and/or your IDE to run
 YouTube API samples, see this video:
