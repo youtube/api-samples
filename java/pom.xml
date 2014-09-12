@@ -11,10 +11,10 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <project.youtube.version>v3-rev79-1.17.0-rc</project.youtube.version>
+        <project.youtube.version>v3-rev107-1.18.0-rc</project.youtube.version>
         <project.youtube.analytics.version>v1-rev24-1.17.0-rc</project.youtube.analytics.version>
-        <project.http.version>1.17.0-rc</project.http.version>
-        <project.oauth.version>1.17.0-rc</project.oauth.version>
+        <project.http.version>1.18.0-rc</project.http.version>
+        <project.oauth.version>1.18.0-rc</project.oauth.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -70,15 +70,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>com.google.api.services.samples.youtube.cmdline.samples.RunAllSamples</mainClass>
-                </configuration>
-            </plugin>
-
             <!-- Forces Maven to use Java 1.6 -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -45,7 +45,7 @@ func main() {
 		Status: &youtube.VideoStatus{PrivacyStatus: *privacy},
 	}
 
-	// The API returns a 400 Bad Request response if tags is an empty string.
+	// If tags is an empty string, this will cause the API to return a 400 Bad Request
 	if strings.Trim(*keywords, "") != "" {
 		upload.Snippet.Tags = strings.Split(*keywords, ",")
 	}

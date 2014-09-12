@@ -2,6 +2,7 @@
 
 import httplib2
 import os
+import random
 import sys
 
 from apiclient.discovery import build
@@ -21,6 +22,7 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
+
 CLIENT_SECRETS_FILE = "client_secrets.json"
 
 # This variable defines a message to display if the CLIENT_SECRETS_FILE is
@@ -43,36 +45,53 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
-YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
+YOUTUBE_SCOPE = "https://www.googleapis.com/auth/youtube"
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
-flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
-  message=MISSING_CLIENT_SECRETS_MESSAGE,
-  scope=YOUTUBE_READ_WRITE_SCOPE)
+def get_authenticated_service(args):
+  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE, scope=YOUTUBE_SCOPE,
+    message=MISSING_CLIENT_SECRETS_MESSAGE)
 
-storage = Storage("%s-oauth2.json" % sys.argv[0])
-credentials = storage.get()
+  storage = Storage("%s-oauth2.json" % sys.argv[0])
+  credentials = storage.get()
 
-if credentials is None or credentials.invalid:
-  flags = argparser.parse_args()
-  credentials = run_flow(flow, storage, flags)
+  if credentials is None or credentials.invalid:
+    credentials = run_flow(flow, storage, args)
 
-youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-  http=credentials.authorize(httplib2.Http()))
+  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+    http=credentials.authorize(httplib2.Http()))
 
-# This code creates a new, private playlist in the authorized user's channel.
-playlists_insert_response = youtube.playlists().insert(
-  part="snippet,status",
-  body=dict(
-    snippet=dict(
-      title="Test Playlist",
-      description="A private playlist created with the YouTube API v3"
-    ),
-    status=dict(
-      privacyStatus="private"
-    )
-  )
-).execute()
+def get_current_channel_sections(youtube):
+  channel_sections_list_response = youtube.channelSections().list(
+    part="snippet,contentDetails",
+    mine=True
+  ).execute()
 
-print "New playlist id: %s" % playlists_insert_response["id"]
+  return channel_sections_list_response["items"]
+
+def shuffle_channel_sections(youtube, channel_sections):
+  # This will randomly reorder the items in the channel_sections list.
+  random.shuffle(channel_sections)
+
+  for channel_section in channel_sections:
+    # Each section in the list of shuffled sections is sequentially
+    # set to position 0, i.e. the top.
+    channel_section["snippet"]["position"] = 0
+
+    youtube.channelSections().update(
+      part="snippet,contentDetails",
+      body=channel_section
+    ).execute()
+
+if __name__ == '__main__':
+  args = argparser.parse_args()
+
+  youtube = get_authenticated_service(args)
+  try:
+    channel_sections = get_current_channel_sections(youtube)
+    shuffle_channel_sections(youtube, channel_sections)
+  except HttpError, e:
+    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  else:
+    print "The existing channel sections have been randomly shuffled."
