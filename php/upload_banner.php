@@ -87,7 +87,7 @@ if ($client->getAccessToken()) {
 
     // Read the media file and upload it chunk by chunk.
     $status = false;
-    $handle = fopen($videoPath, "rb");
+    $handle = fopen($imagePath, "rb");
     while (!$status && !feof($handle)) {
       $chunk = fread($handle, $chunkSizeBytes);
       $status = $media->nextChunk($chunk);
