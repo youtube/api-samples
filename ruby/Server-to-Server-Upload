@@ -30,11 +30,9 @@ class Youtube_Helper
 
   def get_authenticated_service
     puts 'authenticate'
-    # puts @PROGRAM_NAME.to_s + ' client email ' + @@client_email.to_s + ' youtube email ' + @@youtube_email.to_s + ' p12 file path ' + @@p12_file_path.to_s + ' p12 password ' + @@p12_password.to_s
     api_client = Google::APIClient.new(
       :application_name => $PROGRAM_NAME,
-      :application_version => '1.0.0',
-
+      :application_version => '1.0.0'
     )
     
     puts 'get key'
@@ -82,7 +80,6 @@ class Youtube_Helper
       )
 
       puts'inserted'
-      # videos_insert_response.resumable_upload.send_all(client)
       
       puts "'#{videos_insert_response.data.snippet.title}' (video id: #{videos_insert_response.data.id}) was successfully uploaded."
 
@@ -98,16 +95,23 @@ class Youtube_Helper
     puts 'uploading thumbnail'
     begin
       thumbnail_upload_response = @@client.execute({ :api_method => @@youtube.thumbnails.set,
-                              :parameters => { :videoId => video_id,
-                                               'uploadType' => 'media',
-                                               :onBehalfOfContentOwner => @@youtube_email},
-                              :media => thumbnail_file,
-                              :headers => { 'Content-Length' => thumbnail_size.to_s,
-                                            'Content-Type' => 'image/jpg' }
-                              })
-      puts 'finished uploading thumbnail'
+                            :parameters => { :videoId => video_id,
+                                             'uploadType' => 'media',
+                                             :onBehalfOfContentOwner => @@youtube_email},
+                            :media => thumbnail_file,
+                            :headers => { 'Content-Length' => thumbnail_size.to_s,
+                                          'Content-Type' => 'image/jpg' }
+                            })
     rescue Google::APIClient::TransmissionError => e
         puts e.result.body 
     end 
+  end
+
+  def get_video_statistics video_id
+    #this doesn't work please help to fix this...
+    stats_response = @@client.execute!( :api_method => @@youtube.videos.list,
+                    :parameters => {:videoId => video_id, :part => 'statistics' }
+                    )
+    return stats_response
   end
 end
