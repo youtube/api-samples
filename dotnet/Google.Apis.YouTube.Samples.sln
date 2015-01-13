@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Apis.YouTube.Samples.Playlists", "Google.Apis.YouTube.Samples.Playlists\Google.Apis.YouTube.Samples.Playlists.csproj", "{5781C0CB-169B-42BE-A7D2-766520F3CCD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Apis.YouTube.Samples.Search", "Google.Apis.YouTube.Samples.Search\Google.Apis.YouTube.Samples.Search.csproj", "{1DB7F593-3C99-4171-A584-5234457E7351}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Apis.YouTube.Samples.Upload", "Google.Apis.YouTube.Samples.Upload\Google.Apis.YouTube.Samples.Upload.csproj", "{19C80AA8-950B-4182-940F-760EFE9D32BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5781C0CB-169B-42BE-A7D2-766520F3CCD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5781C0CB-169B-42BE-A7D2-766520F3CCD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5781C0CB-169B-42BE-A7D2-766520F3CCD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5781C0CB-169B-42BE-A7D2-766520F3CCD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DB7F593-3C99-4171-A584-5234457E7351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB7F593-3C99-4171-A584-5234457E7351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DB7F593-3C99-4171-A584-5234457E7351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB7F593-3C99-4171-A584-5234457E7351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19C80AA8-950B-4182-940F-760EFE9D32BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19C80AA8-950B-4182-940F-760EFE9D32BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19C80AA8-950B-4182-940F-760EFE9D32BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19C80AA8-950B-4182-940F-760EFE9D32BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
