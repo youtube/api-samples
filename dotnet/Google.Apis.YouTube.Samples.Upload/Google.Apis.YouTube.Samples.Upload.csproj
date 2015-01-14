@@ -92,6 +92,7 @@
   <ItemGroup>
     <None Include="..\client_secrets.json">
       <Link>client_secrets.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
