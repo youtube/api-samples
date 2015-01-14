@@ -90,10 +90,10 @@
     <Compile Include="Search.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="client_secrets.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="..\client_secrets.json">
+      <Link>client_secrets.json</Link>
     </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
