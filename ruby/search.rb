@@ -28,9 +28,6 @@ end
 def main
   opts = Trollop::options do
     opt :q, 'Search term', :type => String, :default => 'Google'
-    #Trollop requires values for "p" and "e". 
-    opt :p, ""
-    opt :e, " "
     opt :max_results, 'Max results', :type => :int, :default => 25
   end
 
