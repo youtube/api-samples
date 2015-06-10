@@ -87,7 +87,7 @@ if ($_GET['q'] && $_GET['maxResults']) {
     <h3>Videos</h3>
     <ul>$videos</ul>
 END;
-  } catch (Google_ServiceException $e) {
+  } catch (Google_Service_Exception $e) {
     $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
         htmlspecialchars($e->getMessage()));
   } catch (Google_Exception $e) {
