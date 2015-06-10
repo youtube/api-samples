@@ -140,6 +140,10 @@ public class GeolocationSearch {
                 // Call the YouTube Data API's youtube.videos.list method to
                 // retrieve the resources that represent the specified videos.
                 YouTube.Videos.List listVideosRequest = youtube.videos().list("snippet, recordingDetails").setId(videoId);
+
+                // Set your developer key
+                listVideosRequest.setKey(apiKey);
+
                 VideoListResponse listResponse = listVideosRequest.execute();
 
                 List<Video> videoList = listResponse.getItems();
