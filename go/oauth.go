@@ -12,9 +12,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"time"
 
-	"golang.org/x/oauth2"
+	"code.google.com/p/goauth2/oauth"
 )
 
 const missingClientSecretsMessage = `
@@ -34,25 +33,8 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 var (
 	clientSecretsFile = flag.String("secrets", "client_secrets.json", "Client Secrets configuration")
-	cache             = flag.String("cache", "request.token", "Token cache file")
+	cacheFile         = flag.String("cache", "request.token", "Token cache file")
 )
-
-// CallbackStatus is returned from the oauth2 callback
-type CallbackStatus struct {
-	code  string
-	state string
-	err   error
-}
-
-// Cache specifies the methods that implement a Token cache.
-type Cache interface {
-	Token() (*oauth2.Token, error)
-	PutToken(*oauth2.Token) error
-}
-
-// CacheFile implements Cache. Its value is the name of the file in which
-// the Token is stored in JSON format.
-type CacheFile string
 
 // ClientConfig is a data structure definition for the client_secrets.json file.
 // The code unmarshals the JSON configuration file into this structure.
@@ -90,7 +72,7 @@ func openURL(url string) error {
 
 // readConfig reads the configuration from clientSecretsFile.
 // It returns an oauth configuration object for use with the Google API client.
-func readConfig(scope string) (*oauth2.Config, error) {
+func readConfig(scope string) (*oauth.Config, error) {
 	// Read the secrets file
 	data, err := ioutil.ReadFile(*clientSecretsFile)
 	if err != nil {
@@ -114,37 +96,39 @@ func readConfig(scope string) (*oauth2.Config, error) {
 		return nil, errors.New("Must specify a redirect URI in config file or when creating OAuth client")
 	}
 
-	return &oauth2.Config{
-		ClientID:     cfg.Installed.ClientID,
+	return &oauth.Config{
+		ClientId:     cfg.Installed.ClientID,
 		ClientSecret: cfg.Installed.ClientSecret,
-		Scopes:       []string{scope},
-		Endpoint: oauth2.Endpoint{
-			AuthURL:  cfg.Installed.AuthURI,
-			TokenURL: cfg.Installed.TokenURI,
-		},
-		RedirectURL: redirectUri,
+		Scope:        scope,
+		AuthURL:      cfg.Installed.AuthURI,
+		TokenURL:     cfg.Installed.TokenURI,
+		RedirectURL:  redirectUri,
+		TokenCache:   oauth.CacheFile(*cacheFile),
+		// Get a refresh token so we can use the access token indefinitely
+		AccessType: "offline",
+		// If we want a refresh token, we must set this attribute
+		// to force an approval prompt or the code won't work.
+		ApprovalPrompt: "force",
 	}, nil
 }
 
 // startWebServer starts a web server that listens on http://localhost:8080.
 // The webserver waits for an oauth code in the three-legged auth flow.
-func startWebServer() (callbackCh chan CallbackStatus, err error) {
+func startWebServer() (codeCh chan string, err error) {
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		return nil, err
 	}
-	callbackCh = make(chan CallbackStatus)
+	codeCh = make(chan string)
 	go http.Serve(listener, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cbs := CallbackStatus{}
-		cbs.state = r.FormValue("state")
-		cbs.code = r.FormValue("code")
-		callbackCh <- cbs // send code to OAuth flow
+		code := r.FormValue("code")
+		codeCh <- code // send code to OAuth flow
 		listener.Close()
 		w.Header().Set("Content-Type", "text/plain")
-		fmt.Fprintf(w, "Received code: %v\r\nYou can now safely close this browser window.", cbs.code)
+		fmt.Fprintf(w, "Received code: %v\r\nYou can now safely close this browser window.", code)
 	}))
 
-	return callbackCh, nil
+	return codeCh, nil
 }
 
 // buildOAuthHTTPClient takes the user through the three-legged OAuth flow.
@@ -159,82 +143,45 @@ func buildOAuthHTTPClient(scope string) (*http.Client, error) {
 		return nil, errors.New(msg)
 	}
 
+	transport := &oauth.Transport{Config: config}
+
 	// Try to read the token from the cache file.
 	// If an error occurs, do the three-legged OAuth flow because
 	// the token is invalid or doesn't exist.
-	tokenCache := CacheFile(*cache)
-	token, err := tokenCache.Token()
+	token, err := config.TokenCache.Token()
 	if err != nil {
-
-		// You must always provide a non-zero string and validate that it matches
-		// the state query parameter on your redirect callback
-		randState := fmt.Sprintf("st%d", time.Now().UnixNano())
-
 		// Start web server.
 		// This is how this program receives the authorization code
 		// when the browser redirects.
-		callbackCh, err := startWebServer()
+		codeCh, err := startWebServer()
 		if err != nil {
 			return nil, err
 		}
 
-		url := config.AuthCodeURL(randState, oauth2.AccessTypeOffline, oauth2.ApprovalForce)
+		// Open url in browser
+		url := config.AuthCodeURL("")
 		err = openURL(url)
 		if err != nil {
 			fmt.Println("Visit the URL below to get a code.",
 				" This program will pause until the site is visted.")
 		} else {
 			fmt.Println("Your browser has been opened to an authorization URL.",
-				" This program will resume once authorization has been provided.")
+				" This program will resume once authorization has been provided.\n")
 		}
 		fmt.Println(url)
 
 		// Wait for the web server to get the code.
-		cbs := <-callbackCh
+		code := <-codeCh
 
-		if cbs.state != randState {
-			return nil, fmt.Errorf("expecting state '%s', received state '%s'", randState, cbs.state)
-		}
-
-		token, err = config.Exchange(oauth2.NoContext, cbs.code)
-		if err != nil {
-			return nil, err
-		}
-		err = tokenCache.PutToken(token)
+		// This code caches the authorization code on the local
+		// filesystem, if necessary, as long as the TokenCache
+		// attribute in the config is set.
+		token, err = transport.Exchange(code)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return config.Client(oauth2.NoContext, token), nil
-}
-
-// Token retreives the token from the token cache
-func (f CacheFile) Token() (*oauth2.Token, error) {
-	file, err := os.Open(string(f))
-	if err != nil {
-		return nil, fmt.Errorf("CacheFile.Token: %s", err.Error())
-	}
-	defer file.Close()
-	tok := &oauth2.Token{}
-	if err := json.NewDecoder(file).Decode(tok); err != nil {
-		return nil, fmt.Errorf("CacheFile.Token: %s", err.Error())
-	}
-	return tok, nil
-}
-
-// PutToken stores the token in the token cache
-func (f CacheFile) PutToken(tok *oauth2.Token) error {
-	file, err := os.OpenFile(string(f), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
-	if err != nil {
-		return fmt.Errorf("CacheFile.PutToken: %s", err.Error())
-	}
-	if err := json.NewEncoder(file).Encode(tok); err != nil {
-		file.Close()
-		return fmt.Errorf("CacheFile.PutToken: %s", err.Error())
-	}
-	if err := file.Close(); err != nil {
-		return fmt.Errorf("CacheFile.PutToken: %s", err.Error())
-	}
-	return nil
+	transport.Token = token
+	return transport.Client(), nil
 }
