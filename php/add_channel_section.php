@@ -130,7 +130,7 @@ if ($client->getAccessToken()) {
     }
     $htmlBody .= '</ul>';
 
-  } catch (Google_ServiceException $e) {
+  } catch (Google_Service_Exception $e) {
     $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
         htmlspecialchars($e->getMessage()));
   } catch (Google_Exception $e) {
