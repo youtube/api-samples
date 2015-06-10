@@ -87,7 +87,7 @@ if ($client->getAccessToken()) {
 
     // Read the media file and upload it chunk by chunk.
     $status = false;
-    $handle = fopen($imagePath, "rb");
+    $handle = fopen($videoPath, "rb");
     while (!$status && !feof($handle)) {
       $chunk = fread($handle, $chunkSizeBytes);
       $status = $media->nextChunk($chunk);
@@ -119,7 +119,7 @@ if ($client->getAccessToken()) {
      $htmlBody .= sprintf('<img src="%s">', $bannerMobileUrl);
      $htmlBody .= '</ul>';
 
-    } catch (Google_ServiceException $e) {
+    } catch (Google_Service_Exception $e) {
       $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
           htmlspecialchars($e->getMessage()));
     } catch (Google_Exception $e) {
