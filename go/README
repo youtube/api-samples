@@ -4,7 +4,7 @@ To run these code samples, you will need to install the dependent libraries via
 the "go get" command. These code samples require the goauth2 and google-api-go-client
 libraries which can be installed with the following commands:
 
-   go get code.google.com/p/goauth2/oauth
+   go get golang.org/x/oauth2
    go get code.google.com/p/google-api-go-client/youtube/v3
 
 The keyword search and topic search samples can be run via the standard "go run" command
