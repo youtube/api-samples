@@ -9,7 +9,7 @@ require 'google/api_client/auth/installed_app'
 gem 'trollop', '~> 2.1.2'
 require 'trollop'
 gem 'httpclient', '~> 2.6.0'
-Faraday.default_adapter = :httpclient
+Faraday.default_adapter = :excon
 
 # A limited OAuth 2 access scope that allows for uploading files, but not other
 # types of account access.
