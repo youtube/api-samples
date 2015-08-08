@@ -1,6 +1,11 @@
 #!/usr/bin/python
 
-import httplib
+try:
+    import httplib
+except ImportError:  # python3 compatibility
+    from http import client
+    httplib = client
+
 import httplib2
 import os
 import random
@@ -85,12 +90,13 @@ def get_authenticated_service(args):
   return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
     http=credentials.authorize(httplib2.Http()))
 
+
 def initialize_upload(youtube, options):
   tags = None
   if options.keywords:
     tags = options.keywords.split(",")
 
-  body=dict(
+  body = dict(
     snippet=dict(
       title=options.title,
       description=options.description,
@@ -122,6 +128,7 @@ def initialize_upload(youtube, options):
 
   resumable_upload(insert_request)
 
+
 # This method implements an exponential backoff strategy to resume a
 # failed upload.
 def resumable_upload(insert_request):
@@ -130,31 +137,31 @@ def resumable_upload(insert_request):
   retry = 0
   while response is None:
     try:
-      print "Uploading file..."
+      print("Uploading file...")
       status, response = insert_request.next_chunk()
       if response is not None:
         if 'id' in response:
-          print "Video id '%s' was successfully uploaded." % response['id']
+          print("Video id '%s' was successfully uploaded." % response['id'])
         else:
           exit("The upload failed with an unexpected response: %s" % response)
-    except HttpError, e:
+    except HttpError as e:
       if e.resp.status in RETRIABLE_STATUS_CODES:
         error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status,
                                                              e.content)
       else:
         raise
-    except RETRIABLE_EXCEPTIONS, e:
+    except RETRIABLE_EXCEPTIONS as e:
       error = "A retriable error occurred: %s" % e
 
     if error is not None:
-      print error
+      print(error)
       retry += 1
       if retry > MAX_RETRIES:
         exit("No longer attempting to retry.")
 
       max_sleep = 2 ** retry
       sleep_seconds = random.random() * max_sleep
-      print "Sleeping %f seconds and then retrying..." % sleep_seconds
+      print("Sleeping %f seconds and then retrying..." % sleep_seconds)
       time.sleep(sleep_seconds)
 
 if __name__ == '__main__':
@@ -177,5 +184,5 @@ if __name__ == '__main__':
   youtube = get_authenticated_service(args)
   try:
     initialize_upload(youtube, args)
-  except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  except HttpError as e:
+    print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
