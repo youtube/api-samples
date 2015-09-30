@@ -35,7 +35,7 @@ var UploadVideo = function() {
    *
    * @attribute tags
    * @type Array.<string>
-   * @default ['google-cors-upload']
+   * @default ['youtube-cors-upload']
    */
   this.tags = ['youtube-cors-upload'];
 
