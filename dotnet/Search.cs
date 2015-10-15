@@ -19,7 +19,7 @@ namespace Google.Apis.YouTube.Samples
   /// <summary>
   /// YouTube Data API v3 sample: search by keyword.
   /// Relies on the Google APIs Client Library for .NET, v1.7.0 or higher.
-  /// See https://code.google.com/p/google-api-dotnet-client/wiki/GettingStarted
+  /// See https://developers.google.com/api-client-library/dotnet/get_started
   ///
   /// Set ApiKey to the API key value from the APIs & auth > Registered apps tab of
   ///   https://cloud.google.com/console
