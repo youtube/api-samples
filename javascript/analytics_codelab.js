@@ -17,7 +17,7 @@
   google.load('visualization', '1.0', {'packages': ['corechart']});
 
   // Upon loading, the Google APIs JS client automatically invokes this callback.
-  // See http://code.google.com/p/google-api-javascript-client/wiki/Authentication
+  // See https://developers.google.com/api-client-library/javascript/features/authentication 
   window.onJSClientLoad = function() {
     gapi.auth.init(function() {
       window.setTimeout(checkAuth, 1);
@@ -67,7 +67,7 @@
 
   // Load the client interfaces for the YouTube Analytics and Data APIs, which
   // are required to use the Google APIs JS client. More info is available at
-  // http://code.google.com/p/google-api-javascript-client/wiki/GettingStarted#Loading_the_Client
+  // https://developers.google.com/api-client-library/javascript/dev/dev_jscript#loading-the-client-library-and-the-api
   function loadAPIClientInterfaces() {
     gapi.client.load('youtube', 'v3', function() {
       gapi.client.load('youtubeAnalytics', 'v1', function() {
