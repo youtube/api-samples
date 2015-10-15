@@ -42,7 +42,7 @@ To make this sample run you will need to populate the client_secrets.json file
 found at:
    %s
 with information from the APIs Console
-https://developers.google.com/console
+https://console.developers.google.com
 
 For more information about the client_secrets.json file format, please visit:
 https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
