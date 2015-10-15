@@ -12,14 +12,13 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.file import Storage
 from oauth2client.client import flow_from_clientsecrets
-from oauth2client.tools import run
-from optparse import OptionParser
+from oauth2client.tools import argparser, run_flow
 
 
 # CLIENT_SECRETS_FILE, name of a file containing the OAuth 2.0 information for
 # this application, including client_id and client_secret. You can acquire an
-# ID/secret pair from the API Access tab on the Google APIs Console
-#   http://code.google.com/apis/console#access
+# ID/secret pair from the API Access tab on the Google Developers Console
+#   https://console.developers.google.com/project/_/apiui/credential
 # For more information about using OAuth2 to access Google APIs, please visit:
 #   https://developers.google.com/accounts/docs/OAuth2
 # For more information about the client_secrets.json file format, please visit:
@@ -39,8 +38,8 @@ WARNING: Please configure OAuth 2.0
 To make this sample run you will need to populate the client_secrets.json file
 found at:
    %s
-with information from the APIs Console
-https://developers.google.com/console
+with information from the Developers Console
+https://console.developers.google.com
 
 For more information about the client_secrets.json file format, please visit:
 https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
@@ -48,7 +47,7 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
                                    CLIENT_SECRETS_FILE))
 
 # Authorize the request and store authorization credentials.
-def get_authenticated_service():
+def get_authenticated_service(args):
   flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
     scope=YOUTUBE_READ_WRITE_SCOPE,
     message=MISSING_CLIENT_SECRETS_MESSAGE)
@@ -57,7 +56,7 @@ def get_authenticated_service():
   credentials = storage.get()
 
   if credentials is None or credentials.invalid:
-    credentials = run(flow, storage)
+    credentials = run_flow(flow, storage, args)
 
   return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
     http=credentials.authorize(httplib2.Http()))
@@ -73,16 +72,15 @@ def unset_watermark(youtube, channel_id):
 
 
 if __name__ == "__main__":
-  parser = OptionParser()
-  parser.add_option("--channelid", dest="channelid",
+  argparser.add_argument("--channelid", dest="channelid",
     help="Required; id of channel whose watermark you're updating.")
-  (options, args) = parser.parse_args()
-  
-  if not options.channelid:
-    parser.print_help()
+  args = argparser.parse_args()
+
+  if not args.channelid:
+    argparser.print_help()
     exit()
 
-  youtube = get_authenticated_service()
+  youtube = get_authenticated_service(args)
 
-  unset_watermark(youtube, options.channelid)
+  unset_watermark(youtube, args.channelid)
   print "The watermark was successfully unset."
