@@ -10,8 +10,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'])
 
-# Set DEVELOPER_KEY to the "API key" value from the "Access" tab of the
-# Google APIs Console http://code.google.com/apis/console#access
+# Set DEVELOPER_KEY to the "API key" value from the Google Developers Console:
+# https://console.developers.google.com/project/_/apiui/credential
 # Please ensure that you have enabled the YouTube Data API for your project.
 DEVELOPER_KEY = "REPLACE_ME"
 YOUTUBE_API_SERVICE_NAME = "youtube"
