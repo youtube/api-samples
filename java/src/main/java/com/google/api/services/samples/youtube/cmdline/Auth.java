@@ -55,7 +55,7 @@ public class Auth {
         if (clientSecrets.getDetails().getClientId().startsWith("Enter")
                 || clientSecrets.getDetails().getClientSecret().startsWith("Enter ")) {
             System.out.println(
-                    "Enter Client ID and Secret from https://code.google.com/apis/console/?api=youtube"
+                    "Enter Client ID and Secret from https://console.developers.google.com/project/_/apiui/credential "
                             + "into src/main/resources/client_secrets.json");
             System.exit(1);
         }
