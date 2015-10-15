@@ -21,8 +21,8 @@ REGISTRATION_INSTRUCTIONS = """
     Make sure that you have enabled the YouTube Data API (v3) and the Freebase
     API for your project."""
 
-# Set API_KEY to the "API key" value from the "Access" tab of the
-# Google APIs Console http://code.google.com/apis/console#access
+# Set API_KEY to the "API key" value from the Google Developers Console:
+# https://console.developers.google.com/project/_/apiui/credential
 # Please ensure that you have enabled the YouTube Data API and Freebase API
 # for your project.
 API_KEY = "REPLACE_ME"
