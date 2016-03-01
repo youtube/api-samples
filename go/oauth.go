@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"code.google.com/p/goauth2/oauth"
+	"golang.org/x/oauth2"
 )
 
 const missingClientSecretsMessage = `
