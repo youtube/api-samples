@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YouTube in Your App</title>
+    <!-- This code loads the iFrame Player API code asynchronously.-->
+    <script src = "https://www.youtube.com/iframe_api"></script>
+    <!-- This is the source of the Javscript for the demo -->
+    <script src="demo.js"></script>
+  </head>
+  <body>
+    Demo | <a href=player_control.html>Player Controls and Data</a> | <a href=event_listeners.html>Event Listeners</a><br>
+    <!-- The iframe video player will replace this <div> tag. -->
+    <div id="player"></div>
+    <br><br>
+
+    <!-- This table contains metadata on the video in the iframe -->
+    <div>Metadata</div>
+    <table border="1">
+      <tr>
+        <td style="width:100px">Title</td>
+        <td id="title" style="width:500px"></td>
+      </tr><tr>
+        <td style="width:100px">Author</td>
+        <td id="author" style="width:500px"></td>
+      </tr><tr>
+        <td style="width:100px">Duration</td>
+        <td id="duration" style="width:500px"></td>
+      </tr><tr>
+        <td style="width:100px">URL</td>
+        <td id="url" style="width:500px"></td>
+      </tr><tr>
+        <td style="width:100px">Embed Code</td>
+        <td id="embedCode" style="width:500px"></td>
+      </tr><tr>
+        <td style="width:100px">% loaded</td>
+        <td id=percentLoaded style="width:500px"></td>
+      </tr>
+    </table>
+    <br>
+
+    <!-- This table contains editable video on the video in the iframe -->
+    <div>Video Attributes</div>
+    <table border="1">
+      <tr>
+        <td style="width:120px">VideoID</td>
+        <td style="width:100px" id="video_id"></td>
+        <td>
+          <input id="video_idOption" type="text">
+          <input type="button" value="Load" onClick="loadNewVideo()">
+          <input type="button" value="Cue" onClick="cueNewVideo()">
+        </td>
+      </tr><tr>
+        <td style="width:120px">Status</td>
+        <td style="width:100px" id="status"></td>
+        <td>
+          <input type="button" value="Play" onClick="playVideo()">
+          <input type="button" value="Pause" onClick="pauseVideo()">
+          <input type="button" value="Stop" onClick="stopVideo()">
+        </td>
+      </tr><tr>
+        <td style="width:120px">Current Progress</td>
+        <td style="width:100px" id="currentTime"></td>
+        <td type="text">
+          <input id="currentTimeOption" type="text">
+          <input type="button" value="Seek" onClick="seekTo()">
+        </td>
+      </tr><tr>
+        <td style="width:120px">Volume (0-100)</td>
+        <td style="width:100px" id="volume"></td>
+        <td type="text">
+          <input id="volumeOption" type="text">
+          <input type="button" value="Set" onClick="setVolume()">
+        </td>
+      </tr><tr>
+        <td style="width:120px">Muted?</td>
+        <td style="width:100px" id="mute"></td>
+        <td>
+          <input type="button" value="Mute" onClick="mute()">
+          <input type="button" value="Unmute" onClick="unmute()">
+        </td>
+      </tr><tr>
+        <td style="width:120px">Video Quality</td>
+        <td style="width:100px" id=quality></td>
+        <td>
+          <select id="qualityOption">
+          </select>
+          <input type="button" value="Set" onClick="setQuality()">
+        </td>
+      </tr><tr>
+        <td style="width:120px">Playback Rate</td>
+        <td style="width:100px" id=rate></td>
+        <td>
+          <select id="rateOption">
+          </select>
+          <input type="button" value="Set" onClick="setRate()">
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
