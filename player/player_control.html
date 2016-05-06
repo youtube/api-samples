@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- page title -->
     <title>YouTube in Your App</title>
+    <!-- Style imports for Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- This code loads the iFrame Player API code asynchronously.-->
     <script src = "https://www.youtube.com/iframe_api"></script>
@@ -11,13 +16,36 @@
 
   </head>
   <body>
-    <a href=index.html>Demo</a> | Player Controls and Data | <a href=event_listeners.html>Event Listeners</a><br>
+    <!-- Header -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header"><div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">YouTube in Your App</span><div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="index.html">Demo</a>
+        <a class="mdl-navigation__link" href="#"><b>Player Controls and Data</b></a>
+        <a class="mdl-navigation__link" href="event_listeners.html">Event Listeners</a>
+      </nav></div>
+    </header>
     
-    <!-- The iframe video player will replace this <div> tag. -->
-    <div id="player"></div>
+    <!-- Page contents -->
+    <main class="mdl-layout__content"><div class="mdl-grid">
+    
+    <!-- Player -->
+    <div class="mdl-cell mdl-cell--8-col">
+      <!-- The iframe video player will replace this <div> tag. -->
+      <div id="player"></div>
+    </div>
 
-    <!-- div for displaying data for a method you will implement -->
-    <div id="content"></div>
-  
+    <!-- Table for displaying data from a function you will implement -->
+    <table class="mdl-data-table">
+      <tr>
+        <td>Content:</td>
+        <td>
+          <span id="content">(None)</span>
+        </td>
+      </tr>
+    </table>
+    
+    </main></div>
   </body>
 </html>

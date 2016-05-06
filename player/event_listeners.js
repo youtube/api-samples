@@ -24,25 +24,26 @@ function onPlayerReady (){
 
 function onPlayerStateChange(event){
   // Get current state
-  var currentState = "Current state: "
+  var currentState;
   if (event.data == YT.PlayerState.ENDED){
-    currentState += "Ended";
+    currentState = "Ended";
   } 
   else if (event.data == YT.PlayerState.PLAYING){
-    currentState += "Playing";
+    currentState = "Playing";
   } 
   else if (event.data == YT.PlayerState.PAUSED){
-    currentState += "Paused";
+    currentState = "Paused";
   }  
   else if (event.data == YT.PlayerState.BUFFERING){
-    currentState += "Buffering";
+    currentState = "Buffering";
   }
   else if (event.data == YT.PlayerState.CUED){
-    currentState += "Cued";
+    currentState = "Cued";
   } else{
-    currentState += "Unknown";
+    currentState = "Unknown";
   }
 
+  currentState += " (" + event.data + ")"
   // Update video state div
   document.getElementById('currentState').innerText = currentState;
 };

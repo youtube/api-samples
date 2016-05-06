@@ -1,100 +1,128 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- page title -->
     <title>YouTube in Your App</title>
+    <!-- Style imports for Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <!-- This code loads the iFrame Player API code asynchronously.-->
     <script src = "https://www.youtube.com/iframe_api"></script>
     <!-- This is the source of the Javscript for the demo -->
     <script src="demo.js"></script>
   </head>
   <body>
-    Demo | <a href=player_control.html>Player Controls and Data</a> | <a href=event_listeners.html>Event Listeners</a><br>
-    <!-- The iframe video player will replace this <div> tag. -->
-    <div id="player"></div>
-    <br><br>
-
-    <!-- This table contains metadata on the video in the iframe -->
-    <div>Metadata</div>
-    <table border="1">
-      <tr>
-        <td style="width:100px">Title</td>
-        <td id="title" style="width:500px"></td>
-      </tr><tr>
-        <td style="width:100px">Author</td>
-        <td id="author" style="width:500px"></td>
-      </tr><tr>
-        <td style="width:100px">Duration</td>
-        <td id="duration" style="width:500px"></td>
-      </tr><tr>
-        <td style="width:100px">URL</td>
-        <td id="url" style="width:500px"></td>
-      </tr><tr>
-        <td style="width:100px">Embed Code</td>
-        <td id="embedCode" style="width:500px"></td>
-      </tr><tr>
-        <td style="width:100px">% loaded</td>
-        <td id=percentLoaded style="width:500px"></td>
-      </tr>
-    </table>
-    <br>
-
-    <!-- This table contains editable video on the video in the iframe -->
-    <div>Video Attributes</div>
-    <table border="1">
-      <tr>
-        <td style="width:120px">VideoID</td>
-        <td style="width:100px" id="video_id"></td>
-        <td>
-          <input id="video_idOption" type="text">
-          <input type="button" value="Load" onClick="loadNewVideo()">
-          <input type="button" value="Cue" onClick="cueNewVideo()">
-        </td>
-      </tr><tr>
-        <td style="width:120px">Status</td>
-        <td style="width:100px" id="status"></td>
-        <td>
-          <input type="button" value="Play" onClick="playVideo()">
-          <input type="button" value="Pause" onClick="pauseVideo()">
-          <input type="button" value="Stop" onClick="stopVideo()">
-        </td>
-      </tr><tr>
-        <td style="width:120px">Current Progress</td>
-        <td style="width:100px" id="currentTime"></td>
-        <td type="text">
-          <input id="currentTimeOption" type="text">
-          <input type="button" value="Seek" onClick="seekTo()">
-        </td>
-      </tr><tr>
-        <td style="width:120px">Volume (0-100)</td>
-        <td style="width:100px" id="volume"></td>
-        <td type="text">
-          <input id="volumeOption" type="text">
-          <input type="button" value="Set" onClick="setVolume()">
-        </td>
-      </tr><tr>
-        <td style="width:120px">Muted?</td>
-        <td style="width:100px" id="mute"></td>
-        <td>
-          <input type="button" value="Mute" onClick="mute()">
-          <input type="button" value="Unmute" onClick="unmute()">
-        </td>
-      </tr><tr>
-        <td style="width:120px">Video Quality</td>
-        <td style="width:100px" id=quality></td>
-        <td>
-          <select id="qualityOption">
-          </select>
-          <input type="button" value="Set" onClick="setQuality()">
-        </td>
-      </tr><tr>
-        <td style="width:120px">Playback Rate</td>
-        <td style="width:100px" id=rate></td>
-        <td>
-          <select id="rateOption">
-          </select>
-          <input type="button" value="Set" onClick="setRate()">
-        </td>
-      </tr>
-    </table>
+    <!-- Header -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+          <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">YouTube in Your App</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="mdl-navigation">
+              <a class="mdl-navigation__link" href="#"><b>Demo</b></a>
+              <a class="mdl-navigation__link" href="player_control.html">Player Controls and Data</a>
+              <a class="mdl-navigation__link" href="event_listeners.html">Event Listeners</a>
+            </nav>
+          </div>
+        </header>
+      <main class="mdl-layout__content">
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--5-col">
+            <!-- The iframe video player will replace this <div> tag. -->
+            <div id="player"></div>
+          </div>
+          <div class="mdl-cell mdl-cell--7-col">
+            <!-- This table contains editable video on the video in the iframe -->
+            <table class="mdl-data-table">
+              <tr>
+                <td  class="mdl-data-table__cell--non-numeric">VideoID</td>
+                <td id="video_id"></td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <input id="video_idOption" type="text">
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="loadNewVideo()">Load</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="cueNewVideo()">Cue</button>
+                </td>
+              </tr><tr>
+                <td  class="mdl-data-table__cell--non-numeric">Status</td>
+                <td id="status"></td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="playVideo()">Play</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="pauseVideo()">Pause</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="stopVideo()">Stop</button>
+                </td>
+              </tr><tr>
+                <td  class="mdl-data-table__cell--non-numeric">Current Progress</td>
+                <td id="currentTime"></td>
+                <td  class="mdl-data-table__cell--non-numeric">
+                  <input id="currentTimeOption" type="text">
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="seekTo()">Seek</button>
+                </td>
+              </tr><tr>
+                <td  class="mdl-data-table__cell--non-numeric">Volume (0-100)</td>
+                <td id="volume"></td>
+                <td  class="mdl-data-table__cell--non-numeric">
+                  <input id="volumeOption" type="text">
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="setVolume()">Set</button>
+                </td>
+              </tr><tr>
+                <td  class="mdl-data-table__cell--non-numeric">Muted?</td>
+                <td id="mute"></td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="mute()">Mute</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="unmute()">Unmute</button>
+                </td>
+              </tr><tr>
+                <td  class="mdl-data-table__cell--non-numeric">Video Quality</td>
+                <td id=quality></td>
+                <td  class="mdl-data-table__cell--non-numeric">
+                  <select id="qualityOption">
+                  </select>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="setQuality()">Set</button>
+                </td>
+              </tr><tr>
+                <td  class="mdl-data-table__cell--non-numeric">Playback Rate</td>
+                <td id=rate></td>
+                <td  class="mdl-data-table__cell--non-numeric">
+                  <select id="rateOption">
+                  </select>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onClick="setRate()">Set</button>
+                </td>
+              </tr>
+            </table>
+            </div>
+        </div>
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--4-col">
+            <!-- This table contains metadata on the video in the iframe -->
+            <table class="mdl-data-table">
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Title</td>
+                <td id="title" class="mdl-data-table__cell--non-numeric"></td>
+              </tr><tr>
+                <td class="mdl-data-table__cell--non-numeric">Author</td>
+                <td id="author" class="mdl-data-table__cell--non-numeric"></td>
+              </tr><tr>
+                <td class="mdl-data-table__cell--non-numeric">Duration</td>
+                <td id="duration"></td>
+              </tr><tr>
+                <td class="mdl-data-table__cell--non-numeric">% loaded</td>
+                <td id=percentLoaded></td>
+              </tr><tr>
+                <td class="mdl-data-table__cell--non-numeric">Embed Code</td>
+                <td id="embedCode"></td>
+              </tr><tr>
+                <td class="mdl-data-table__cell--non-numeric">URL</td>
+                <td id="url"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
   </body>
 </html>

@@ -39,9 +39,10 @@ function onApiChange(event){
 function onPlayerReady(){
   // Update page after player is ready
   updateAll();
+  playVideo();
 }
 
-function onPlayerStateChange (event){
+function onPlayerStateChange(event){
   // Get current state
   // Video has ended
   switch (event.data) {
@@ -80,14 +81,17 @@ function update(node){
   switch (node){
     // Update player reported changes
     case "duration":
-      document.getElementById("duration").innerHTML = player.getDuration()+"s"
+      document.getElementById("duration").innerHTML = player.getDuration()+"s";
       break;
     case "url":
-      var url = player.getVideoUrl()
-      document.getElementById("url").innerHTML = "<a href=\""+url+"\">"+url+"</a>"
+      var url = player.getVideoUrl();
+      document.getElementById("url").innerHTML = "<a href=\""+url+"\">"+url+"</a>";
       break;
     case "embedCode":
-      document.getElementById("embedCode").innerText = player.getVideoEmbedCode()
+      var embedCode = player.getVideoEmbedCode();
+      var index = Math.ceil(embedCode.length/3);
+      var fmtEmbedCode = [embedCode.slice(0, index), "\n", embedCode.slice(index, index*2),"\n", embedCode.slice(index*2)].join('');
+      document.getElementById("embedCode").innerText = fmtEmbedCode
       break;
     case "percentLoaded":
       document.getElementById("percentLoaded").innerHTML = player.getVideoLoadedFraction()*100+"%"
@@ -222,8 +226,6 @@ function unmute(){
   player.unMute();  
 };
 function setQuality(){
-  console.log("QUAILTY");
-  console.log(document.getElementById("qualityOption").value);
   player.setPlaybackQuality(document.getElementById("qualityOption").value);  
 };
 function setRate(){

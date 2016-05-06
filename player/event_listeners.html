@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- page title -->
     <title>YouTube in Your App</title>
-    
+    <!-- Style imports for Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- This code loads the iFrame Player API code asynchronously.-->
     <script src = "https://www.youtube.com/iframe_api"></script>
     
@@ -11,16 +16,46 @@
 
   </head>
   <body>
-    <a href=index.html>Demo</a> | <a href=palyer_control.html>Player Controls and Data</a>| Event Listeners<br>
+    <!-- Header -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header"><div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">YouTube in Your App</span><div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="index.html">Demo</a>
+        <a class="mdl-navigation__link" href="player_control.html">Player Controls and Data</a>
+        <a class="mdl-navigation__link" href="#"><b>Event Listeners</b></a>
+      </nav></div>
+    </header>
     
-    <!-- The iframe video player will replace this <div> tag. -->
-    <div id="player"></div>
+    <!-- Page contents -->
+    <main class="mdl-layout__content"><div class="mdl-grid">
+    
+    <!-- Player -->
+    <div class="mdl-cell mdl-cell--7-col">
+      <!-- The iframe video player will replace this <div> tag. -->
+      <div id="player"></div>
+    </div>
 
-    <!-- div for displaying value status -->
-    <div id="currentState"></div>
-
-    <!-- div for displaying rate status for a method you will implement -->
-    <div id="currentRate"></div>
-  
+    <!-- Content Card for displaying the video status (implemented) -->
+    <!-- and the current playback rate (You will implement this later) -->
+    <div class="mdl-cell mdl-cell--5-col">
+      <table class="mdl-data-table">
+        <tr>
+          <td>Current Player Status:</td>
+          <td>
+            <!-- div for displaying value status -->
+            <span id="currentState"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Current Player Rate:</td>
+          <td>
+            <!-- div for displaying rate status for a method you will implement -->
+            <span id="currentState"></span>
+          </td>
+        </tr>
+      </table>
+    </div>   
+    </div></main></div>
   </body>
 </html>
