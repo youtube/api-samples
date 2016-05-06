@@ -52,5 +52,7 @@ function onPlaybackRateChange(event){
   // Implment this function to display the rate of the player on the page
   var currentRate;
 
+  // You code goes here
+
   document.getElementById('currentRate').innerText = currentRate;  
 }

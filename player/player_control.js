@@ -20,8 +20,7 @@ function onPlayerReady (){
   setTimeout(pauseVideo, 4000);
   setTimeout(loadNewVideo, 6000);
   setTimeout(stopVideo, 8500);
-  // Uncommend the following line after implmenting getContent 
-  //setInterval(getContent, 1000);
+  setInterval(getContent, 1000);
 };
 
 function pauseVideo(){

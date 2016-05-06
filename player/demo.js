@@ -85,7 +85,7 @@ function update(node){
       break;
     case "url":
       var url = player.getVideoUrl();
-      document.getElementById("url").innerHTML = "<a href=\""+url+"\">"+url+"</a>";
+      document.getElementById("url").innerHTML = "<a href=\""+url+"\" target=\"_blank\">"+url+"</a>";
       break;
     case "embedCode":
       var embedCode = player.getVideoEmbedCode();
