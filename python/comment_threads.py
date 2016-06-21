@@ -62,7 +62,7 @@ def get_authenticated_service(args):
 
   # Trusted testers can download this discovery document from the developers page
   # and it should be in the same directory with the code.
-  with open("youtube-v3-discoverydocument.json", "r") as f:
+  with open("youtube-v3-discoverydocument.json", "r", encoding='utf8') as f:
     doc = f.read()
     return build_from_document(doc, http=credentials.authorize(httplib2.Http()))
 
@@ -80,7 +80,7 @@ def get_comments(youtube, video_id, channel_id):
     comment = item["snippet"]["topLevelComment"]
     author = comment["snippet"]["authorDisplayName"]
     text = comment["snippet"]["textDisplay"]
-    print "Comment by %s: %s" % (author, text)
+    print ("Comment by %s: %s" % (author.encode('ascii', 'ignore'), text.encode('ascii', 'ignore')))
 
   return results["items"]
 
