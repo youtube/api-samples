@@ -9,9 +9,19 @@
  * @author Ibrahim Ulukaya
  */
 
-// Call set_include_path() as needed to point to your client library.
-require_once 'Google/Client.php';
-require_once 'Google/Service/YouTubeReporting.php';
+/**
+ * Library Requirements
+ *
+ * 1. Install composer (https://getcomposer.org)
+ * 2. On the command line, change to this directory (api-samples/php)
+ * 3. Require the google/apiclient library
+ *    $ composer require google/apiclient:~2.0
+ */
+if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
+  throw new \Exception('please run "composer require google/apiclient:~2.0" in "' . __DIR__ .'"');
+}
+
+require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 
 
@@ -41,22 +51,25 @@ $client->setRedirectUri($redirect);
 // YouTube Reporting object used to make YouTube Reporting API requests.
 $youtubeReporting = new Google_Service_YoutubeReporting($client);
 
+// Check if an auth token exists for the required scopes
+$tokenSessionKey = 'token-' . $client->prepareScopes();
 if (isset($_GET['code'])) {
   if (strval($_SESSION['state']) !== strval($_GET['state'])) {
     die('The session state did not match.');
   }
 
   $client->authenticate($_GET['code']);
-  $_SESSION['token'] = $client->getAccessToken();
+  $_SESSION[$tokenSessionKey] = $client->getAccessToken();
   header('Location: ' . $redirect);
 }
 
-if (isset($_SESSION['token'])) {
-  $client->setAccessToken($_SESSION['token']);
+if (isset($_SESSION[$tokenSessionKey])) {
+  $client->setAccessToken($_SESSION[$tokenSessionKey]);
 }
 
 // Check to ensure that the access token was successfully acquired.
 if ($client->getAccessToken()) {
+  $htmlBody = '';
   try {
     if (empty(listReportingJobs($youtubeReporting, $htmlBody))) {
       $htmlBody .= sprintf('<p>No jobs found.</p>');
@@ -72,7 +85,15 @@ if ($client->getAccessToken()) {
     $htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
         htmlspecialchars($e->getMessage()));
   }
-  $_SESSION['token'] = $client->getAccessToken();
+  $_SESSION[$tokenSessionKey] = $client->getAccessToken();
+} elseif ($OAUTH2_CLIENT_ID == 'REPLACE_ME') {
+  $htmlBody = <<<END
+  <h3>Client Credentials Required</h3>
+  <p>
+    You need to set <code>\$OAUTH2_CLIENT_ID</code> and
+    <code>\$OAUTH2_CLIENT_ID</code> before proceeding.
+  <p>
+END;
 } else {
   // If the user hasn't authorized the app, initiate the OAuth flow
   $state = mt_rand();
