@@ -13,6 +13,21 @@
  * @author Ibrahim Ulukaya
  */
 
+/**
+ * Library Requirements
+ *
+ * 1. Install composer (https://getcomposer.org)
+ * 2. On the command line, change to this directory (api-samples/php)
+ * 3. Require the google/apiclient library
+ *    $ composer require google/apiclient:~2.0
+ */
+if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
+  throw new \Exception('please run "composer require google/apiclient:~2.0" in "' . __DIR__ .'"');
+}
+
+require_once __DIR__ . '/vendor/autoload.php';
+session_start();
+
 $htmlBody = <<<END
 <form method="GET">
   <div>
@@ -44,12 +59,6 @@ $htmlBody = <<<END
 </form>
 END;
 
-// Call set_include_path() as needed to point to your client library.
-  require_once 'Google/Client.php';
-  require_once 'Google/Service/YouTube.php';
-  session_start();
-
-
 /*
  * You can acquire an OAuth 2.0 client ID and client secret from the
  * {{ Google Cloud Console }} <{{ https://cloud.google.com/console }}>
@@ -59,13 +68,6 @@ END;
  */
 $OAUTH2_CLIENT_ID = 'REPLACE_ME';
 $OAUTH2_CLIENT_SECRET = 'REPLACE_ME';
-
-$action = $_GET['action'];
-$resource = $_GET['resource'];
-$channelId = $_GET['channelId'];
-$language = $_GET['language'];
-$defaultLanguage = $_GET['defaultLanguage'];
-$description = $_GET['description'];
 
 $client = new Google_Client();
 $client->setClientId($OAUTH2_CLIENT_ID);
@@ -83,27 +85,35 @@ $client->setRedirectUri($redirect);
 // Define an object that will be used to make all API requests.
 $youtube = new Google_Service_YouTube($client);
 
+// Check if an auth token exists for the required scopes
+$tokenSessionKey = 'token-' . $client->prepareScopes();
 if (isset($_GET['code'])) {
   if (strval($_SESSION['state']) !== strval($_GET['state'])) {
     die('The session state did not match.');
   }
 
   $client->authenticate($_GET['code']);
-  $_SESSION['token'] = $client->getAccessToken();
+  $_SESSION[$tokenSessionKey] = $client->getAccessToken();
   header('Location: ' . $redirect);
 }
 
-if (isset($_SESSION['token'])) {
-  $client->setAccessToken($_SESSION['token']);
+if (isset($_SESSION[$tokenSessionKey])) {
+  $client->setAccessToken($_SESSION[$tokenSessionKey]);
 }
 
 // Check to ensure that the access token was successfully acquired.
 if ($client->getAccessToken()) {
   // This code executes if the user enters an action in the form
   // and submits the form. Otherwise, the page displays the form above.
-  if ($_GET['action']) {
+  if (isset($_GET['action'])) {
+    $htmlBody = '';
+    $resource = $_GET['resource'];
+    $channelId = $_GET['channelId'];
+    $language = $_GET['language'];
+    $defaultLanguage = $_GET['defaultLanguage'];
+    $description = $_GET['description'];
     try {
-      switch ($action) {
+      switch ($_GET['action']) {
         case 'set':
           setChannelLocalization($youtube, $channelId, $defaultLanguage,
               $language, $description, $htmlBody);
@@ -123,7 +133,15 @@ if ($client->getAccessToken()) {
           htmlspecialchars($e->getMessage()));
     }
   }
-  $_SESSION['token'] = $client->getAccessToken();
+  $_SESSION[$tokenSessionKey] = $client->getAccessToken();
+} elseif ($OAUTH2_CLIENT_ID == 'REPLACE_ME') {
+  $htmlBody = <<<END
+  <h3>Client Credentials Required</h3>
+  <p>
+    You need to set <code>\$OAUTH2_CLIENT_ID</code> and
+    <code>\$OAUTH2_CLIENT_ID</code> before proceeding.
+  <p>
+END;
 } else {
   // If the user hasn't authorized the app, initiate the OAuth flow
   $state = mt_rand();

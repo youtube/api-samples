@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Library Requirements
+ *
+ * 1. Install composer (https://getcomposer.org)
+ * 2. On the command line, change to this directory (api-samples/php)
+ * 3. Require the google/apiclient library
+ *    $ composer require google/apiclient:~2.0
+ */
+if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
+  throw new \Exception('please run "composer require google/apiclient:~2.0" in "' . __DIR__ .'"');
+}
+
+require_once __DIR__ . '/vendor/autoload.php';
+
 $htmlBody = <<<END
 <form method="GET">
   <div>
@@ -14,11 +28,7 @@ END;
 
 // This code will execute if the user entered a search query in the form
 // and submitted the form. Otherwise, the page displays the form above.
-if ($_GET['q'] && $_GET['maxResults']) {
-  // Call set_include_path() as needed to point to your client library.
-require_once 'Google/Client.php';
-require_once 'Google/Service/YouTube.php';
-
+if (isset($_GET['q']) && isset($_GET['maxResults'])) {
   /*
    * Set $DEVELOPER_KEY to the "API key" value from the "Access" tab of the
    * {{ Google Cloud Console }} <{{ https://cloud.google.com/console }}>
@@ -32,7 +42,9 @@ require_once 'Google/Service/YouTube.php';
   // Define an object that will be used to make all API requests.
   $youtube = new Google_Service_YouTube($client);
 
+  $htmlBody = '';
   try {
+
     // Call the search.list method to retrieve results matching the specified
     // query term.
     $searchResponse = $youtube->search->listSearch('id,snippet', array(
