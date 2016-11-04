@@ -11,10 +11,11 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <project.youtube.version>v3-rev107-1.18.0-rc</project.youtube.version>
-        <project.youtube.analytics.version>v1-rev24-1.17.0-rc</project.youtube.analytics.version>
-        <project.http.version>1.18.0-rc</project.http.version>
-        <project.oauth.version>1.18.0-rc</project.oauth.version>
+        <project.youtube.version>v3-rev179-1.22.0</project.youtube.version>
+        <project.youtube.analytics.version>v1-rev63-1.22.0</project.youtube.analytics.version>
+        <project.youtube.reporting.version>v1-rev10-1.22.0</project.youtube.reporting.version>
+        <project.http.version>1.20.0</project.http.version>
+        <project.oauth.version>1.20.0</project.oauth.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -34,11 +35,18 @@
             <version>${project.youtube.version}</version>
         </dependency>
 
-        <!-- Required for any code that makes calls to the Google Analytics API -->
+        <!-- Required for any code that makes calls to the YouTube Analytics API -->
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-youtubeAnalytics</artifactId>
             <version>${project.youtube.analytics.version}</version>
+        </dependency>
+
+        <!-- Required for any code that makes calls to the YouTube Reporting API -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-youtubereporting</artifactId>
+            <version>${project.youtube.reporting.version}</version>
         </dependency>
 
         <!-- This dependency is only used for the Topics API sample, which requires the Jackson JSON parser -->
@@ -73,7 +81,7 @@
             <!-- Forces Maven to use Java 1.6 -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.6.0</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
