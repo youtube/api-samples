@@ -26,8 +26,8 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentSnippet;
 import com.google.api.services.youtube.model.CommentThread;
-import com.google.api.services.youtube.model.V3CommentListResponse;
-import com.google.api.services.youtube.model.V3CommentThreadListResponse;
+import com.google.api.services.youtube.model.CommentListResponse;
+import com.google.api.services.youtube.model.CommentThreadListResponse;
 import com.google.common.collect.Lists;
 
 /**
@@ -86,7 +86,7 @@ public class CommentHandling {
 
             // Call the YouTube Data API's commentThreads.list method to
             // retrieve video comment threads.
-            V3CommentThreadListResponse videoCommentsListResponse = youtube.commentThreads()
+            CommentThreadListResponse videoCommentsListResponse = youtube.commentThreads()
                     .list("snippet").setVideoId(videoId).setTextFormat("plainText").execute();
             List<CommentThread> videoComments = videoCommentsListResponse.getItems();
 
@@ -138,7 +138,7 @@ public class CommentHandling {
                 // Call the YouTube Data API's comments.list method to retrieve
                 // existing comment
                 // replies.
-                V3CommentListResponse commentsListResponse = youtube.comments().list("snippet")
+                CommentListResponse commentsListResponse = youtube.comments().list("snippet")
                         .setParentId(parentId).setTextFormat("plainText").execute();
                 List<Comment> comments = commentsListResponse.getItems();
 
