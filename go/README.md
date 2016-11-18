@@ -34,36 +34,36 @@ authorization, so it must be passed as a parameter to "go run".
 
 More information about the YouTube APIs can be found at https://developer.google.com/youtube.
 
-Samples in this directory:
+## Samples in this directory:
 
-### Authorize a request
+### [Authorize a request](/youtube/api-samples/blob/master/go/oauth.go)
 
 Description: This code sample performs OAuth 2.0 authorization by checking for the presence of a local file that
 contains authorization credentials. If the file is not present, the script opens a browser and waits for a response,
 then saves the returned credentials locally.
 
-### Upload a video
+### [Upload a video](/youtube/api-samples/blob/master/go/upload_video.go)
 
-Method: youtube.videos.insert
+Method: youtube.videos.insert<br>
 Description: This code sample calls the API's <code>videos.insert</code> method to upload a video to the channel
 associated with the request.
 
-### Retrieve my uploads
+### [Retrieve my uploads](/youtube/api-samples/blob/master/go/my_uploads.go)
 
-Method: youtube.playlistItems.list
+Method: youtube.playlistItems.list<br>
 Description: This code sample calls the API's <code>playlistItems.list</code> method to retrieve a list of 
 videos uploaded to the channel associated with the request. The code also calls the <code>channels.list</code> 
 method with the <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies 
 the channel's uploaded videos.
 
-### Search by keyword
+### [Search by keyword](/youtube/api-samples/blob/master/go/search_by_keyword.go)
 
-Method: youtube.search.list
+Method: youtube.search.list<br>
 Description: This code sample calls the API's <code>search.list</code> method to retrieve search results associated
 with a particular keyword.
 
-### Post a channel bulletin
+### [Post a channel bulletin](/youtube/api-samples/blob/master/go/post_bulletin.go)
 
-Method: youtube.activities.insert
+Method: youtube.activities.insert<br>
 Description: This code sample calls the API's <code>activities.insert</code> method to post a bulletin to the
 channel associated with the request.
