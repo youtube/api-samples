@@ -35,7 +35,7 @@ tracks.</li>
 identify the caption track.</li>
 </ul>
 
-### [Set and retrieve localized metadata for a channel](/youtube/api-samples/blob/master/php/channel_localizations.php)
+### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/php/channel_localizations.php)
 
 Method: youtube.channels.update, youtube.channels.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -50,7 +50,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that channel.</li>
 </ul>
 
-### [Set and retrieve localized metadata for a channel section](/youtube/api-samples/blob/master/php/channel_section_localizations.php)
+### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/php/channel_section_localizations.php)
 
 Method: youtube.channelSections.update, youtube.channelSections.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -110,10 +110,10 @@ job.
 ### [Search by geolocation](/youtube/api-samples/blob/master/php/geolocation_search.php)
 
 Method: youtube.search.list, youtube.videos.list<br>
-Description: This sample calls the API's <code>search.list</code> method with <code>q</code>, <code>location</code> and
-<code>locationRadius</code> parameters to retrieve search results matching the provided keyword within the radius centered
-at a particular location. Using the video IDs from the search result, the sample calls the API's <code>videos.list</code>
-method to retrieve location details of each video.
+Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>, <code>q</code>,
+<code>location</code> and <code>locationRadius</code> parameters to retrieve search results matching the provided
+keyword within the radius centered at a particular location. Using the video IDs from the search result, the sample
+calls the API's <code>videos.list</code> method to retrieve location details of each video.
 
 ### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/php/list_broadcasts.php)
 
@@ -136,7 +136,7 @@ to the channel associated with the request. The code also calls the <code>channe
 <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies the channel's uploaded
 videos.
 
-### [Set and retrieve localized metadata for a playlist](/youtube/api-samples/blob/master/php/playlist_localizations.php)
+### [Set and retrieve localized playlist metadata](/youtube/api-samples/blob/master/php/playlist_localizations.php)
 
 Method: youtube.playlists.update, youtube.playlists.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -198,9 +198,9 @@ to persist these changes on YouTube.
 
 Method: youtube.channelBanners.insert, youtube.channels.update<br>
 Description: This sample calls the API's <code>channelBanners.insert</code> method to upload an image. With the
-returned URL, the sample calls <code>channels.update</code> method to update channel's banner to this image.
+returned URL, the sample calls <code>channels.update</code> method to update the channel's banner to this image.
 
-### [Upload a video thumbnail image](/youtube/api-samples/blob/master/php/upload_thumbnail.php)
+### [Upload a custom video thumbnail image](/youtube/api-samples/blob/master/php/upload_thumbnail.php)
 
 Method: youtube.thumbnails.set<br>
 Description: This sample demonstrates how to upload a custom video thumbnail to YouTube and set it for a video.
