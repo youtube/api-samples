@@ -25,9 +25,3 @@ associated with a particular keyword.
 Method: youtube.playlists.insert<br>
 Description: The following code sample calls the API's <code>playlists.insert</code> method to create a private playlist
 owned by the channel authorizing the request.
-
-### [Retrieve a content owner's managed channels](/youtube/api-samples/blob/master/dotnet/papi_my_managed_channels.cs)
-
-Method: youtube.channels.list
-Description: The following code sample calls the YouTube Data API's <code>channels.list</code> method to retrieve a list
-of channels managed by the content owner making the API request.
