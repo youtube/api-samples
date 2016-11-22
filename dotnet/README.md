@@ -6,7 +6,7 @@ Method: youtube.videos.insert<br>
 Description: The following code sample calls the API's <code>videos.insert</code> method to upload a video to the channel
 associated with the request.
 
-### [Retrieve my uploads](/youtube/api-samples/blob/master/dotnet/MyUploads.go)
+### [Retrieve my uploads](/youtube/api-samples/blob/master/dotnet/MyUploads.cs)
 
 Method: youtube.playlistItems.list<br>
 Description: The following code sample calls the API's <code>playlistItems.list</code> method to retrieve a list of videos
