@@ -47,7 +47,7 @@ Method: youtube.activities.insert<br>
 Description: This sample calls the API's <code>activities.insert</code> method to post a bulletin to the channel
 associated with the request.
 
-### [Set and retrieve localized metadata for a channel](/youtube/api-samples/blob/master/python/channel_localizations.py)
+### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/python/channel_localizations.py)
 
 Method: youtube.channels.update, youtube.channels.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -62,7 +62,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that channel.</li>
 </ul>
 
-### [Set and retrieve localized metadata for a channel section](/youtube/api-samples/blob/master/python/channel_section_localizations.py)
+### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/python/channel_section_localizations.py)
 
 Method: youtube.channelSections.update, youtube.channelSections.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -80,7 +80,7 @@ to retrieve localized metadata in that language.</li>
 
 Method: youtube.commentThreads.list, youtube.comments.insert, youtube.comments.list, youtube.comments.update,
 youtube.comments.setModerationStatus, youtube.comments.markAsSpam, youtube.comments.delete<br>
-Description: The following code sample demonstrates how to use the following API methods to create and manage comments:<br>
+Description: This sample demonstrates how to use the following API methods to create and manage comments:<br>
 <ul>
 <li>It calls the <code>commentThreads.list</code> method with the <code>videoId</code> parameter set to retrieve comments
 for a video.</li>
@@ -121,10 +121,11 @@ job.
 ### [Search by geolocation](/youtube/api-samples/blob/master/python/geolocation_search.py)
 
 Method: youtube.search.list, youtube.videos.list<br>
-Description: This sample calls the API's <code>search.list</code> method with <code>q</code>, <code>location</code> and
-<code>locationRadius</code> parameters to retrieve search results matching the provided keyword within the radius centered
-at a particular location. Using the video ids from the search result, the sample calls the API's <code>videos.list</code>
-method to retrieve location details of each video.
+Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>,
+<code>q</code>, <code>location</code>, and <code>locationRadius</code> parameters to retrieve search results
+matching the provided keyword within the radius centered at a particular location. Using the video ids from
+the search result, the sample calls the API's <code>videos.list</code> method to retrieve location details
+of each video.
 
 ### [Like a video](/youtube/api-samples/blob/master/python/like_video.py)
 
@@ -152,7 +153,7 @@ to the channel associated with the request. The code also calls the <code>channe
 <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies the channel's uploaded
 videos.
 
-### [Set and retrieve localized metadata for a playlist](/youtube/api-samples/blob/master/python/playlist_localizations.py)
+### [Set and retrieve localized playlist metadata](/youtube/api-samples/blob/master/python/playlist_localizations.py)
 
 Method: youtube.playlists.update, youtube.playlists.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -196,7 +197,7 @@ watermark image for a channel. The request must be authorized by the channel tha
 
 Method: youtube.channelSections.list,youtube.channelSections.update<br>
 Description: This sample calls the API's <code>channelSections.list</code> method to get the list of current channel
-sections, shuffles them, and then calls <code>channelSections.update</code> to change the position of each.<br><br>
+sections. Then it shuffles the list and calls <code>channelSections.update</code> to change the position of each item.<br><br>
 More information on channel sections is available in the
 <a href="https://support.google.com/youtube/answer/3027787">YouTube Help Center</a>.
 
@@ -216,7 +217,7 @@ authorizing the request.
 
 Method: youtube.channelBanners.insert, youtube.channels.update<br>
 Description: This sample calls the API's <code>channelBanners.insert</code> method to upload an image. With the
-returned URL, the sample calls <code>channels.update</code> method to update channel's banner to this image.
+returned URL, the sample calls <code>channels.update</code> method to update the channel's banner to that image.
 
 ### [Upload a video thumbnail image](/youtube/api-samples/blob/master/python/upload_thumbnail.py)
 
@@ -230,7 +231,7 @@ Method: youtube.videos.insert<br>
 Description: This sample calls the API's <code>videos.insert</code> method to upload a video to the channel associated
 with the request.
 
-### [Set and retrieve localized metadata for a video](/youtube/api-samples/blob/master/python/video_localizations.py)
+### [Set and retrieve localized video metadata](/youtube/api-samples/blob/master/python/video_localizations.py)
 
 Method: youtube.videos.update, youtube.videos.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata
