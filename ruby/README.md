@@ -34,7 +34,7 @@ associated with a particular keyword.
 
 ### [Retrieve top 10 videos by viewcount](/youtube/api-samples/blob/master/ruby/yt_analytics_report.rb)
 
-Method: youtube.playlists.insert<br>
+Method: youtubeAnalytics.reports.query<br>
 Description: This sample calls the API's <code>reports.query</code> method to retrieve YouTube Analytics data.
 By default, the report retrieves the top 10 videos based on viewcounts, and it returns several metrics for those
 videos, sorting the results in reverse order by viewcount. By setting command line parameters, you can use the same
