@@ -18,8 +18,18 @@ Description: This code sample demonstrates how to execute a resumable upload usi
 ### [Upload a video](/youtube/api-samples/blob/master/javascript/upload_video.js)
 
 Method: youtube.videos.insert<br>
-Description: This code sample calls the API's <code>videos.insert</code> method to upload a video to the channel
-associated with the request.
+Description: This JavaScript sample performs the following functions:<br>
+<ol>
+  <li>It retrieves the channel name and thumbnail of the authenticated user's channel using the API's channels.list method.</li>
+  <li>It handles the video upload to YouTube using the resumable upload protocol.</li>
+  <li>It polls for the uploaded video's upload and processing status using the API's videos.list method by setting the part parameter value to status.</li>
+</ol><br>
+
+The HTML page uses JQuery, the <code>plusone.js</code> and <code>upload_video.js</code> JavaScript files, and the
+<code>upload_video.css</code> file to upload a video file to YouTube.<br><br>Note that if you use this code in your own application, you must replace the value of the <code>data-clientid</code> attribute in the code for the Sign-In Button
+with your project's client ID. The only valid JavaScript origin for the client ID in the sample code is
+<code>http://localhost</code>. This means that you could test the sample locally, but it would not work in your
+production application.
 
 ### [Retrieve my uploads](/youtube/api-samples/blob/master/javascript/my_uploads.js)
 
