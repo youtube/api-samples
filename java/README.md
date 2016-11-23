@@ -61,7 +61,7 @@ Method: youtube.activities.insert<br>
 Description: This sample calls the API's <code>activities.insert</code> method to post a bulletin to the channel
 associated with the request.
 
-### [Set and retrieve localized metadata for a channel](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelLocalizations.java)
+### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelLocalizations.java)
 
 Method: youtube.channels.update, youtube.channels.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -76,7 +76,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that channel.</li>
 </ul>
 
-### [Set and retrieve localized metadata for a channel section](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelSectionLocalizations.java)
+### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelSectionLocalizations.java)
 
 Method: youtube.channelSections.update, youtube.channelSections.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -123,9 +123,9 @@ channel comment. In each case, the request body contains the <code>comment</code
 ### [Search by geolocation](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/GeolocationSearch.java)
 
 Method: youtube.search.list, youtube.videos.list<br>
-Description: This sample calls the API's <code>search.list</code> method with <code>q</code>, <code>location</code> and
+Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>, <code>q</code>, <code>location</code>, and
 <code>locationRadius</code> parameters to retrieve search results matching the provided keyword within the radius centered
-at a particular location. Using the video ids from the search result, the sample calls the API's <code>videos.list</code>
+at a particular location. Using the video IDs from the search result, the sample calls the API's <code>videos.list</code>
 method to retrieve location details of each video.
 
 ### [Retrieve my uploads](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/MyUploads.java)
@@ -136,7 +136,7 @@ to the channel associated with the request. The code also calls the <code>channe
 <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies the channel's uploaded
 videos.
 
-### [Set and retrieve localized metadata for a playlist](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistLocalizations.java)
+### [Set and retrieve localized playlist metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistLocalizations.java)
 
 Method: youtube.playlists.update, youtube.playlists.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -168,7 +168,7 @@ Method: youtube.videos.update<br>
 Description: This sample calls the API's <code>videos.update</code> method to update a video owned by the channel
 authorizing the request.
 
-### [Upload a video thumbnail image](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UploadThumbnail.java)
+### [Upload a custom video thumbnail image](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UploadThumbnail.java)
 
 Method: youtube.thumbnails.set<br>
 Description: This sample calls the API's <code>thumbnails.set</code> method to upload an image and set it as the
@@ -180,7 +180,7 @@ Method: youtube.videos.insert<br>
 Description: This sample calls the API's <code>videos.insert</code> method to upload a video to the channel associated
 with the request.
 
-### [Set and retrieve localized metadata for a video](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/VideoLocalizations.java)
+### [Set and retrieve localized video metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/VideoLocalizations.java)
 
 Method: youtube.videos.update, youtube.videos.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata
