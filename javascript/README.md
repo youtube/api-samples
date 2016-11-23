@@ -42,22 +42,19 @@ Description: The JavaScript sample code performs the following functions:<br>
   <li>It constructs next and previous page buttons and sets their visibility based on the information in the API response.</li>
 </ol>
 
-The HTML page below uses JQuery, the <code>auth.js</code> and <code>my_uploads.js</code> JavaScript files, and a CSS file to display the list of uploaded videos.
+The HTML page uses JQuery, the <code>auth.js</code> and <code>my_uploads.js</code> JavaScript files, and a CSS file to display the list of uploaded videos.
 
 ### [Search by keyword](/youtube/api-samples/blob/master/javascript/search.js)
 
 Method: youtube.search.list<br>
 Description: This code sample calls the API's <code>search.list</code> method to retrieve search results associated
-with a particular keyword. The HTML page below uses JQuery, along with the auth.js and search.js JavaScript files,
-to show a simple search form and display the list of search results.
+with a particular keyword. The HTML page uses JQuery, along with the <code>auth.js</code> and <code>search.js</code> JavaScript files, to show a simple search form and display the list of search results.
 
 ### [Create a playlist](/youtube/api-samples/blob/master/javascript/playlist_updates.js)
 
 Method: youtube.playlists.insert<br>
 Description: This JavaScript code creates a private playlist and adds videos to that playlist. (You could, of course, modify the code so that it creates a publicly visible playlist or so that it checks a form value to determine whether the playlist is
-public or private.) Note that you need to update the client ID in the <code>auth.js</code> file to run this code.
-
-The HTML page below uses JQuery, along with the auth.js and playlist_updates.js JavaScript files, to display a simple form for adding videos to the playlist.
+public or private.) Note that you need to update the client ID in the <code>auth.js</code> file to run this code.<br><br>The HTML page uses JQuery, along with the <code>auth.js</code> and <code>playlist_updates.js</code> JavaScript files, to display a simple form for adding videos to the playlist.
 
 ### [Calling the Analytics API](/youtube/api-samples/blob/master/javascript/analytics_codelab.js)
 
