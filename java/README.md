@@ -38,57 +38,11 @@ Method: youtube.channels.update<br>
 Description: This sample calls the API's <code>channels.update</code> method to set <code>invideoPromotion</code>
 properties for the channel.
 
-### [Create and manage YouTube video caption tracks](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Captions.java)
+### [Create a playlist](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistUpdates.java)
 
-Method: youtube.captions.insert, youtube.captions.list, youtube.captions.update, youtube.captions.download,
-youtube.captions.delete<br>
-Description: This sample demonstrates how to use the following API methods to create and manage YouTube video caption
-tracks:<br>
-<ul>
-<li>It calls the <code>captions.insert</code> method with the <code>isDraft</code> parameter set to <code>true</code>
-to upload a caption track in draft status.</li>
-<li>It calls the <code>captions.list</code> method with the <code>videoId</code> parameter to retrieve video caption
-tracks.</li>
-<li>It calls the <code>captions.update</code> method with the caption in the request body to update a caption track.</li>
-<li>It calls the <code>captions.download</code> method to download the caption track.</li>
-<li>It calls the <code>captions.delete</code> method to delete the caption track, using the <code>id</code> parameter to
-identify the caption track.</li>
-</ul>
-
-### [Post a channel bulletin](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelBulletin.java)
-
-Method: youtube.activities.insert<br>
-Description: This sample calls the API's <code>activities.insert</code> method to post a bulletin to the channel
-associated with the request.
-
-### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelLocalizations.java)
-
-Method: youtube.channels.update, youtube.channels.list<br>
-Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
-channel:<br>
-<ul>
-<li>It calls the <code>channels.update</code> method to update the default language of a channel's metadata and to add a
-localized version of this metadata in a selected language. Note that to set the default language for a channel resource,
-you actually need to update the <code>brandingSettings.channel.defaultLanguage</code> property.</li>
-<li>It calls the <code>channels.list</code> method with the <code>hl</code> parameter set to a specific language to
-retrieve localized metadata in that language.</li>
-<li>It calls the <code>channels.list</code> method and includes <code>localizations</code> in the <code>part</code>
-parameter value to retrieve all of the localized metadata for that channel.</li>
-</ul>
-
-### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelSectionLocalizations.java)
-
-Method: youtube.channelSections.update, youtube.channelSections.list<br>
-Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
-channel section:<br>
-<ul>
-<li>It calls the <code>channelSections.update</code> method to update the default language of a channel section's
-metadata and to add a localized version of this metadata in a selected language.</li>
-<li>It calls the <code>channelSections.list</code> method with the <code>hl</code> parameter set to a specific language
-to retrieve localized metadata in that language.</li>
-<li>It calls the <code>channelSections.list</code> method and includes <code>localizations</code> in the
-<code>part</code> parameter value to retrieve all of the localized metadata for that channel section.</li>
-</ul>
+Method: youtube.playlists.insert<br>
+Description: This sample calls the API's <code>playlists.insert</code> method to create a private playlist owned by the
+channel authorizing the request.
 
 ### [Create and manage comments](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/CommentHandling.java)
 
@@ -120,13 +74,28 @@ channel comments and once with the <code>videoId</code> parameter to retrieve vi
 channel comment. In each case, the request body contains the <code>comment</code> resource being updated.</li>
 </ul>
 
-### [Search by geolocation](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/GeolocationSearch.java)
+### [Create and manage YouTube video caption tracks](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Captions.java)
 
-Method: youtube.search.list, youtube.videos.list<br>
-Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>, <code>q</code>, <code>location</code>, and
-<code>locationRadius</code> parameters to retrieve search results matching the provided keyword within the radius centered
-at a particular location. Using the video IDs from the search result, the sample calls the API's <code>videos.list</code>
-method to retrieve location details of each video.
+Method: youtube.captions.insert, youtube.captions.list, youtube.captions.update, youtube.captions.download,
+youtube.captions.delete<br>
+Description: This sample demonstrates how to use the following API methods to create and manage YouTube video caption
+tracks:<br>
+<ul>
+<li>It calls the <code>captions.insert</code> method with the <code>isDraft</code> parameter set to <code>true</code>
+to upload a caption track in draft status.</li>
+<li>It calls the <code>captions.list</code> method with the <code>videoId</code> parameter to retrieve video caption
+tracks.</li>
+<li>It calls the <code>captions.update</code> method with the caption in the request body to update a caption track.</li>
+<li>It calls the <code>captions.download</code> method to download the caption track.</li>
+<li>It calls the <code>captions.delete</code> method to delete the caption track, using the <code>id</code> parameter to
+identify the caption track.</li>
+</ul>
+
+### [Post a channel bulletin](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelBulletin.java)
+
+Method: youtube.activities.insert<br>
+Description: This sample calls the API's <code>activities.insert</code> method to post a bulletin to the channel
+associated with the request.
 
 ### [Retrieve my uploads](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/MyUploads.java)
 
@@ -135,6 +104,49 @@ Description: This sample calls the API's <code>playlistItems.list</code> method 
 to the channel associated with the request. The code also calls the <code>channels.list</code> method with the
 <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies the channel's uploaded
 videos.
+
+### [Search by keyword](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Search.java)
+
+Method: youtube.search.list<br>
+Description: This sample calls the API's <code>search.list</code> method to retrieve search results associated with
+a particular keyword.
+
+### [Search by location](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/GeolocationSearch.java)
+
+Method: youtube.search.list, youtube.videos.list<br>
+Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>, <code>q</code>, <code>location</code>, and
+<code>locationRadius</code> parameters to retrieve search results matching the provided keyword within the radius centered
+at a particular location. Using the video IDs from the search result, the sample calls the API's <code>videos.list</code>
+method to retrieve location details of each video.
+
+### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelLocalizations.java)
+
+Method: youtube.channels.update, youtube.channels.list<br>
+Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
+channel:<br>
+<ul>
+<li>It calls the <code>channels.update</code> method to update the default language of a channel's metadata and to add a
+localized version of this metadata in a selected language. Note that to set the default language for a channel resource,
+you actually need to update the <code>brandingSettings.channel.defaultLanguage</code> property.</li>
+<li>It calls the <code>channels.list</code> method with the <code>hl</code> parameter set to a specific language to
+retrieve localized metadata in that language.</li>
+<li>It calls the <code>channels.list</code> method and includes <code>localizations</code> in the <code>part</code>
+parameter value to retrieve all of the localized metadata for that channel.</li>
+</ul>
+
+### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelSectionLocalizations.java)
+
+Method: youtube.channelSections.update, youtube.channelSections.list<br>
+Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
+channel section:<br>
+<ul>
+<li>It calls the <code>channelSections.update</code> method to update the default language of a channel section's
+metadata and to add a localized version of this metadata in a selected language.</li>
+<li>It calls the <code>channelSections.list</code> method with the <code>hl</code> parameter set to a specific language
+to retrieve localized metadata in that language.</li>
+<li>It calls the <code>channelSections.list</code> method and includes <code>localizations</code> in the
+<code>part</code> parameter value to retrieve all of the localized metadata for that channel section.</li>
+</ul>
 
 ### [Set and retrieve localized playlist metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistLocalizations.java)
 
@@ -150,17 +162,19 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that playlist.</li>
 </ul>
 
-### [Create a playlist](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistUpdates.java)
+### [Set and retrieve localized video metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/VideoLocalizations.java)
 
-Method: youtube.playlists.insert<br>
-Description: This sample calls the API's <code>playlists.insert</code> method to create a private playlist owned by the
-channel authorizing the request.
-
-### [Search by keyword](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Search.java)
-
-Method: youtube.search.list<br>
-Description: This sample calls the API's <code>search.list</code> method to retrieve search results associated with
-a particular keyword.
+Method: youtube.videos.update, youtube.videos.list<br>
+Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata
+for a video:<br>
+<ul>
+<li>It calls the <code>videos.update</code> method to update the default language of a video's metadata and to add
+a localized version of this metadata in a selected language.</li>
+<li>It calls the <code>videos.list</code> method with the <code>hl</code> parameter set to a specific language to
+retrieve localized metadata in that language.</li>
+<li>It calls the <code>videos.list</code> method and includes <code>localizations</code> in the <code>part</code>
+parameter value to retrieve all of the localized metadata for that video.</li>
+</ul>
 
 ### [Update a video](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UpdateVideo.java)
 
@@ -179,20 +193,6 @@ thumbnail image for a video. The request must be authorized by the channel that 
 Method: youtube.videos.insert<br>
 Description: This sample calls the API's <code>videos.insert</code> method to upload a video to the channel associated
 with the request.
-
-### [Set and retrieve localized video metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/VideoLocalizations.java)
-
-Method: youtube.videos.update, youtube.videos.list<br>
-Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata
-for a video:<br>
-<ul>
-<li>It calls the <code>videos.update</code> method to update the default language of a video's metadata and to add
-a localized version of this metadata in a selected language.</li>
-<li>It calls the <code>videos.list</code> method with the <code>hl</code> parameter set to a specific language to
-retrieve localized metadata in that language.</li>
-<li>It calls the <code>videos.list</code> method and includes <code>localizations</code> in the <code>part</code>
-parameter value to retrieve all of the localized metadata for that video.</li>
-</ul>
 
 ### [Retrieve top 10 videos by viewcount](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/analytics/YouTubeAnalyticsReports.java)
 
