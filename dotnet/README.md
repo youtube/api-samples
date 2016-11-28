@@ -1,10 +1,10 @@
 ## Samples in this directory:
 
-### [Upload a video](/youtube/api-samples/blob/master/dotnet/UploadVideo.cs)
+### [Create a playlist](/youtube/api-samples/blob/master/dotnet/PlaylistUpdates.cs)
 
-Method: youtube.videos.insert<br>
-Description: The following code sample calls the API's <code>videos.insert</code> method to upload a video to the channel
-associated with the request.
+Method: youtube.playlists.insert<br>
+Description: The following code sample calls the API's <code>playlists.insert</code> method to create a private playlist
+owned by the channel authorizing the request.
 
 ### [Retrieve my uploads](/youtube/api-samples/blob/master/dotnet/MyUploads.cs)
 
@@ -20,8 +20,8 @@ Method: youtube.search.list<br>
 Description: The following code sample calls the API's <code>search.list</code> method to retrieve search results
 associated with a particular keyword.
 
-### [Create a playlist](/youtube/api-samples/blob/master/dotnet/PlaylistUpdates.cs)
+### [Upload a video](/youtube/api-samples/blob/master/dotnet/UploadVideo.cs)
 
-Method: youtube.playlists.insert<br>
-Description: The following code sample calls the API's <code>playlists.insert</code> method to create a private playlist
-owned by the channel authorizing the request.
+Method: youtube.videos.insert<br>
+Description: The following code sample calls the API's <code>videos.insert</code> method to upload a video to the channel
+associated with the request.
