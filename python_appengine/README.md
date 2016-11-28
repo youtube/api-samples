@@ -10,5 +10,5 @@ to a specified channel. The channel can be identified by its channel ID or chann
 ### [Search by keyword](/youtube/api-samples/blob/master/python_appengine/search/main.py)
 
 Method: youtube.search.list
-Description: This code sample calls the API's search.list method to retrieve search results associated
+Description: This code sample calls the API's <code>search.list</code> method to retrieve search results associated
 with a particular keyword.
