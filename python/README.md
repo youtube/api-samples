@@ -216,7 +216,7 @@ watermark image for a channel. The request must be authorized by the channel tha
 
 Method: youtube.liveBroadcasts.bind,youtube.liveBroadcasts.insert,youtube.liveStreams.insert<br>
 Description: This sample calls the API's <code>liveBroadcasts.insert</code> and <code>liveStreams.insert</code>
-method to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
+methods to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
 the stream to the broadcast.
 
 ### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/python/list_broadcasts.py)
