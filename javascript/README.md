@@ -64,7 +64,7 @@ Description: This sample uses the YouTube Data and YouTube Analytics APIs to ret
 The samples use the <a target="_blank" href="/api-client-library/javascript/">Google APIs JavaScript client library</a>
 to demonstrate API functionality. The <a href="/youtube/analytics/v1/sample-application">Building a Sample Application</a>
 document walks you through the steps of building this application and discusses different portions of this code in more 
-detail.
+detail.<br><br>
 
 In addition to the JavaScript file described above, the HTML page uses <a href="http://jquery.com">jQuery</a>, which
 provides helper methods to simplify HTML document traversing, event handling, animating and Ajax interactions. It also
