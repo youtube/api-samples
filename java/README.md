@@ -217,10 +217,12 @@ Description: This sample demonstrates how to retrieve reports created by a speci
 <code>jobId</code> parameter set to a specific job id to retrieve reports created by that job. Finally, the sample
 prints out the download URL for each report.
 
-### [Create a broadcast](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/CreateBroadcast.java)
+### [Create a broadcast and stream](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/CreateBroadcast.java)
 
 Method: youtube.liveBroadcasts.bind,youtube.liveBroadcasts.insert,youtube.liveStreams.insert<br>
-Description: This sample calls the API's <code>liveBroadcasts.insert</code> method to create a broadcast.
+Description: This sample calls the API's <code>liveBroadcasts.insert</code> and <code>liveStreams.insert</code>
+method to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
+the stream to the broadcast.
 
 ### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListBroadcasts.java)
 
