@@ -191,10 +191,12 @@ Description: The following code sample calls the API's <code>videos.insert</code
 channel. The code also utilizes <code>Google_MediaFileUpload</code> class with the <code>resumable upload</code>
 parameter set to <code>true</code> to be able to to upload the video in chunks.
 
-### [Create a broadcast](/youtube/api-samples/blob/master/php/create_broadcast.php)
+### [Create a broadcast and stream](/youtube/api-samples/blob/master/php/create_broadcast.php)
 
 Method: youtube.liveBroadcasts.bind,youtube.liveBroadcasts.insert,youtube.liveStreams.insert<br>
-Description: This sample calls the API's <code>liveBroadcasts.insert</code> method to create a broadcast.
+Description: This sample calls the API's <code>liveBroadcasts.insert</code> and <code>liveStreams.insert</code>
+method to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
+the stream to the broadcast.
 
 ### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/php/list_broadcasts.php)
 
