@@ -212,10 +212,12 @@ Method: youtube.watermarks.set<br>
 Description: This sample calls the API's <code>watermarks.set</code> method to upload an image and set it as the
 watermark image for a channel. The request must be authorized by the channel that owns the video.
 
-### [Create a broadcast](/youtube/api-samples/blob/master/python/create_broadcast.py)
+### [Create a broadcast and stream](/youtube/api-samples/blob/master/python/create_broadcast.py)
 
 Method: youtube.liveBroadcasts.bind,youtube.liveBroadcasts.insert,youtube.liveStreams.insert<br>
-Description: This sample calls the API's <code>liveBroadcasts.insert</code> method to create a broadcast.
+Description: This sample calls the API's <code>liveBroadcasts.insert</code> and <code>liveStreams.insert</code>
+method to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
+the stream to the broadcast.
 
 ### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/python/list_broadcasts.py)
 
