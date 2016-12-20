@@ -45,7 +45,8 @@ thread.</li>
 <li>It calls the <code>comments.update</code> method with comment in the request body to update a comment.</li>
 <li>It calls the <code>comments.setModerationStatus</code> method to set the moderation status of the comment, the
 <code>comments.markAsSpam</code> method to mark the comment as spam, and the <code>comments.delete</code> method to
-delete the comment, using the <code>id</code> parameter to identify the comment.</li></ul>
+delete the comment, using the <code>id</code> parameter to identify the comment.</li>
+</ul>
 
 ### [Create and manage comment threads](/youtube/api-samples/blob/master/python/comment_threads.py)
 
