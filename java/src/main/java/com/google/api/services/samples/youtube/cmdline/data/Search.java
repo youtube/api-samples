@@ -88,14 +88,22 @@ public class Search {
 
             // Prompt the user to enter a query term.
             String queryTerm = getInputQuery();
-
+            
+            // Prompt the user to enter number of videos to be returned.
+            long total_number_of_videos_returned = getInputNumberOfVideos();
+            long number_of_videos_returned = total_number_of_videos_returned;
+            
             // Define the API request for retrieving search results.
             YouTube.Search.List search = youtube.search().list("id,snippet");
 
             // Set your developer key from the {{ Google Cloud Console }} for
             // non-authenticated requests. See:
             // {{ https://cloud.google.com/console }}
-            String apiKey = properties.getProperty("youtube.apikey");
+            //String apiKey = properties.getProperty("youtube.apikey");
+            
+            // Prompt the user to enter api key.
+            String apiKey = getInputApiKey();
+            
             search.setKey(apiKey);
             search.setQ(queryTerm);
 
@@ -105,15 +113,60 @@ public class Search {
 
             // To increase efficiency, only retrieve the fields that the
             // application uses.
-            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
-            search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url),nextPageToken,pageInfo,prevPageToken");
+            
+            while( number_of_videos_returned > 0 )
+            {
+                if (number_of_videos_returned <= 50)
+                {
+                    search.setMaxResults(number_of_videos_returned);
 
-            // Call the API and print results.
-            SearchListResponse searchResponse = search.execute();
-            List<SearchResult> searchResultList = searchResponse.getItems();
-            if (searchResultList != null) {
-                prettyPrint(searchResultList.iterator(), queryTerm);
+                    // Call the API and print results.
+                    SearchListResponse searchResponse = search.execute();
+
+                    List<SearchResult> searchResultList = searchResponse.getItems();
+
+                    if (searchResultList != null)
+                    {
+                        // Print videos list
+                        prettyPrint(searchResultList.iterator(), queryTerm);
+                    }
+                    else
+                    {
+                        System.out.println("Search result is null");
+                    }
+
+                    number_of_videos_returned = 0;
+                }
+                else
+                {
+                    long fifty = 50;
+                    search.setMaxResults(fifty);
+
+                    // Call the API and print results.
+                    SearchListResponse searchResponse = search.execute();
+
+                    // Get next page token
+                    String nextPageToken = searchResponse.getNextPageToken();
+
+                    // Set next page token
+                    search.setPageToken(nextPageToken);
+
+                    List<SearchResult> searchResultList = searchResponse.getItems();
+                    if (searchResultList != null)
+                    {
+                        // Print videos list
+                        prettyPrint(searchResultList.iterator(), queryTerm);
+                    }
+                    else
+                    {
+                        System.out.println("Search result is null");
+                    }
+
+                    number_of_videos_returned -= 50;
+                }
             }
+            
         } catch (GoogleJsonResponseException e) {
             System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
                     + e.getDetails().getMessage());
@@ -142,6 +195,39 @@ public class Search {
         return inputQuery;
     }
 
+    /*
+     * Prompt the user to enter number of videos to be returned.
+     */
+    private static long getInputNumberOfVideos() throws IOException
+    {
+        long number = 1;
+
+        System.out.print("Please enter number of videos: ");
+        BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
+        number = Integer.parseInt(bReader.readLine());
+
+        if( number < 1 )
+        {
+            number = 1;
+        }
+
+        return number;
+    }
+    
+    /*
+     * Prompt the user to enter google api key.
+     */
+    private static String getInputApiKey() throws IOException
+    {
+        String apiKey = ""; // E.g. AIzaSyByDhVcr6jNpTk64kXmXBnAd4AqiFxyZ44
+
+        System.out.print("Please enter your api key: ");
+        BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
+        apiKey = bReader.readLine();
+
+        return apiKey;
+    }
+    
     /*
      * Prints out all results in the Iterator. For each result, print the
      * title, video ID, and thumbnail.
