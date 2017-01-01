@@ -13,7 +13,7 @@ https://code.google.com/apis/console.
 
 Example usage:
 
-    go run search_key_keyword.go
+    go run search_by_keyword.go
 
 The YouTube Data API must be enabled for the project associated with this key.
 
