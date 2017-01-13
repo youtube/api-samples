@@ -1,6 +1,6 @@
 ## Samples in this directory:
 
-### [Add a channel section](/youtube/api-samples/blob/master/php/add_channel_section.php)
+### [Add a channel section](/php/add_channel_section.php)
 
 Method: youtube.channelSections.insert<br>
 Description: This sample calls the API's <code>channelSections.insert</code> method to create channel sections.
@@ -12,19 +12,19 @@ property so that the channel displays content in a browse view (rather than a fe
 visible if the channel displays content in a browse view.<br><br>More information on channel sections is available in the
 <a href="https://support.google.com/youtube/answer/3027787">YouTube Help Center</a>.
 
-### [Add a channel subscription](/youtube/api-samples/blob/master/php/add_subscription.php)
+### [Add a channel subscription](/php/add_subscription.php)
 
 Method: youtube.subscriptions.insert<br>
 Description: This sample calls the API's <code>subscriptions.insert</code> method to add a subscription to a specified
 channel.
 
-### [Create a playlist](/youtube/api-samples/blob/master/php/playlist_updates.php)
+### [Create a playlist](/php/playlist_updates.php)
 
 Method: youtube.playlists.insert<br>
 Description: This sample calls the API's <code>playlists.insert</code> method to create a private playlist owned by the
 channel authorizing the request.
 
-### [Create and manage comments](/youtube/api-samples/blob/master/php/comment_handling.php)
+### [Create and manage comments](/php/comment_handling.php)
 
 Method: youtube.commentThreads.list, youtube.comments.insert, youtube.comments.list, youtube.comments.update,
 youtube.comments.setModerationStatus, youtube.comments.markAsSpam, youtube.comments.delete<br>
@@ -42,7 +42,7 @@ thread.</li>
 delete the comment, using the <code>id</code> parameter to identify the comment.</li>
 </ul>
 
-### [Create and manage comment threads](/youtube/api-samples/blob/master/php/comment_threads.php)
+### [Create and manage comment threads](/php/comment_threads.php)
 
 Method: youtube.commentThreads.insert, youtube.commentThreads.list, youtube.commentThreads.update<br>
 Description: This sample demonstrates how to use the following API methods to create and manage top-level comments:<br>
@@ -55,7 +55,7 @@ channel comments and once with the <code>videoId</code> parameter to retrieve vi
 channel comment. In each case, the request body contains the <code>comment</code> resource being updated.</li>
 </ul>
 
-### [Create and manage YouTube video caption tracks](/youtube/api-samples/blob/master/php/captions.php)
+### [Create and manage YouTube video caption tracks](/php/captions.php)
 
 Method: youtube.captions.insert, youtube.captions.list, youtube.captions.update, youtube.captions.download,
 youtube.captions.delete<br>
@@ -72,7 +72,7 @@ tracks.</li>
 identify the caption track.</li>
 </ul>
 
-### [Retrieve my uploads](/youtube/api-samples/blob/master/php/my_uploads.php)
+### [Retrieve my uploads](/php/my_uploads.php)
 
 Method: youtube.playlistItems.list<br>
 Description: This sample calls the API's <code>playlistItems.list</code> method to retrieve a list of videos uploaded
@@ -80,13 +80,13 @@ to the channel associated with the request. The code also calls the <code>channe
 <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies the channel's uploaded
 videos.
 
-### [Search by keyword](/youtube/api-samples/blob/master/php/search.php)
+### [Search by keyword](/php/search.php)
 
 Method: youtube.search.list<br>
 Description: This sample calls the API's <code>search.list</code> method to retrieve search results associated with
 a particular keyword.
 
-### [Search by location](/youtube/api-samples/blob/master/php/geolocation_search.php)
+### [Search by location](/php/geolocation_search.php)
 
 Method: youtube.search.list, youtube.videos.list<br>
 Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>, <code>q</code>,
@@ -94,7 +94,7 @@ Description: This sample calls the API's <code>search.list</code> method with th
 keyword within the radius centered at a particular location. Using the video IDs from the search result, the sample
 calls the API's <code>videos.list</code> method to retrieve location details of each video.
 
-### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/php/channel_localizations.php)
+### [Set and retrieve localized channel metadata](/php/channel_localizations.php)
 
 Method: youtube.channels.update, youtube.channels.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -109,7 +109,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that channel.</li>
 </ul>
 
-### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/php/channel_section_localizations.php)
+### [Set and retrieve localized channel section metadata](/php/channel_section_localizations.php)
 
 Method: youtube.channelSections.update, youtube.channelSections.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -123,7 +123,7 @@ to retrieve localized metadata in that language.</li>
 <code>part</code> parameter value to retrieve all of the localized metadata for that channel section.</li>
 </ul>
 
-### [Set and retrieve localized playlist metadata](/youtube/api-samples/blob/master/php/playlist_localizations.php)
+### [Set and retrieve localized playlist metadata](/php/playlist_localizations.php)
 
 Method: youtube.playlists.update, youtube.playlists.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -137,7 +137,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that playlist.</li>
 </ul>
 
-### [Set and retrieve localized video metadata](/youtube/api-samples/blob/master/php/video_localizations.php)
+### [Set and retrieve localized video metadata](/php/video_localizations.php)
 
 Method: youtube.videos.update, youtube.videos.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata
@@ -151,7 +151,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that video.</li>
 </ul>
 
-### [Shuffle existing channel sections](/youtube/api-samples/blob/master/php/shuffle_channel_sections.php)
+### [Shuffle existing channel sections](/php/shuffle_channel_sections.php)
 
 Method: youtube.channelSections.list,youtube.channelSections.update<br>
 Description: This sample calls the API's <code>channelSections.list</code> method to get the list of current channel
@@ -159,7 +159,7 @@ sections, shuffles them, and then calls <code>channelSections.update</code> to c
 More information on channel sections is available in the
 <a href="https://support.google.com/youtube/answer/3027787">YouTube Help Center</a>.
 
-### [Update a video](/youtube/api-samples/blob/master/php/update_video.php)
+### [Update a video](/php/update_video.php)
 
 Method: youtube.videos.update<br>
 Description: This code sample demonstrates how to add tags into an existing video.<br><br>The following code
@@ -168,13 +168,13 @@ to get the video object. Using this video object, the sample gets the list of ta
 end of this list.  Finally, the code calls <code>youtube.videos.update</code> method with updated video object
 to persist these changes on YouTube.
 
-### [Upload a banner image and set as channel's banner](/youtube/api-samples/blob/master/php/upload_banner.php)
+### [Upload a banner image and set as channel's banner](/php/upload_banner.php)
 
 Method: youtube.channelBanners.insert, youtube.channels.update<br>
 Description: This sample calls the API's <code>channelBanners.insert</code> method to upload an image. With the
 returned URL, the sample calls <code>channels.update</code> method to update the channel's banner to this image.
 
-### [Upload a custom video thumbnail image](/youtube/api-samples/blob/master/php/upload_thumbnail.php)
+### [Upload a custom video thumbnail image](/php/upload_thumbnail.php)
 
 Method: youtube.thumbnails.set<br>
 Description: This sample demonstrates how to upload a custom video thumbnail to YouTube and set it for a video.
@@ -184,41 +184,41 @@ ID to use a custom image as a thumbnail to the video. For the image upload, the 
 <code>true</code> to upload the image piece-by-piece, allowing for subsequent retries to resume uploading from
 a point close to where the previous retry failed, a feature useful for programs that need to upload large files.
 
-### [Upload a video](/youtube/api-samples/blob/master/php/resumable_upload.php)
+### [Upload a video](/php/resumable_upload.php)
 
 Method: youtube.videos.insert<br>
 Description: The following code sample calls the API's <code>videos.insert</code> method to add a video to user's
 channel. The code also utilizes <code>Google_MediaFileUpload</code> class with the <code>resumable upload</code>
 parameter set to <code>true</code> to be able to to upload the video in chunks.
 
-### [Create a broadcast and stream](/youtube/api-samples/blob/master/php/create_broadcast.php)
+### [Create a broadcast and stream](/php/create_broadcast.php)
 
 Method: youtube.liveBroadcasts.bind,youtube.liveBroadcasts.insert,youtube.liveStreams.insert<br>
 Description: This sample calls the API's <code>liveBroadcasts.insert</code> and <code>liveStreams.insert</code>
 methods to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
 the stream to the broadcast.
 
-### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/php/list_broadcasts.php)
+### [Retrieve a channel's broadcasts](/php/list_broadcasts.php)
 
 Method: youtube.liveBroadcasts.list<br>
 Description: This sample calls the API's <code>liveBroadcasts.list</code> method to retrieve a list of broadcasts for
 the channel associated with the request. By default, the request retrieves all broadcasts for the channel, but you can
 also specify a value for the <code>--broadcast-status</code> option to only retrieve broadcasts with a particular status.
 
-### [Retrieve a channel's live video streams](/youtube/api-samples/blob/master/php/list_streams.php)
+### [Retrieve a channel's live video streams](/php/list_streams.php)
 
 Method: youtube.liveStreams.list<br>
 Description: This sample calls the API's <code>liveStreams.list</code> method to retrieve a list of video stream settings
 that a channel can use to broadcast live events on YouTube.
 
-### [Create a reporting job](/youtube/api-samples/blob/master/php/create_reporting_job.php)
+### [Create a reporting job](/php/create_reporting_job.php)
 
 Method: youtubeReporting.reportTypes.list, youtubeReporting.jobs.create<br>
 Description: This sample demonstrates how to create a reporting job. It calls the <code>reportTypes.list</code> method
 to retrieve a list of available report types. It then calls the <code>jobs.create</code> method to create a new reporting
 job.
 
-### [Retrieve reports](/youtube/api-samples/blob/master/php/retrieve_reports.php)
+### [Retrieve reports](/php/retrieve_reports.php)
 
 Method: youtubeReporting.jobs.list, youtubeReporting.reports.list<br>
 Description: This sample demonstrates how to retrieve reports created by a specific job. It calls the

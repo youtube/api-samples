@@ -1,6 +1,6 @@
 ## Samples in this directory:
 
-### [Authorize a request](/youtube/api-samples/blob/master/javascript/auth.js)
+### [Authorize a request](/javascript/auth.js)
 
 Description: The <code>auth.js</code> script demonstrates how to use the Google APIs Client Library for JavaScript
 to provide API access and authorize user requests. All of the subsequent samples on this page use this script to
@@ -11,18 +11,18 @@ For requests that do not require authentication, you could also use the
 client ID by registering your application in the
 <a href="https://console.developers.google.com">Google Developers Console</a>.
 
-### [Do resumable uploads with CORS](/youtube/api-samples/blob/master/javascript/cors_upload.js)
+### [Do resumable uploads with CORS](/javascript/cors_upload.js)
 
 Method: youtube.videos.insert
 Description: This code sample demonstrates how to execute a resumable upload using XHR/CORS.
 
-### [Create a playlist](/youtube/api-samples/blob/master/javascript/playlist_updates.js)
+### [Create a playlist](/javascript/playlist_updates.js)
 
 Method: youtube.playlists.insert<br>
 Description: This JavaScript code creates a private playlist and adds videos to that playlist. (You could, of course, modify the code so that it creates a publicly visible playlist or so that it checks a form value to determine whether the playlist is
 public or private.) Note that you need to update the client ID in the <code>auth.js</code> file to run this code.<br><br>The HTML page uses JQuery, along with the <code>auth.js</code> and <code>playlist_updates.js</code> JavaScript files, to display a simple form for adding videos to the playlist.
 
-### [Retrieve my uploads](/youtube/api-samples/blob/master/javascript/my_uploads.js)
+### [Retrieve my uploads](/javascript/my_uploads.js)
 
 Method: youtube.playlistItems.list<br>
 Description: The JavaScript sample code performs the following functions:<br>
@@ -35,13 +35,13 @@ Description: The JavaScript sample code performs the following functions:<br>
 
 The HTML page uses JQuery, the <code>auth.js</code> and <code>my_uploads.js</code> JavaScript files, and a CSS file to display the list of uploaded videos.
 
-### [Search by keyword](/youtube/api-samples/blob/master/javascript/search.js)
+### [Search by keyword](/javascript/search.js)
 
 Method: youtube.search.list<br>
 Description: This code sample calls the API's <code>search.list</code> method to retrieve search results associated
 with a particular keyword. The HTML page uses JQuery, along with the <code>auth.js</code> and <code>search.js</code> JavaScript files, to show a simple search form and display the list of search results.
 
-### [Upload a video](/youtube/api-samples/blob/master/javascript/upload_video.js)
+### [Upload a video](/javascript/upload_video.js)
 
 Method: youtube.videos.insert<br>
 Description: This JavaScript sample performs the following functions:<br>
@@ -57,7 +57,7 @@ with your project's client ID. The only valid JavaScript origin for the client I
 <code>http://localhost</code>. This means that you could test the sample locally, but it would not work in your
 production application.
 
-### [Calling the Analytics API](/youtube/api-samples/blob/master/javascript/analytics_codelab.js)
+### [Calling the Analytics API](/javascript/analytics_codelab.js)
 
 Method: youtubeAnalytics.reports.query<br>
 Description: This sample uses the YouTube Data and YouTube Analytics APIs to retrieve YouTube channel metrics.
