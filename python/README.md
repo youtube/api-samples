@@ -1,6 +1,6 @@
 ## Samples in this directory:
 
-### [Add a channel section](/youtube/api-samples/blob/master/python/add_channel_section.py)
+### [Add a channel section](/python/add_channel_section.py)
 
 Method: youtube.channelSections.insert<br>
 Description: This sample calls the API's <code>channelSections.insert</code> method to create channel sections.
@@ -12,25 +12,25 @@ property so that the channel displays content in a browse view (rather than a fe
 visible if the channel displays content in a browse view.<br><br>More information on channel sections is available in the
 <a href="https://support.google.com/youtube/answer/3027787">YouTube Help Center</a>.
 
-### [Add a channel subscription](/youtube/api-samples/blob/master/python/add_subscription.py)
+### [Add a channel subscription](/python/add_subscription.py)
 
 Method: youtube.subscriptions.insert<br>
 Description: This sample calls the API's <code>subscriptions.insert</code> method to add a subscription to a specified
 channel.
 
-### [Add a featured video](/youtube/api-samples/blob/master/python/add_featured_video.py)
+### [Add a featured video](/python/add_featured_video.py)
 
 Method: youtube.channels.update<br>
 Description: This sample calls the API's <code>channels.update</code> method to set <code>invideoPromotion</code>
 properties for the channel.
 
-### [Create a playlist](/youtube/api-samples/blob/master/python/playlist_updates.py)
+### [Create a playlist](/python/playlist_updates.py)
 
 Method: youtube.playlists.insert<br>
 Description: This sample calls the API's <code>playlists.insert</code> method to create a private playlist owned by the
 channel authorizing the request.
 
-### [Create and manage comments](/youtube/api-samples/blob/master/python/comment_handling.py)
+### [Create and manage comments](/python/comment_handling.py)
 
 Method: youtube.commentThreads.list, youtube.comments.insert, youtube.comments.list, youtube.comments.update,
 youtube.comments.setModerationStatus, youtube.comments.markAsSpam, youtube.comments.delete<br>
@@ -48,7 +48,7 @@ thread.</li>
 delete the comment, using the <code>id</code> parameter to identify the comment.</li>
 </ul>
 
-### [Create and manage comment threads](/youtube/api-samples/blob/master/python/comment_threads.py)
+### [Create and manage comment threads](/python/comment_threads.py)
 
 Method: youtube.commentThreads.insert, youtube.commentThreads.list, youtube.commentThreads.update<br>
 Description: This sample demonstrates how to use the following API methods to create and manage top-level comments:<br>
@@ -61,7 +61,7 @@ channel comments and once with the <code>videoId</code> parameter to retrieve vi
 channel comment. In each case, the request body contains the <code>comment</code> resource being updated.</li>
 </ul>
 
-### [Create and manage YouTube video caption tracks](/youtube/api-samples/blob/master/python/captions.py)
+### [Create and manage YouTube video caption tracks](/python/captions.py)
 
 Method: youtube.captions.insert, youtube.captions.list, youtube.captions.update, youtube.captions.download,
 youtube.captions.delete<br>
@@ -78,24 +78,24 @@ tracks.</li>
 identify the caption track.</li>
 </ul>
 
-### [Like a video](/youtube/api-samples/blob/master/python/like_video.py)
+### [Like a video](/python/like_video.py)
 
 Method: youtube.videos.rate<br>
 Description: This sample calls the API's <code>videos.rate</code> method to set a positive rating for a video.
 
-### [Post a channel bulletin](/youtube/api-samples/blob/master/python/channel_bulletin.py)
+### [Post a channel bulletin](/python/channel_bulletin.py)
 
 Method: youtube.activities.insert<br>
 Description: This sample calls the API's <code>activities.insert</code> method to post a bulletin to the channel
 associated with the request.
 
-### [Remove a watermark image from a channel](/youtube/api-samples/blob/master/python/unset_watermark.py)
+### [Remove a watermark image from a channel](/python/unset_watermark.py)
 
 Method: youtube.watermarks.unset<br>
 Description: This sample calls the API's <code>watermarks.unset</code> method to remove the watermark
 image for a channel. The request must be authorized by the channel that owns the video.
 
-### [Retrieve my uploads](/youtube/api-samples/blob/master/python/my_uploads.py)
+### [Retrieve my uploads](/python/my_uploads.py)
 
 Method: youtube.playlistItems.list<br>
 Description: This sample calls the API's <code>playlistItems.list</code> method to retrieve a list of videos uploaded
@@ -103,13 +103,13 @@ to the channel associated with the request. The code also calls the <code>channe
 <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies the channel's uploaded
 videos.
 
-### [Search by keyword](/youtube/api-samples/blob/master/python/search.py)
+### [Search by keyword](/python/search.py)
 
 Method: youtube.search.list<br>
 Description: This sample calls the API's <code>search.list</code> method to retrieve search results associated with
 a particular keyword.
 
-### [Search by location](/youtube/api-samples/blob/master/python/geolocation_search.py)
+### [Search by location](/python/geolocation_search.py)
 
 Method: youtube.search.list, youtube.videos.list<br>
 Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>,
@@ -118,7 +118,7 @@ matching the provided keyword within the radius centered at a particular locatio
 the search result, the sample calls the API's <code>videos.list</code> method to retrieve location details
 of each video.
 
-### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/python/channel_localizations.py)
+### [Set and retrieve localized channel metadata](/python/channel_localizations.py)
 
 Method: youtube.channels.update, youtube.channels.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -133,7 +133,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that channel.</li>
 </ul>
 
-### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/python/channel_section_localizations.py)
+### [Set and retrieve localized channel section metadata](/python/channel_section_localizations.py)
 
 Method: youtube.channelSections.update, youtube.channelSections.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -147,7 +147,7 @@ to retrieve localized metadata in that language.</li>
 <code>part</code> parameter value to retrieve all of the localized metadata for that channel section.</li>
 </ul>
 
-### [Set and retrieve localized playlist metadata](/youtube/api-samples/blob/master/python/playlist_localizations.py)
+### [Set and retrieve localized playlist metadata](/python/playlist_localizations.py)
 
 Method: youtube.playlists.update, youtube.playlists.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -161,7 +161,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that playlist.</li>
 </ul>
 
-### [Set and retrieve localized video metadata](/youtube/api-samples/blob/master/python/video_localizations.py)
+### [Set and retrieve localized video metadata](/python/video_localizations.py)
 
 Method: youtube.videos.update, youtube.videos.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata
@@ -175,7 +175,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that video.</li>
 </ul>
 
-### [Shuffle existing channel sections](/youtube/api-samples/blob/master/python/shuffle_channel_sections.py)
+### [Shuffle existing channel sections](/python/shuffle_channel_sections.py)
 
 Method: youtube.channelSections.list,youtube.channelSections.update<br>
 Description: This sample calls the API's <code>channelSections.list</code> method to get the list of current channel
@@ -183,57 +183,57 @@ sections. Then it shuffles the list and calls <code>channelSections.update</code
 More information on channel sections is available in the
 <a href="https://support.google.com/youtube/answer/3027787">YouTube Help Center</a>.
 
-### [Update a video](/youtube/api-samples/blob/master/python/update_video.py)
+### [Update a video](/python/update_video.py)
 
 Method: youtube.videos.update<br>
 Description: This sample calls the API's <code>videos.update</code> method to update a video owned by the channel
 authorizing the request.
 
-### [Upload a banner image and set as channel's banner](/youtube/api-samples/blob/master/python/upload_banner.py)
+### [Upload a banner image and set as channel's banner](/python/upload_banner.py)
 
 Method: youtube.channelBanners.insert, youtube.channels.update<br>
 Description: This sample calls the API's <code>channelBanners.insert</code> method to upload an image. With the
 returned URL, the sample calls <code>channels.update</code> method to update the channel's banner to that image.
 
-### [Upload a video](/youtube/api-samples/blob/master/python/upload_video.py)
+### [Upload a video](/python/upload_video.py)
 
 Method: youtube.videos.insert<br>
 Description: This sample calls the API's <code>videos.insert</code> method to upload a video to the channel associated
 with the request.
 
-### [Upload a video thumbnail image](/youtube/api-samples/blob/master/python/upload_thumbnail.py)
+### [Upload a video thumbnail image](/python/upload_thumbnail.py)
 
 Method: youtube.thumbnails.set<br>
 Description: This sample calls the API's <code>thumbnails.set</code> method to upload an image and set it as the
 thumbnail image for a video. The request must be authorized by the channel that owns the video.
 
-### [Upload a watermark image and set it for a channel](/youtube/api-samples/blob/master/python/set_watermark.py)
+### [Upload a watermark image and set it for a channel](/python/set_watermark.py)
 
 Method: youtube.watermarks.set<br>
 Description: This sample calls the API's <code>watermarks.set</code> method to upload an image and set it as the
 watermark image for a channel. The request must be authorized by the channel that owns the video.
 
-### [Create a broadcast and stream](/youtube/api-samples/blob/master/python/create_broadcast.py)
+### [Create a broadcast and stream](/python/create_broadcast.py)
 
 Method: youtube.liveBroadcasts.bind,youtube.liveBroadcasts.insert,youtube.liveStreams.insert<br>
 Description: This sample calls the API's <code>liveBroadcasts.insert</code> and <code>liveStreams.insert</code>
 methods to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
 the stream to the broadcast.
 
-### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/python/list_broadcasts.py)
+### [Retrieve a channel's broadcasts](/python/list_broadcasts.py)
 
 Method: youtube.liveBroadcasts.list<br>
 Description: This sample calls the API's <code>liveBroadcasts.list</code> method to retrieve a list of broadcasts for
 the channel associated with the request. By default, the request retrieves all broadcasts for the channel, but you can
 also specify a value for the <code>--broadcast-status</code> option to only retrieve broadcasts with a particular status.
 
-### [Retrieve a channel's live video streams](/youtube/api-samples/blob/master/python/list_streams.py)
+### [Retrieve a channel's live video streams](/python/list_streams.py)
 
 Method: youtube.liveStreams.list<br>
 Description: This sample calls the API's <code>liveStreams.list</code> method to retrieve a list of video stream settings
 that a channel can use to broadcast live events on YouTube.
 
-### [Retrieve top 10 videos by viewcount](/youtube/api-samples/blob/master/python/yt_analytics_report.py)
+### [Retrieve top 10 videos by viewcount](/python/yt_analytics_report.py)
 
 Method: youtubeAnalytics.reports.query<br>
 Description: This sample calls the API's <code>reports.query</code> method to retrieve YouTube Analytics data.
@@ -241,14 +241,14 @@ By default, the report retrieves the top 10 videos based on viewcounts, and it r
 videos, sorting the results in reverse order by viewcount. By setting command line parameters, you can use the
 same code to retrieve other reports as well.
 
-### [Create a reporting job](/youtube/api-samples/blob/master/python/create_reporting_job.py)
+### [Create a reporting job](/python/create_reporting_job.py)
 
 Method: youtubeReporting.reportTypes.list, youtubeReporting.jobs.create<br>
 Description: This sample demonstrates how to create a reporting job. It calls the <code>reportTypes.list</code> method
 to retrieve a list of available report types. It then calls the <code>jobs.create</code> method to create a new reporting
 job.
 
-### [Retrieve reports](/youtube/api-samples/blob/master/python/retrieve_reports.py)
+### [Retrieve reports](/python/retrieve_reports.py)
 
 Method: youtubeReporting.jobs.list, youtubeReporting.reports.list<br>
 Description: This sample demonstrates how to retrieve reports created by a specific job. It calls the

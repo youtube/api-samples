@@ -22,29 +22,29 @@ YouTube API samples, see this video:
 
 ## Samples in this directory:
 
-### [Authorize a request](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/Auth.java)
+### [Authorize a request](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/Auth.java)
 
 Description: This sample demonstrates how to use OAuth 2.0 to authorize an application to access resources on a user's behalf. 
 
-### [Add a channel subscription](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/AddSubscription.java)
+### [Add a channel subscription](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/AddSubscription.java)
 
 Method: youtube.subscriptions.insert<br>
 Description: This sample calls the API's <code>subscriptions.insert</code> method to add a subscription to a specified
 channel.
 
-### [Add a featured video](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/InvideoProgramming.java)
+### [Add a featured video](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/InvideoProgramming.java)
 
 Method: youtube.channels.update<br>
 Description: This sample calls the API's <code>channels.update</code> method to set <code>invideoPromotion</code>
 properties for the channel.
 
-### [Create a playlist](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistUpdates.java)
+### [Create a playlist](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistUpdates.java)
 
 Method: youtube.playlists.insert<br>
 Description: This sample calls the API's <code>playlists.insert</code> method to create a private playlist owned by the
 channel authorizing the request.
 
-### [Create and manage comments](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/CommentHandling.java)
+### [Create and manage comments](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/CommentHandling.java)
 
 Method: youtube.commentThreads.list, youtube.comments.insert, youtube.comments.list, youtube.comments.update,
 youtube.comments.setModerationStatus, youtube.comments.markAsSpam, youtube.comments.delete<br>
@@ -61,7 +61,7 @@ thread.</li>
 <code>comments.markAsSpam</code> method to mark the comment as spam, and the <code>comments.delete</code> method to
 delete the comment, using the <code>id</code> parameter to identify the comment.</li></ul>
 
-### [Create and manage comment threads](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/CommentThreads.java)
+### [Create and manage comment threads](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/CommentThreads.java)
 
 Method: youtube.commentThreads.insert, youtube.commentThreads.list, youtube.commentThreads.update<br>
 Description: This sample demonstrates how to use the following API methods to create and manage top-level comments:<br>
@@ -74,7 +74,7 @@ channel comments and once with the <code>videoId</code> parameter to retrieve vi
 channel comment. In each case, the request body contains the <code>comment</code> resource being updated.</li>
 </ul>
 
-### [Create and manage YouTube video caption tracks](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Captions.java)
+### [Create and manage YouTube video caption tracks](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Captions.java)
 
 Method: youtube.captions.insert, youtube.captions.list, youtube.captions.update, youtube.captions.download,
 youtube.captions.delete<br>
@@ -91,13 +91,13 @@ tracks.</li>
 identify the caption track.</li>
 </ul>
 
-### [Post a channel bulletin](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelBulletin.java)
+### [Post a channel bulletin](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelBulletin.java)
 
 Method: youtube.activities.insert<br>
 Description: This sample calls the API's <code>activities.insert</code> method to post a bulletin to the channel
 associated with the request.
 
-### [Retrieve my uploads](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/MyUploads.java)
+### [Retrieve my uploads](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/MyUploads.java)
 
 Method: youtube.playlistItems.list<br>
 Description: This sample calls the API's <code>playlistItems.list</code> method to retrieve a list of videos uploaded
@@ -105,13 +105,13 @@ to the channel associated with the request. The code also calls the <code>channe
 <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies the channel's uploaded
 videos.
 
-### [Search by keyword](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Search.java)
+### [Search by keyword](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/Search.java)
 
 Method: youtube.search.list<br>
 Description: This sample calls the API's <code>search.list</code> method to retrieve search results associated with
 a particular keyword.
 
-### [Search by location](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/GeolocationSearch.java)
+### [Search by location](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/GeolocationSearch.java)
 
 Method: youtube.search.list, youtube.videos.list<br>
 Description: This sample calls the API's <code>search.list</code> method with the <code>type</code>, <code>q</code>, <code>location</code>, and
@@ -119,7 +119,7 @@ Description: This sample calls the API's <code>search.list</code> method with th
 at a particular location. Using the video IDs from the search result, the sample calls the API's <code>videos.list</code>
 method to retrieve location details of each video.
 
-### [Set and retrieve localized channel metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelLocalizations.java)
+### [Set and retrieve localized channel metadata](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelLocalizations.java)
 
 Method: youtube.channels.update, youtube.channels.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -134,7 +134,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that channel.</li>
 </ul>
 
-### [Set and retrieve localized channel section metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelSectionLocalizations.java)
+### [Set and retrieve localized channel section metadata](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/ChannelSectionLocalizations.java)
 
 Method: youtube.channelSections.update, youtube.channelSections.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -148,7 +148,7 @@ to retrieve localized metadata in that language.</li>
 <code>part</code> parameter value to retrieve all of the localized metadata for that channel section.</li>
 </ul>
 
-### [Set and retrieve localized playlist metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistLocalizations.java)
+### [Set and retrieve localized playlist metadata](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/PlaylistLocalizations.java)
 
 Method: youtube.playlists.update, youtube.playlists.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata for a
@@ -162,7 +162,7 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that playlist.</li>
 </ul>
 
-### [Set and retrieve localized video metadata](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/VideoLocalizations.java)
+### [Set and retrieve localized video metadata](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/VideoLocalizations.java)
 
 Method: youtube.videos.update, youtube.videos.list<br>
 Description: This sample demonstrates how to use the following API methods to set and retrieve localized metadata
@@ -176,25 +176,25 @@ retrieve localized metadata in that language.</li>
 parameter value to retrieve all of the localized metadata for that video.</li>
 </ul>
 
-### [Update a video](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UpdateVideo.java)
+### [Update a video](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UpdateVideo.java)
 
 Method: youtube.videos.update<br>
 Description: This sample calls the API's <code>videos.update</code> method to update a video owned by the channel
 authorizing the request.
 
-### [Upload a custom video thumbnail image](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UploadThumbnail.java)
+### [Upload a custom video thumbnail image](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UploadThumbnail.java)
 
 Method: youtube.thumbnails.set<br>
 Description: This sample calls the API's <code>thumbnails.set</code> method to upload an image and set it as the
 thumbnail image for a video. The request must be authorized by the channel that owns the video.
 
-### [Upload a video](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UploadVideo.java)
+### [Upload a video](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/data/UploadVideo.java)
 
 Method: youtube.videos.insert<br>
 Description: This sample calls the API's <code>videos.insert</code> method to upload a video to the channel associated
 with the request.
 
-### [Retrieve top 10 videos by viewcount](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/analytics/YouTubeAnalyticsReports.java)
+### [Retrieve top 10 videos by viewcount](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/analytics/YouTubeAnalyticsReports.java)
 
 Method: youtubeAnalytics.reports.query<br>
 Description: This sample calls the API's <code>reports.query</code> method to retrieve YouTube Analytics data.
@@ -202,14 +202,14 @@ By default, the report retrieves the top 10 videos based on viewcounts, and it r
 videos, sorting the results in reverse order by viewcount. By setting command line parameters, you can use the
 same code to retrieve other reports as well.
 
-### [Create a reporting job](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/reporting/CreateReportingJob.java)
+### [Create a reporting job](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/reporting/CreateReportingJob.java)
 
 Method: youtubeReporting.reportTypes.list, youtubeReporting.jobs.create<br>
 Description: This sample demonstrates how to create a reporting job. It calls the <code>reportTypes.list</code> method
 to retrieve a list of available report types. It then calls the <code>jobs.create</code> method to create a new reporting
 job.
 
-### [Retrieve reports](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/reporting/RetrieveReports.java)
+### [Retrieve reports](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/reporting/RetrieveReports.java)
 
 Method: youtubeReporting.jobs.list, youtubeReporting.reports.list<br>
 Description: This sample demonstrates how to retrieve reports created by a specific job. It calls the
@@ -217,21 +217,21 @@ Description: This sample demonstrates how to retrieve reports created by a speci
 <code>jobId</code> parameter set to a specific job id to retrieve reports created by that job. Finally, the sample
 prints out the download URL for each report.
 
-### [Create a broadcast and stream](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/CreateBroadcast.java)
+### [Create a broadcast and stream](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/CreateBroadcast.java)
 
 Method: youtube.liveBroadcasts.bind,youtube.liveBroadcasts.insert,youtube.liveStreams.insert<br>
 Description: This sample calls the API's <code>liveBroadcasts.insert</code> and <code>liveStreams.insert</code>
 methods to create a broadcast and a stream. Then, it calls the <code>liveBroadcasts.bind</code> method to bind
 the stream to the broadcast.
 
-### [Retrieve a channel's broadcasts](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListBroadcasts.java)
+### [Retrieve a channel's broadcasts](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListBroadcasts.java)
 
 Method: youtube.liveBroadcasts.list<br>
 Description: This sample calls the API's <code>liveBroadcasts.list</code> method to retrieve a list of broadcasts for
 the channel associated with the request. By default, the request retrieves all broadcasts for the channel, but you can
 also specify a value for the <code>--broadcast-status</code> option to only retrieve broadcasts with a particular status.
 
-### [Retrieve a channel's live video streams](/youtube/api-samples/blob/master/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListStreams.java)
+### [Retrieve a channel's live video streams](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListStreams.java)
 
 Method: youtube.liveStreams.list<br>
 Description: This sample calls the API's <code>liveStreams.list</code> method to retrieve a list of video stream settings
