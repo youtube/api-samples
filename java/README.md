@@ -2,8 +2,8 @@ Prerequisites for this code sample:
 - Java 1.6
 - Apache Maven (http://maven.apache.org)
 
-Before running the sample, client_secrets.json must be populated with a
-client ID and client secret. You can create an ID/secret pair at:
+Before running the sample, client_secrets.json and youtube.properties must be populated with a
+client ID and client secret or simple api key. You can create an ID/secret pair at:
 
   https://code.google.com/apis/console
 
