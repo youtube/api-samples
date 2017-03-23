@@ -11,9 +11,13 @@ To build this code sample from the command line, type:
 
   mvn compile
 
-To run the code sample from the command line, enter the following:
+To run a code sample from the command line, enter the following:
 
-  mvn exec:java -Dexec.mainClass="FULL_CLASS_NAME"
+  <code>mvn exec:java -Dexec.mainClass="FULL_CLASS_NAME"</code>
+
+For samples that require arguments, also specify -Dexec.args, e.g.:
+
+  <code>mvn exec:java -Dexec.mainClass="FULL_CLASS_NAME" -Dexec.args="arg1 arg2"</code>
 
 For more instructions about how to set up Maven and/or your IDE to run
 YouTube API samples, see this video:
@@ -236,3 +240,29 @@ also specify a value for the <code>--broadcast-status</code> option to only retr
 Method: youtube.liveStreams.list<br>
 Description: This sample calls the API's <code>liveStreams.list</code> method to retrieve a list of video stream settings
 that a channel can use to broadcast live events on YouTube.
+
+
+### [Get a live chat id](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/GetLiveChatId.java)
+
+Methods: youtube.videos.list, youtube.liveBroadcasts.list<br>
+Description: This sample retrieves a live chat id from either a <code>videoId</code> parameter
+or the current user's live broadcast. The <code>liveChatId</code> is required for other samples
+that interact with live chat.
+
+### [Insert a live chat message](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/InsertLiveChatMessage.java)
+
+Method: youtube.liveChatMessages.insert<br>
+Description: This sample inserts a live chat message into the live chat specified by either
+a <code>videoId</code> parameter or the current user's live broadcast.
+
+### [Delete a live chat message](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/DeleteLiveChatMessage.java)
+
+Method: youtube.liveChatMessages.delete<br>
+Description: This sample deletes a live chat message from the live chat specified by either
+a <code>videoId</code> parameter or the current user's live broadcast.
+
+### [List live chat messages](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListLiveChatMessages.java)
+
+Method: youtube.liveChatMessages.list<br>
+Description: This sample lists live chat messages from the chat specified by either
+a <code>videoId</code> parameter or the current user's live broadcast.

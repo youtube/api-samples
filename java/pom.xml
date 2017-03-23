@@ -11,7 +11,7 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <project.youtube.version>v3-rev179-1.22.0</project.youtube.version>
+        <project.youtube.version>v3-rev182-1.22.0</project.youtube.version>
         <project.youtube.analytics.version>v1-rev63-1.22.0</project.youtube.analytics.version>
         <project.youtube.reporting.version>v1-rev10-1.22.0</project.youtube.reporting.version>
         <project.http.version>1.20.0</project.http.version>
