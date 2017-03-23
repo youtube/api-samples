@@ -63,8 +63,8 @@ public class ListBroadcasts {
                     youtube.liveBroadcasts().list("id,snippet");
 
             // Indicate that the API response should not filter broadcasts
-            // based on their status.
-            liveBroadcastRequest.setBroadcastStatus("all");
+            // based on their type or status.
+            liveBroadcastRequest.setBroadcastType("all").setBroadcastStatus("all");
 
             // Execute the API request and return the list of broadcasts.
             LiveBroadcastListResponse returnedListResponse = liveBroadcastRequest.execute();
