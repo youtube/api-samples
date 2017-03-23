@@ -259,7 +259,7 @@ public class ListLiveChatMessages {
                 if (appendComma) {
                     output.append(", ");
                 }
-                output.append("SPONSER");
+                output.append("SPONSOR");
             }
             output.append(")");
         }
