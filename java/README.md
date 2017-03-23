@@ -9,7 +9,7 @@ client ID and client secret. You can create an ID/secret pair at:
 
 To build this code sample from the command line, type:
 
-  mvn compile
+  <code>mvn compile</code>
 
 To run a code sample from the command line, enter the following:
 
