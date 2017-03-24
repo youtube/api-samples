@@ -176,7 +176,7 @@ public class ListLiveChatMessages {
             output.append("SUPERCHAT RECEIVED FROM ");
         }
         output.append(author.getDisplayName());
-        if (author.getIsChatOwner() || author.getIsChatOwner() || author.getIsChatSponsor()) {
+        if (author.getIsChatOwner() || author.getIsChatModerator() || author.getIsChatSponsor()) {
             output.append(" (");
             boolean appendComma = false;
             if (author.getIsChatOwner()) {
