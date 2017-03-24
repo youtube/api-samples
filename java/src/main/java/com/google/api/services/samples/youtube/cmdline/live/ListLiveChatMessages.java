@@ -58,11 +58,6 @@ public class ListLiveChatMessages {
     private static YouTube youtube;
 
     /**
-     * A timer used to schedule message retrieval.
-     */
-    private static Timer pollTimer;
-
-    /**
      * Lists live chat messages and SuperChat details from a live broadcast.
      *
      * @param args videoId (optional). If the videoId is given, live chat messages will be retrieved
@@ -94,11 +89,7 @@ public class ListLiveChatMessages {
                 System.exit(1);
             }
 
-            /**
-             * List live chat messages with poll interval from server. Alternatively, messages
-             * may be requested at a fixed interval with listChatMessagesFixedPeriod, e.g.
-             * listChatMessagesFixedPeriod(liveChatId, 1000, 0)
-             */
+            // Get live chat messages
             listChatMessages(liveChatId, null, 0);
         } catch (GoogleJsonResponseException e) {
             System.err
@@ -116,7 +107,8 @@ public class ListLiveChatMessages {
     }
 
     /**
-     * Lists live chat messages, polling at the server supplied interval.
+     * Lists live chat messages, polling at the server supplied interval. Owners and moderators of a
+     * live chat will poll at a faster rate.
      *
      * @param liveChatId The live chat id to list messages from.
      * @param nextPageToken The page token from the previous request, if any.
@@ -128,7 +120,7 @@ public class ListLiveChatMessages {
         long delayMs) {
         System.out.println(
             String.format("Getting chat messages in %1$.3f seconds...", delayMs * 0.001));
-        pollTimer = new Timer();
+        Timer pollTimer = new Timer();
         pollTimer.schedule(
             new TimerTask() {
                 @Override
@@ -164,63 +156,6 @@ public class ListLiveChatMessages {
                     }
                 }
             }, delayMs);
-    }
-
-    /**
-     * Lists live chat messages, polling at the client supplied interval. This method is not
-     * recommended because it will consume more API usage, but it may be necessary in some
-     * applications that require lower latency. Page tokens do not work when polling faster than the
-     * server supplied interval, so we need to keep track of the publish time to avoid duplicate
-     * message output. Message ids will not work for tracking the last received message because
-     * messages may be removed from chat.
-     *
-     * @param liveChatId The live chat id to list messages from.
-     * @param periodMs The fixed interval to poll messages.
-     * @param minPublishTime The minimum message time to output.
-     */
-    private static void listChatMessagesFixedPeriod(
-        final String liveChatId,
-        final long periodMs,
-        final long minPublishTime) {
-        System.out.println(
-            String.format("Getting chat messages in %1$.3f seconds...", periodMs * 0.001));
-        pollTimer = new Timer();
-        pollTimer.schedule(
-            new TimerTask() {
-                @Override
-                public void run() {
-                    try {
-                        // Get chat messages from YouTube
-                        LiveChatMessageListResponse response = youtube
-                            .liveChatMessages()
-                            .list(liveChatId, "snippet, authorDetails")
-                            .setFields(LIVE_CHAT_FIELDS)
-                            .execute();
-
-                        // Display messages and super chat details
-                        long maxPublishTime = minPublishTime;
-                        List<LiveChatMessage> messages = response.getItems();
-                        for (int i = 0; i < messages.size(); i++) {
-                            LiveChatMessage message = messages.get(i);
-                            LiveChatMessageSnippet snippet = message.getSnippet();
-                            long publishTime = snippet.getPublishedAt().getValue();
-                            if (publishTime >= minPublishTime) {
-                                System.out.println(buildOutput(
-                                    snippet.getDisplayMessage(),
-                                    message.getAuthorDetails(),
-                                    snippet.getSuperChatDetails()));
-                            }
-                            maxPublishTime = Math.max(maxPublishTime, publishTime);
-                        }
-
-                        // Request the next page of messages
-                        listChatMessagesFixedPeriod(liveChatId, periodMs, maxPublishTime + 1);
-                    } catch (Throwable t) {
-                        System.err.println("Throwable: " + t.getMessage());
-                        t.printStackTrace();
-                    }
-                }
-            }, periodMs);
     }
 
     /**
