@@ -19,8 +19,8 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.samples.youtube.cmdline.Auth;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
+import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,11 +52,8 @@ public class DeleteLiveChatMessage {
         }
         String messageId = args[0];
 
-        // This OAuth 2.0 access scope allows for read-only access to the
-        // authenticated user's account, but not other types of account access.
-        List<String> scopes = new ArrayList<String>();
-        scopes.add(YouTubeScopes.YOUTUBE_FORCE_SSL);
-        scopes.add(YouTubeScopes.YOUTUBE);
+        // This OAuth 2.0 access scope allows for write access to the authenticated user's account.
+        List<String> scopes = Lists.newArrayList(YouTubeScopes.YOUTUBE_FORCE_SSL);
 
         try {
             // Authorize the request.
@@ -65,17 +62,6 @@ public class DeleteLiveChatMessage {
             // This object is used to make YouTube Data API requests.
             youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, credential)
                 .setApplicationName("youtube-cmdline-deletechatmessages-sample").build();
-
-            // Get the liveChatId
-            String liveChatId = GetLiveChatId.getLiveChatId(
-                youtube,
-                args.length == 2 ? args[1] : null);
-            if (liveChatId != null) {
-                System.out.println("Live chat id: " + liveChatId);
-            } else {
-                System.err.println("Unable to find a live chat id");
-                System.exit(1);
-            }
 
             // Delete the message from live chat
             YouTube.LiveChatMessages.Delete liveChatDelete =

@@ -68,7 +68,9 @@ public class GetLiveChatId {
                 .setApplicationName("youtube-cmdline-getlivechatid-sample").build();
 
             // Get the liveChatId
-            String liveChatId = getLiveChatId(youtube, args.length == 1 ? args[0] : null);
+            String liveChatId = args.length == 1
+                ? getLiveChatId(youtube, args[0])
+                : getLiveChatId(youtube);
             if (liveChatId != null) {
                 System.out.println("Live chat id: " + liveChatId);
             } else {
@@ -91,41 +93,48 @@ public class GetLiveChatId {
     }
 
     /**
-     * Retrieves the liveChatId from the videoId, if specified. If not specified, will find the
-     * liveChatId for the signed in user's live broadcast.
+     * Retrieves the liveChatId from the authenticated user's live broadcast.
      *
      * @param youtube The object is used to make YouTube Data API requests.
-     * @param videoId The videoId associated with the live chat (optional).
+     * @return A liveChatId, or null if not found.
+     */
+    static String getLiveChatId(YouTube youtube) throws IOException {
+        // Get signed in user's liveChatId
+        YouTube.LiveBroadcasts.List broadcastList = youtube
+            .liveBroadcasts()
+            .list("snippet")
+            .setFields("items/snippet/liveChatId")
+            .setBroadcastType("all")
+            .setBroadcastStatus("active");
+        LiveBroadcastListResponse broadcastListResponse = broadcastList.execute();
+        for (LiveBroadcast b : broadcastListResponse.getItems()) {
+            String liveChatId = b.getSnippet().getLiveChatId();
+            if (liveChatId != null && !liveChatId.isEmpty()) {
+                return liveChatId;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves the liveChatId from the broadcast associated with a videoId.
+     *
+     * @param youtube The object is used to make YouTube Data API requests.
+     * @param videoId The videoId associated with the live broadcast.
      * @return A liveChatId, or null if not found.
      */
     static String getLiveChatId(YouTube youtube, String videoId) throws IOException {
-        if (videoId != null && !videoId.isEmpty()) {
-            // Get liveChatId from the video
-            YouTube.Videos.List videoList = youtube.videos()
-                .list("liveStreamingDetails")
-                .setFields("items/liveStreamingDetails/activeLiveChatId")
-                .setId(videoId);
-            VideoListResponse response = videoList.execute();
-            for (Video v : response.getItems()) {
-                String liveChatId = v.getLiveStreamingDetails().getActiveLiveChatId();
-                if (liveChatId != null && !liveChatId.isEmpty()) {
-                    return liveChatId;
-                }
-            }
-        } else {
-            // Get signed in user's liveChatId
-            YouTube.LiveBroadcasts.List broadcastList = youtube
-                .liveBroadcasts()
-                .list("snippet")
-                .setFields("items/snippet/liveChatId")
-                .setBroadcastType("all")
-                .setBroadcastStatus("active");
-            LiveBroadcastListResponse broadcastListResponse = broadcastList.execute();
-            for (LiveBroadcast b : broadcastListResponse.getItems()) {
-                String liveChatId = b.getSnippet().getLiveChatId();
-                if (liveChatId != null && !liveChatId.isEmpty()) {
-                    return liveChatId;
-                }
+        // Get liveChatId from the video
+        YouTube.Videos.List videoList = youtube.videos()
+            .list("liveStreamingDetails")
+            .setFields("items/liveStreamingDetails/activeLiveChatId")
+            .setId(videoId);
+        VideoListResponse response = videoList.execute();
+        for (Video v : response.getItems()) {
+            String liveChatId = v.getLiveStreamingDetails().getActiveLiveChatId();
+            if (liveChatId != null && !liveChatId.isEmpty()) {
+                return liveChatId;
             }
         }
 

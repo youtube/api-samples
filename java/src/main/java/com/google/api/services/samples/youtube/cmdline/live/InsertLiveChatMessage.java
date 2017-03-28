@@ -22,8 +22,8 @@ import com.google.api.services.youtube.YouTubeScopes;
 import com.google.api.services.youtube.model.LiveChatMessage;
 import com.google.api.services.youtube.model.LiveChatMessageSnippet;
 import com.google.api.services.youtube.model.LiveChatTextMessageDetails;
+import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,11 +61,8 @@ public class InsertLiveChatMessage {
         }
         String message = args[0];
 
-        // This OAuth 2.0 access scope allows for read-only access to the
-        // authenticated user's account, but not other types of account access.
-        List<String> scopes = new ArrayList<String>();
-        scopes.add(YouTubeScopes.YOUTUBE_FORCE_SSL);
-        scopes.add(YouTubeScopes.YOUTUBE);
+        // This OAuth 2.0 access scope allows for write access to the authenticated user's account.
+        List<String> scopes = Lists.newArrayList(YouTubeScopes.YOUTUBE_FORCE_SSL);
 
         try {
             // Authorize the request.
@@ -76,9 +73,9 @@ public class InsertLiveChatMessage {
                 .setApplicationName("youtube-cmdline-insertchatmessage-sample").build();
 
             // Get the liveChatId
-            String liveChatId = GetLiveChatId.getLiveChatId(
-                youtube,
-                args.length == 2 ? args[1] : null);
+            String liveChatId = args.length == 2
+                ? GetLiveChatId.getLiveChatId(youtube, args[1])
+                : GetLiveChatId.getLiveChatId(youtube);
             if (liveChatId != null) {
                 System.out.println("Live chat id: " + liveChatId);
             } else {
@@ -91,7 +88,6 @@ public class InsertLiveChatMessage {
             LiveChatMessageSnippet snippet = new LiveChatMessageSnippet();
             snippet.setType("textMessageEvent");
             snippet.setLiveChatId(liveChatId);
-            snippet.setDisplayMessage(message);
             LiveChatTextMessageDetails details = new LiveChatTextMessageDetails();
             details.setMessageText(message);
             snippet.setTextMessageDetails(details);

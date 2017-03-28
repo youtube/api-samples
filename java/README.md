@@ -218,7 +218,7 @@ job.
 Method: youtubeReporting.jobs.list, youtubeReporting.reports.list<br>
 Description: This sample demonstrates how to retrieve reports created by a specific job. It calls the
 <code>jobs.list</code> method to retrieve reporting jobs. It then calls the <code>reports.list</code> method with the
-<code>jobId</code> parameter set to a specific job id to retrieve reports created by that job. Finally, the sample
+<code>jobId</code> parameter set to a specific job ID to retrieve reports created by that job. Finally, the sample
 prints out the download URL for each report.
 
 ### [Create a broadcast and stream](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/CreateBroadcast.java)
@@ -245,24 +245,23 @@ that a channel can use to broadcast live events on YouTube.
 ### [Get a live chat id](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/GetLiveChatId.java)
 
 Methods: youtube.videos.list, youtube.liveBroadcasts.list<br>
-Description: This sample retrieves a live chat id from either a <code>videoId</code> parameter
-or the current user's live broadcast. The <code>liveChatId</code> is required for other samples
+Description: This sample retrieves the live chat ID from either a <code>videoId</code> parameter
+or the live broadcast for the authorized user's channel. The <code>liveChatId</code> is required for other samples
 that interact with live chat.
 
 ### [Insert a live chat message](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/InsertLiveChatMessage.java)
 
 Method: youtube.liveChatMessages.insert<br>
-Description: This sample inserts a live chat message into the live chat specified by either
-a <code>videoId</code> parameter or the current user's live broadcast.
+Description: This sample inserts a live chat message into the the specified video or the live broadcast for
+the authorized user's channel.
 
 ### [Delete a live chat message](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/DeleteLiveChatMessage.java)
 
 Method: youtube.liveChatMessages.delete<br>
-Description: This sample deletes a live chat message from the live chat specified by either
-a <code>videoId</code> parameter or the current user's live broadcast.
+Description: This sample deletes the specified live chat message.
 
 ### [List live chat messages](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListLiveChatMessages.java)
 
 Method: youtube.liveChatMessages.list<br>
-Description: This sample lists live chat messages from the chat specified by either
-a <code>videoId</code> parameter or the current user's live broadcast.
+Description: This sample lists live chat messages from the specified video or from the live broadcast for
+the authorized user's channel.

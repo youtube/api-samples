@@ -26,6 +26,7 @@ import com.google.api.services.youtube.model.LiveChatMessageSnippet;
 import com.google.api.services.youtube.model.LiveChatSuperChatDetails;
 import com.google.common.collect.Lists;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -79,9 +80,9 @@ public class ListLiveChatMessages {
                 .setApplicationName("youtube-cmdline-listchatmessages-sample").build();
 
             // Get the liveChatId
-            String liveChatId = GetLiveChatId.getLiveChatId(
-                youtube,
-                args.length == 1 ? args[0] : null);
+            String liveChatId = args.length == 1
+                ? GetLiveChatId.getLiveChatId(youtube, args[0])
+                : GetLiveChatId.getLiveChatId(youtube);
             if (liveChatId != null) {
                 System.out.println("Live chat id: " + liveChatId);
             } else {
@@ -176,25 +177,22 @@ public class ListLiveChatMessages {
             output.append("SUPERCHAT RECEIVED FROM ");
         }
         output.append(author.getDisplayName());
-        if (author.getIsChatOwner() || author.getIsChatModerator() || author.getIsChatSponsor()) {
+        List<String> roles = new ArrayList<String>();
+        if (author.getIsChatOwner()) {
+            roles.add("OWNER");
+        }
+        if (author.getIsChatModerator()) {
+            roles.add("MODERATOR");
+        }
+        if (author.getIsChatSponsor()) {
+            roles.add("SPONSOR");
+        }
+        if (roles.size() > 0) {
             output.append(" (");
-            boolean appendComma = false;
-            if (author.getIsChatOwner()) {
-                output.append("OWNER");
-                appendComma = true;
-            }
-            if (author.getIsChatModerator()) {
-                if (appendComma) {
-                    output.append(", ");
-                }
-                output.append("MODERATOR");
-                appendComma = true;
-            }
-            if (author.getIsChatSponsor()) {
-                if (appendComma) {
-                    output.append(", ");
-                }
-                output.append("SPONSOR");
+            String delim = "";
+            for (String role : roles) {
+                output.append(delim).append(role);
+                delim = ", ";
             }
             output.append(")");
         }
