@@ -9,11 +9,15 @@ client ID and client secret. You can create an ID/secret pair at:
 
 To build this code sample from the command line, type:
 
-  mvn compile
+  <code>mvn compile</code>
 
-To run the code sample from the command line, enter the following:
+To run a code sample from the command line, enter the following:
 
-  mvn exec:java -Dexec.mainClass="FULL_CLASS_NAME"
+  <code>mvn exec:java -Dexec.mainClass="FULL_CLASS_NAME"</code>
+
+For samples that require arguments, also specify -Dexec.args, e.g.:
+
+  <code>mvn exec:java -Dexec.mainClass="FULL_CLASS_NAME" -Dexec.args="arg1 arg2"</code>
 
 For more instructions about how to set up Maven and/or your IDE to run
 YouTube API samples, see this video:
@@ -214,7 +218,7 @@ job.
 Method: youtubeReporting.jobs.list, youtubeReporting.reports.list<br>
 Description: This sample demonstrates how to retrieve reports created by a specific job. It calls the
 <code>jobs.list</code> method to retrieve reporting jobs. It then calls the <code>reports.list</code> method with the
-<code>jobId</code> parameter set to a specific job id to retrieve reports created by that job. Finally, the sample
+<code>jobId</code> parameter set to a specific job ID to retrieve reports created by that job. Finally, the sample
 prints out the download URL for each report.
 
 ### [Create a broadcast and stream](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/CreateBroadcast.java)
@@ -236,3 +240,28 @@ also specify a value for the <code>--broadcast-status</code> option to only retr
 Method: youtube.liveStreams.list<br>
 Description: This sample calls the API's <code>liveStreams.list</code> method to retrieve a list of video stream settings
 that a channel can use to broadcast live events on YouTube.
+
+
+### [Get a live chat id](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/GetLiveChatId.java)
+
+Methods: youtube.videos.list, youtube.liveBroadcasts.list<br>
+Description: This sample retrieves the live chat ID from either a <code>videoId</code> parameter
+or the live broadcast for the authorized user's channel. The <code>liveChatId</code> is required for other samples
+that interact with live chat.
+
+### [Insert a live chat message](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/InsertLiveChatMessage.java)
+
+Method: youtube.liveChatMessages.insert<br>
+Description: This sample inserts a live chat message into the the specified video or the live broadcast for
+the authorized user's channel.
+
+### [Delete a live chat message](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/DeleteLiveChatMessage.java)
+
+Method: youtube.liveChatMessages.delete<br>
+Description: This sample deletes the specified live chat message.
+
+### [List live chat messages](/java/src/main/java/com/google/api/services/samples/youtube/cmdline/live/ListLiveChatMessages.java)
+
+Method: youtube.liveChatMessages.list<br>
+Description: This sample lists live chat messages from the specified video or from the live broadcast for
+the authorized user's channel.
