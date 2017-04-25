@@ -90,7 +90,7 @@ def set_channel_localization(youtube, channel_id, default_language, language, de
 
   localization = update_result["localizations"][language]
 
-  print ("Updated channel '%s' default language to '%s', localized description"
+  print ("Updated channel '%s', localized description"
          " to '%s' in language '%s'" % (channel_id, localization["description"], language))
 
 

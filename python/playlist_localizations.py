@@ -89,7 +89,7 @@ def set_playlist_localization(youtube, playlist_id, default_language, language, 
 
   localization = update_result["localizations"][language]
 
-  print ("Updated playlist '%s' default language to '%s', localized title to '%s'"
+  print ("Updated playlist '%s', localized title to '%s'"
          " and description to '%s' in language '%s'"
          % (playlist_id, localization["title"], localization["description"], language))
 
