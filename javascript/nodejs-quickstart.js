@@ -28,9 +28,9 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
  * @param {function} callback The callback to call with the authorized client.
  */
 function authorize(credentials, callback) {
-  var clientSecret = credentials.installed.client_secret;
-  var clientId = credentials.installed.client_id;
-  var redirectUrl = credentials.installed.redirect_uris[0];
+  var clientSecret = credentials.web.client_secret;
+  var clientId = credentials.web.client_id;
+  var redirectUrl = credentials.web.redirect_uris[0];
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
@@ -71,8 +71,9 @@ function getNewToken(oauth2Client, callback) {
         return;
       }
       oauth2Client.credentials = token;
-      storeToken(token);
-      callback(oauth2Client);
+      storeToken(token, function(){
+        callback(oauth2Client);
+      });
     });
   });
 }
@@ -82,7 +83,7 @@ function getNewToken(oauth2Client, callback) {
  *
  * @param {Object} token The token to store to disk.
  */
-function storeToken(token) {
+function storeToken(token, callback) {
   try {
     fs.mkdirSync(TOKEN_DIR);
   } catch (err) {
@@ -90,8 +91,13 @@ function storeToken(token) {
       throw err;
     }
   }
-  fs.writeFile(TOKEN_PATH, JSON.stringify(token));
-  console.log('Token stored to ' + TOKEN_PATH);
+  fs.writeFile(TOKEN_PATH, JSON.stringify(token), function(err){
+    if (err) {
+      throw err;
+    }
+    console.log('Token stored to ' + TOKEN_PATH);
+    callback();
+  });
 }
 
 /**
