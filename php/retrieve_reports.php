@@ -167,11 +167,11 @@ function downloadReport(Google_Service_YouTubeReporting $youtubeReporting, $repo
   $client->setDefer(true);
 
   // Call the YouTube Reporting API's media.download method to download a report.
-  $request = $youtubeReporting->media->download("");
-  $request->setUrl($reportUrl);
+  $request = $youtubeReporting->media->download("", array("alt" => "media"));
+  $request = $request->withUri(new \GuzzleHttp\Psr7\Uri($reportUrl));
   $response = $client->execute($request);
 
-  file_put_contents("reportFile", $response->getResponseBody());
+  file_put_contents("reportFile", $response->getBody());
   $client->setDefer(false);
 }
 ?>
