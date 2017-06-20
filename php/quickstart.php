@@ -1,11 +1,10 @@
 <?php
 
-// Sample PHP code for user authorization
-
 // Call set_include_path() as needed to point to your client library.
-require_once 'Google/autoload.php';
-require_once 'Google/Client.php';
-require_once 'Google/Service/YouTube.php';
+if (!file_exists($file = __DIR__ . '/vendor/autoload.php')) {
+    throw new \Exception('please run "composer require google/apiclient:~2.0" in "' . __DIR__ .'"');
+}
+require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 
 /*
@@ -22,7 +21,7 @@ function getClient() {
   // Set to valid redirect URI for your project.
   $client->setRedirectUri('http://localhost');
 
-  $client->addScope(GOOGLE_SERVICE_YOUTUBE::YOUTUBE_READONLY);
+  $client->addScope(Google_Service_YouTube::YOUTUBE_READONLY);
   $client->setAccessType('offline');
 
   // Load previously authorized credentials from a file.
