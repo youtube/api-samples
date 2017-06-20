@@ -16,8 +16,8 @@ define('CREDENTIALS_PATH', '~/php-yt-oauth2.json');
 
 function getClient() {
   $client = new Google_Client();
-  // Set to name/location of your client_secrets.json file.
-  $client->setAuthConfigFile('client_secrets.json');
+  // Set to name/location of your client_secret.json file.
+  $client->setAuthConfigFile('client_secret.json');
   // Set to valid redirect URI for your project.
   $client->setRedirectUri('http://localhost');
 
