@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"code.google.com/p/google-api-go-client/youtube/v3"
+	"google.golang.org/api/youtube/v3"
 )
 
 var (
