@@ -4,8 +4,8 @@ To run these code samples, you will need to install the dependent libraries via
 the "go get" command. These code samples require the goauth2 and google-api-go-client
 libraries which can be installed with the following commands:
 
-   go get code.google.com/p/goauth2/oauth
-   go get code.google.com/p/google-api-go-client/youtube/v3
+    go get code.google.com/p/goauth2/oauth
+    go get code.google.com/p/google-api-go-client/youtube/v3
 
 The keyword search and topic search samples can be run via the standard "go run" command
 once the developerKey constant is populated with an API key created at
@@ -13,7 +13,7 @@ https://code.google.com/apis/console.
 
 Example usage:
 
-   go run search_key_keyword.go
+    go run search_by_keyword.go
 
 The YouTube Data API must be enabled for the project associated with this key.
 
@@ -27,7 +27,7 @@ provided in client_secrets.json.sample. Rename this file and populate the fields
 
 Example usage:
 
-   go run my_uploads.go oauth.go
+    go run my_uploads.go oauth.go
 
 oauth.go contains code that is shared between the code samples that require OAuth 2.0 
 authorization, so it must be passed as a parameter to "go run".
@@ -44,26 +44,26 @@ then saves the returned credentials locally.
 
 ### [Post a channel bulletin](/go/post_bulletin.go)
 
-Method: youtube.activities.insert<br>
-Description: This code sample calls the API's <code>activities.insert</code> method to post a bulletin to the
+Method: youtube.activities.insert  
+Description: This code sample calls the API's `activities.insert` method to post a bulletin to the
 channel associated with the request.
 
 ### [Retrieve my uploads](/go/my_uploads.go)
 
-Method: youtube.playlistItems.list<br>
-Description: This code sample calls the API's <code>playlistItems.list</code> method to retrieve a list of 
-videos uploaded to the channel associated with the request. The code also calls the <code>channels.list</code> 
-method with the <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies 
+Method: youtube.playlistItems.list  
+Description: This code sample calls the API's `playlistItems.list` method to retrieve a list of 
+videos uploaded to the channel associated with the request. The code also calls the `channels.list` 
+method with the `mine` parameter set to `true` to retrieve the playlist ID that identifies 
 the channel's uploaded videos.
 
 ### [Search by keyword](/go/search_by_keyword.go)
 
-Method: youtube.search.list<br>
-Description: This code sample calls the API's <code>search.list</code> method to retrieve search results associated
+Method: youtube.search.list  
+Description: This code sample calls the API's `search.list` method to retrieve search results associated
 with a particular keyword.
 
 ### [Upload a video](/go/upload_video.go)
 
-Method: youtube.videos.insert<br>
-Description: This code sample calls the API's <code>videos.insert</code> method to upload a video to the channel
+Method: youtube.videos.insert  
+Description: This code sample calls the API's `videos.insert` method to upload a video to the channel
 associated with the request.
