@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"code.google.com/p/goauth2/oauth"
+	"golang.org/x/oauth2"
 )
 
 const missingClientSecretsMessage = `
@@ -33,7 +33,7 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 var (
 	clientSecretsFile = flag.String("secrets", "client_secrets.json", "Client Secrets configuration")
-	cacheFile         = flag.String("cache", "request.token", "Token cache file")
+	cache             = flag.String("cache", "request.token", "Token cache file")
 )
 
 // ClientConfig is a data structure definition for the client_secrets.json file.
@@ -51,6 +51,21 @@ type Config struct {
 	Installed ClientConfig `json:"installed"`
 	Web       ClientConfig `json:"web"`
 }
+
+type Code struct {
+	code  string
+	state string
+}
+
+// Cache specifies the methods that implement a Token cache.
+type Cache interface {
+	Token() (*oauth2.Token, error)
+	PutToken(*oauth2.Token) error
+}
+
+// CacheFile implements Cache. Its value is the name of the file in which
+// the Token is stored in JSON format.
+type CacheFile string
 
 // openURL opens a browser window to the specified location.
 // This code originally appeared at:
@@ -72,7 +87,7 @@ func openURL(url string) error {
 
 // readConfig reads the configuration from clientSecretsFile.
 // It returns an oauth configuration object for use with the Google API client.
-func readConfig(scope string) (*oauth.Config, error) {
+func readConfig(scope string) (*oauth2.Config, error) {
 	// Read the secrets file
 	data, err := ioutil.ReadFile(*clientSecretsFile)
 	if err != nil {
@@ -96,36 +111,34 @@ func readConfig(scope string) (*oauth.Config, error) {
 		return nil, errors.New("Must specify a redirect URI in config file or when creating OAuth client")
 	}
 
-	return &oauth.Config{
-		ClientId:     cfg.Installed.ClientID,
+	return &oauth2.Config{
+		ClientID:     cfg.Installed.ClientID,
 		ClientSecret: cfg.Installed.ClientSecret,
-		Scope:        scope,
-		AuthURL:      cfg.Installed.AuthURI,
-		TokenURL:     cfg.Installed.TokenURI,
 		RedirectURL:  redirectUri,
-		TokenCache:   oauth.CacheFile(*cacheFile),
-		// Get a refresh token so we can use the access token indefinitely
-		AccessType: "offline",
-		// If we want a refresh token, we must set this attribute
-		// to force an approval prompt or the code won't work.
-		ApprovalPrompt: "force",
+		Scopes:       []string{scope},
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  cfg.Installed.AuthURI,
+			TokenURL: cfg.Installed.TokenURI,
+		},
 	}, nil
 }
 
 // startWebServer starts a web server that listens on http://localhost:8080.
 // The webserver waits for an oauth code in the three-legged auth flow.
-func startWebServer() (codeCh chan string, err error) {
+func startWebServer() (codeCh chan Code, err error) {
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		return nil, err
 	}
-	codeCh = make(chan string)
+	codeCh = make(chan Code)
 	go http.Serve(listener, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		code := r.FormValue("code")
-		codeCh <- code // send code to OAuth flow
+		c := Code{}
+		c.code = r.FormValue("code")
+		c.state = r.FormValue("state")
+		codeCh <- c // send code to OAuth flow
 		listener.Close()
 		w.Header().Set("Content-Type", "text/plain")
-		fmt.Fprintf(w, "Received code: %v\r\nYou can now safely close this browser window.", code)
+		fmt.Fprintf(w, "Received code: %v\r\nYou can now safely close this browser window.", c.code)
 	}))
 
 	return codeCh, nil
@@ -143,12 +156,11 @@ func buildOAuthHTTPClient(scope string) (*http.Client, error) {
 		return nil, errors.New(msg)
 	}
 
-	transport := &oauth.Transport{Config: config}
-
 	// Try to read the token from the cache file.
 	// If an error occurs, do the three-legged OAuth flow because
 	// the token is invalid or doesn't exist.
-	token, err := config.TokenCache.Token()
+	tokenCache := CacheFile(*cache)
+	token, err := tokenCache.Token()
 	if err != nil {
 		// Start web server.
 		// This is how this program receives the authorization code
@@ -159,7 +171,8 @@ func buildOAuthHTTPClient(scope string) (*http.Client, error) {
 		}
 
 		// Open url in browser
-		url := config.AuthCodeURL("")
+		// state parameter is currently "", but it is recommended to set this value in RFC.
+		url := config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce)
 		err = openURL(url)
 		if err != nil {
 			fmt.Println("Visit the URL below to get a code.",
@@ -171,17 +184,48 @@ func buildOAuthHTTPClient(scope string) (*http.Client, error) {
 		fmt.Println(url)
 
 		// Wait for the web server to get the code.
-		code := <-codeCh
+		c := <-codeCh
 
-		// This code caches the authorization code on the local
-		// filesystem, if necessary, as long as the TokenCache
-		// attribute in the config is set.
-		token, err = transport.Exchange(code)
+		token, err = config.Exchange(oauth2.NoContext, c.code)
+		if err != nil {
+			return nil, err
+		}
+
+		err = tokenCache.PutToken(token)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	transport.Token = token
-	return transport.Client(), nil
+	return config.Client(oauth2.NoContext, token), nil
+}
+
+// Token retreives the token from the token cache
+func (cf CacheFile) Token() (*oauth2.Token, error) {
+	file, err := os.Open(string(cf))
+	if err != nil {
+		return nil, fmt.Errorf("CacheFile.Token: %s", err.Error())
+	}
+	defer file.Close()
+	token := &oauth2.Token{}
+	if err := json.NewDecoder(file).Decode(token); err != nil {
+		return nil, fmt.Errorf("CacheFile.Token: %s", err.Error())
+	}
+	return token, nil
+}
+
+// PutToken stores the token in the token cache
+func (cf CacheFile) PutToken(token *oauth2.Token) error {
+	file, err := os.OpenFile(string(cf), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		return fmt.Errorf("CacheFile.PutToken: %s", err.Error())
+	}
+	if err := json.NewEncoder(file).Encode(token); err != nil {
+		file.Close()
+		return fmt.Errorf("CacheFile.PutToken: %s", err.Error())
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("CacheFile.PutToken: %s", err.Error())
+	}
+	return nil
 }
