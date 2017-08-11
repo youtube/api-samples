@@ -1,60 +1,54 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 
 	"google.golang.org/api/youtube/v3"
 )
 
-func main() {
-	flag.Parse()
-
-	client, err := buildOAuthHTTPClient(youtube.YoutubeReadonlyScope)
-	if err != nil {
-		log.Fatalf("Error building OAuth client: %v", err)
+// Retrieve playlistItems in the specified playlist
+func playlistItemsList(service *youtube.Service, part string, playlistId string, pageToken string) *youtube.PlaylistItemListResponse {
+	call := service.PlaylistItems.List(part)
+	call = call.PlaylistId(playlistId)
+	if pageToken != "" {
+		call = call.PageToken(pageToken)
 	}
+	response, err := call.Do()
+	handleError(err, "")
+	return response
+}
 
+// Retrieve resource for the authenticated user's channel
+func channelsListMine(service *youtube.Service, part string) *youtube.ChannelListResponse {
+	call := service.Channels.List(part)
+	call = call.Mine(true)
+	response, err := call.Do()
+	handleError(err, "")
+	return response
+}
+
+func main() {
+	client := getClient(youtube.YoutubeReadonlyScope)
 	service, err := youtube.New(client)
+	
 	if err != nil {
 		log.Fatalf("Error creating YouTube client: %v", err)
 	}
 
-	// Start making YouTube API calls.
-	// Call the channels.list method. Set the mine parameter to true to
-	// retrieve the playlist ID for uploads to the authenticated user's
-	// channel.
-	call := service.Channels.List("contentDetails").Mine(true)
-
-	response, err := call.Do()
-	if err != nil {
-		// The channels.list method call returned an error.
-		log.Fatalf("Error making API call to list channels: %v", err.Error())
-	}
+	response := channelsListMine(service, "contentDetails")
 
 	for _, channel := range response.Items {
 		playlistId := channel.ContentDetails.RelatedPlaylists.Uploads
+		
 		// Print the playlist ID for the list of uploaded videos.
 		fmt.Printf("Videos in list %s\r\n", playlistId)
 
 		nextPageToken := ""
 		for {
-			// Call the playlistItems.list method to retrieve the
-			// list of uploaded videos. Each request retrieves 50
-			// videos until all videos have been retrieved.
-			playlistCall := service.PlaylistItems.List("snippet").
-				PlaylistId(playlistId).
-				MaxResults(50).
-				PageToken(nextPageToken)
-
-			playlistResponse, err := playlistCall.Do()
-
-			if err != nil {
-				// The playlistItems.list method call returned an error.
-				log.Fatalf("Error fetching playlist items: %v", err.Error())
-			}
-
+			// Retrieve next set of items in the playlist.
+			playlistResponse := playlistItemsList(service, "snippet", playlistId, nextPageToken)
+			
 			for _, playlistItem := range playlistResponse.Items {
 				title := playlistItem.Snippet.Title
 				videoId := playlistItem.Snippet.ResourceId.VideoId
