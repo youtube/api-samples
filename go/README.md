@@ -1,52 +1,42 @@
 Minimum Go version: go 1.1+
 
 To run these code samples, you will need to install the dependent libraries via
-the "go get" command. These code samples require the goauth2 and google-api-go-client
-libraries which can be installed with the following commands:
-
-   go get code.google.com/p/goauth2/oauth
-   go get code.google.com/p/google-api-go-client/youtube/v3
+the "go get" command. See the client library's getting started guide for more detail:
+https://github.com/google/google-api-go-client/blob/master/GettingStarted.md
 
 The keyword search and topic search samples can be run via the standard "go run" command
 once the developerKey constant is populated with an API key created at
-https://code.google.com/apis/console.
+https://developers.google.com/console.
 
 Example usage:
 
-   go run search_key_keyword.go
+   go run search\_by\_keyword.go
 
 The YouTube Data API must be enabled for the project associated with this key.
 
 To run any sample that requires authorization on behalf of a user, such as checking
-for uploads, this requires the shared oauth.go file to be passed as a parameter to "go run".
-These samples require a "Web Application" client ID and client secret pair which can
-also be created at the Google API console at https://code.google.com/apis/console. Once
-a client ID and secret pair have been created, these values must be populated into
-client_secrets.json in the corresponding fields. A template client_secrets.json has been
-provided in client_secrets.json.sample. Rename this file and populate the fields.
+for uploads, this requires the shared oauth2.go file to be passed as a parameter to "go run".
+These samples require an OAuth 2.0 client ID and client secret pair, which can
+also be created at the Google API console at https://developers.google.com/console. After
+creating your OAuth 2.0 credentials, download the client\_secret.json file to the directory
+in which you are running these samples.
 
 Example usage:
 
-   go run my_uploads.go oauth.go
+   go run my\_uploads.go oauth2.go
 
-oauth.go contains code that is shared between the code samples that require OAuth 2.0 
-authorization, so it must be passed as a parameter to "go run".
+The **oauth2.go** file contains code that is shared between the code samples that require
+OAuth 2.0 authorization, so it must be passed as a parameter to "go run".
 
-More information about the YouTube APIs can be found at https://developer.google.com/youtube.
+More information about the YouTube APIs can be found at https://developers.google.com/youtube.
 
 ## Samples in this directory:
 
-### [Authorize a request](/go/oauth.go)
+### [Authorize a request](/go/oauth2.go)
 
 Description: This code sample performs OAuth 2.0 authorization by checking for the presence of a local file that
 contains authorization credentials. If the file is not present, the script opens a browser and waits for a response,
 then saves the returned credentials locally.
-
-### [Post a channel bulletin](/go/post_bulletin.go)
-
-Method: youtube.activities.insert<br>
-Description: This code sample calls the API's <code>activities.insert</code> method to post a bulletin to the
-channel associated with the request.
 
 ### [Retrieve my uploads](/go/my_uploads.go)
 
