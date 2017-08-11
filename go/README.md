@@ -1,4 +1,4 @@
-Minimum Go version: go 1.1+
+Recommended Go version: latest version
 
 To run these code samples, you will need to install the dependent libraries via
 the "go get" command. See the client library's getting started guide for more detail:
