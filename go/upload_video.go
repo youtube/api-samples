@@ -26,10 +26,7 @@ func main() {
 		log.Fatalf("You must provide a filename of a video file to upload")
 	}
 
-	client, err := buildOAuthHTTPClient(youtube.YoutubeUploadScope)
-	if err != nil {
-		log.Fatalf("Error building OAuth client: %v", err)
-	}
+	client := getClient(youtube.YoutubeUploadScope)
 
 	service, err := youtube.New(client)
 	if err != nil {
@@ -59,8 +56,6 @@ func main() {
 	}
 
 	response, err := call.Media(file).Do()
-	if err != nil {
-		log.Fatalf("Error making YouTube API call: %v", err)
-	}
+	handleError(err, "")
 	fmt.Printf("Upload successful! Video ID: %v\n", response.Id)
 }
