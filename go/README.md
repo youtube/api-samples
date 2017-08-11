@@ -48,7 +48,7 @@ then saves the returned credentials locally.
 
 ### [Retrieve my uploads](/go/my_uploads.go)
 
-Method: youtube.playlistItems.list<br>
+Methods: youtube.channels.list, youtube.playlistItems.list<br>
 Description: This code sample calls the API's <code>playlistItems.list</code> method to retrieve a list of 
 videos uploaded to the channel associated with the request. The code also calls the <code>channels.list</code> 
 method with the <code>mine</code> parameter set to <code>true</code> to retrieve the playlist ID that identifies 
