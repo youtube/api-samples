@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -15,6 +16,7 @@ import (
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 )
 
 // This variable indicates whether the script should launch a web server to
@@ -54,8 +56,28 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 // getClient uses a Context and Config to retrieve a Token
 // then generate a Client. It returns the generated Client.
-func getClient(ctx context.Context, config *oauth2.Config) *http.Client {
-    cacheFile, err := tokenCacheFile()
+func getClient(scope string) *http.Client {
+	ctx := context.Background()
+	
+	b, err := ioutil.ReadFile("client_secret.json")
+	if err != nil {
+		log.Fatalf("Unable to read client secret file: %v", err)
+	}
+	
+	// If modifying the scope, delete your previously saved credentials
+	// at ~/.credentials/youtube-go.json
+	config, err := google.ConfigFromJSON(b, scope)
+	if err != nil {
+		log.Fatalf("Unable to parse client secret file to config: %v", err)
+	}
+	
+	// Use a redirect URI like this for a web app. The redirect URI must be a
+	// valid one for your OAuth2 credentials.
+	config.RedirectURL = "http://localhost:8090"
+	// Use the following redirect URI if launchWebServer=false in oauth2.go
+	// config.RedirectURL = "urn:ietf:wg:oauth:2.0:oob"
+	
+	cacheFile, err := tokenCacheFile()
 	if err != nil {
 		log.Fatalf("Unable to get path to cached credential file. %v", err)
 	}
@@ -114,6 +136,7 @@ func openURL(url string) error {
 	return err
 }
 
+// Exchange the authorization code for an access token
 func exchangeToken(config *oauth2.Config, code string) (*oauth2.Token, error) {
 	tok, err := config.Exchange(oauth2.NoContext, code)
 	if err != nil {
