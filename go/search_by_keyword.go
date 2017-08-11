@@ -34,9 +34,7 @@ func main() {
 		Q(*query).
 		MaxResults(*maxResults)
 	response, err := call.Do()
-	if err != nil {
-		log.Fatalf("Error making search API call: %v", err)
-	}
+	handleError(err, "")
 
 	// Group video, channel, and playlist results in separate lists.
 	videos := make(map[string]string)
