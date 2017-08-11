@@ -32,8 +32,9 @@ that require authorization also require the `oauth2.go` file to be included in t
 Example usages:
 
 ```
-   go run search\_by\_keyword.go errors.go
-   go run my\_uploads.go errors.go oauth2.go
+   go run search_by_keyword.go errors.go
+   go run my_uploads.go errors.go oauth2.go
+   go run upload_video.go errors.go oauth2.go --filename="sample_video.flv" --title="Test video" --keywords="golang test"
 ```
 
 More information about the YouTube APIs can be found at https://developers.google.com/youtube.
