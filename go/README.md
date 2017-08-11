@@ -4,29 +4,37 @@ To run these code samples, you will need to install the dependent libraries via
 the "go get" command. See the client library's getting started guide for more detail:
 https://github.com/google/google-api-go-client/blob/master/GettingStarted.md
 
-The keyword search and topic search samples can be run via the standard "go run" command
-once the developerKey constant is populated with an API key created at
-https://developers.google.com/console.
+You also need to enable the YouTube Data API for the project associated with your developer
+credentials.
 
-Example usage:
+## Authorization credentials
+To run any sample that does not require user authorization, such as search\_by\_keyword.go,
+you need to replace the value of the `developerKey` constant with a valid API key:
 
-   go run search\_by\_keyword.go
+```
+const developerKey = "YOUR DEVELOPER KEY"
+```
 
-The YouTube Data API must be enabled for the project associated with this key.
-
-To run any sample that requires authorization on behalf of a user, such as checking
-for uploads, this requires the shared oauth2.go file to be passed as a parameter to "go run".
-These samples require an OAuth 2.0 client ID and client secret pair, which can
-also be created at the Google API console at https://developers.google.com/console. After
+To run any sample that requires authorization on behalf of a user, such as retrieving the
+authenticated user's uploads, you need an OAuth 2.0 client ID and client secret pair. These
+can be created at the Google API console at https://developers.google.com/console. After
 creating your OAuth 2.0 credentials, download the client\_secret.json file to the directory
 in which you are running these samples.
 
-Example usage:
+## Running samples
 
-   go run my\_uploads.go oauth2.go
+Samples can be run with the standard "go run" command as long as your API key or OAuth 2.0
+credentials are in place. The samples use the `errors.go` file to
+print out API errors, so you need to also include that file in the "go run" command. Samples
+that require authorization also require the `oauth2.go` file to be included in the
+"go run" command:
 
-The **oauth2.go** file contains code that is shared between the code samples that require
-OAuth 2.0 authorization, so it must be passed as a parameter to "go run".
+Example usages:
+
+```
+   go run search\_by\_keyword.go errors.go
+   go run my\_uploads.go errors.go oauth2.go
+```
 
 More information about the YouTube APIs can be found at https://developers.google.com/youtube.
 
