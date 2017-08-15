@@ -49,7 +49,7 @@ $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],
 $client->setRedirectUri($redirect);
 
 // YouTube Reporting object used to make YouTube Reporting API requests.
-$youtubeReporting = new Google_Service_YoutubeReporting($client);
+$youtubeReporting = new Google_Service_YouTubeReporting($client);
 
 // Check if an auth token exists for the required scopes
 $tokenSessionKey = 'token-' . $client->prepareScopes();
