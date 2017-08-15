@@ -47,6 +47,19 @@ Description: This code sample performs OAuth 2.0 authorization by checking for t
 contains authorization credentials. If the file is not present, the script opens a browser and waits for a response,
 then saves the returned credentials locally.
 
+### [List playlists](/go/playlists.go)
+
+Methods: youtube.playlists.list<br>
+Description: This code sample calls the API's `playlists.list` method. Use command-line flags to define the parameters you want to use in the request as shown in the following examples:</p>
+ 
+```
+# Retrieve playlists for a specified channel
+go run playlists.go oauth.go errors.go --channelId=UC_x5XG1OV2P6uZZ5FSM9Ttw
+
+# Retrieve authenticated user's playlists
+go run playlists.go oauth.go errors.go --mine=true
+```
+
 ### [Retrieve my uploads](/go/my_uploads.go)
 
 Methods: youtube.channels.list, youtube.playlistItems.list<br>
