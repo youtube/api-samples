@@ -3,6 +3,7 @@
 import os
 
 import flask
+
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -36,6 +37,7 @@ def index():
 
   client = googleapiclient.discovery.build(
       API_SERVICE_NAME, API_VERSION, credentials=credentials)
+  
   return channels_list_by_username(client,
     part='snippet,contentDetails,statistics',
     forUsername='GoogleDevelopers')
