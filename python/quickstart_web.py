@@ -91,21 +91,12 @@ def oauth2callback():
 
   return flask.redirect(flask.url_for('index'))
 
-def print_response(response):
-  if response:
-    return flask.jsonify(**response)
-  else:
-    return ('This request does not return a response. For these samples, ' +
-            'this is generally true for requests that delete resources, ' +
-            'such as <code>playlists.delete()</code>, but it is also ' +
-            'true for some other methods, such as <code>videos.rate()</code>.')
-
 def channels_list_by_username(client, **kwargs):
   response = client.channels().list(
     **kwargs
   ).execute()
 
-  return print_response(response)
+  return flask.jsonify(**response)
 
 
 if __name__ == '__main__':
