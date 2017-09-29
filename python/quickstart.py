@@ -1,14 +1,12 @@
 # Sample Python code for user authorization
 
-import httplib2
 import os
-import sys
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import google.oauth2.credentials
+
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
 # the OAuth 2.0 information for this application, including its client_id and
@@ -17,45 +15,33 @@ CLIENT_SECRETS_FILE = "client_secret.json"
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account and requires requests to use an SSL connection.
-YOUTUBE_READ_WRITE_SSL_SCOPE = "https://www.googleapis.com/auth/youtube.readonly"
-API_SERVICE_NAME = "youtube"
-API_VERSION = "v3"
+SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
 
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = "WARNING: Please configure OAuth 2.0"
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
 
-# Authorize the request and store authorization credentials.
-def get_authenticated_service(args):
-  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE, scope=YOUTUBE_READ_WRITE_SSL_SCOPE,
-    message=MISSING_CLIENT_SECRETS_MESSAGE)
+  credentials = flow.run_console()
 
-  storage = Storage("%s-oauth2.json" % sys.argv[0])
-  credentials = storage.get()
-
-  if credentials is None or credentials.invalid:
-    credentials = run_flow(flow, storage, args)
-
-  # Trusted testers can download this discovery document from the developers page
-  # and it should be in the same directory with the code.
-  return build(API_SERVICE_NAME, API_VERSION,
-      http=credentials.authorize(httplib2.Http()))
-
-args = argparser.parse_args()
-service = get_authenticated_service(args)
-
-### END BOILERPLATE CODE
-
-# Sample python code for channels.list
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
 def channels_list_by_username(service, **kwargs):
   results = service.channels().list(
     **kwargs
   ).execute()
-
+  
   print('This channel\'s ID is %s. Its title is %s, and it has %s views.' %
        (results['items'][0]['id'],
         results['items'][0]['snippet']['title'],
         results['items'][0]['statistics']['viewCount']))
 
-channels_list_by_username(service, part='snippet,contentDetails,statistics', forUsername='GoogleDevelopers')
+if __name__ == '__main__':
+  # When running locally, disable OAuthlib's HTTPs verification. When
+  # running in production *do not* leave this option enabled.
+  os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+  #app.run('localhost', 8090, debug=True)
+  service = get_authenticated_service()
+  channels_list_by_username(service,
+      part='snippet,contentDetails,statistics',
+      forUsername='GoogleDevelopers')
