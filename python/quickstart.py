@@ -21,9 +21,7 @@ API_VERSION = 'v3'
 
 def get_authenticated_service():
   flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
-
   credentials = flow.run_console()
-
   return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
 def channels_list_by_username(service, **kwargs):
@@ -40,7 +38,6 @@ if __name__ == '__main__':
   # When running locally, disable OAuthlib's HTTPs verification. When
   # running in production *do not* leave this option enabled.
   os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-  #app.run('localhost', 8090, debug=True)
   service = get_authenticated_service()
   channels_list_by_username(service,
       part='snippet,contentDetails,statistics',
