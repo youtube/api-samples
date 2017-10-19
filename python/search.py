@@ -33,10 +33,10 @@ def youtube_search(options):
   # matching videos, channels, and playlists.
   for search_result in search_response.get("items", []):
     if search_result["id"]["kind"] == "youtube#video":
-      videos.append("%s (%s)" % (search_result["snippet"]["title"],
+      videos.append("%s (https://youtube.com/video/%s)" % (search_result["snippet"]["title"],
                                  search_result["id"]["videoId"]))
     elif search_result["id"]["kind"] == "youtube#channel":
-      channels.append("%s (%s)" % (search_result["snippet"]["title"],
+      channels.append("%s (https://youtube.com/channel/%s)" % (search_result["snippet"]["title"],
                                    search_result["id"]["channelId"]))
     elif search_result["id"]["kind"] == "youtube#playlist":
       playlists.append("%s (%s)" % (search_result["snippet"]["title"],
