@@ -1,14 +1,19 @@
 #!/usr/bin/python
 
-import httplib2
-import os
-import sys
+# This code sample shows how to add a channel subscription.
+# The default channel-id is for the GoogleDevelopers YouTube channel.
+# Sample usage:
+# python add_subscription.py --channel-id=UC_x5XG1OV2P6uZZ5FSM9Ttw
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import argparse
+import os
+import re
+
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -21,46 +26,18 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = "client_secrets.json"
+CLIENT_SECRETS_FILE = 'client_secret.json'
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
-YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+SCOPES = ['https://www.googleapis.com/auth/youtube']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
 
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = """
-WARNING: Please configure OAuth 2.0
-
-To make this sample run you will need to populate the client_secrets.json file
-found at:
-
-   %s
-
-with information from the {{ Cloud Console }}
-{{ https://cloud.google.com/console }}
-
-For more information about the client_secrets.json file format, please visit:
-https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   CLIENT_SECRETS_FILE))
-
-def get_authenticated_service(args):
-  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
-    scope=YOUTUBE_READ_WRITE_SCOPE,
-    message=MISSING_CLIENT_SECRETS_MESSAGE)
-
-  storage = Storage("%s-oauth2.json" % sys.argv[0])
-  credentials = storage.get()
-
-  if credentials is None or credentials.invalid:
-    credentials = run_flow(flow, storage, args)
-
-  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    http=credentials.authorize(httplib2.Http()))
-
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+  credentials = flow.run_console()
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
 # This method calls the API's youtube.subscriptions.insert method to add a
 # subscription to the specified channel.
@@ -75,17 +52,18 @@ def add_subscription(youtube, channel_id):
       )
     )).execute()
 
-  return add_subscription_response["snippet"]["title"]
+  return add_subscription_response['snippet']['title']
 
-if __name__ == "__main__":
-  argparser.add_argument("--channel-id", help="ID of the channel to subscribe to.",
-    default="UCtVd0c0tGXuTSbU5d8cSBUg")
-  args = argparser.parse_args()
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description='Process arguments.')
+  parser.add_argument('--channel-id', help='ID of the channel to subscribe to.',
+    default='UC_x5XG1OV2P6uZZ5FSM9Ttw')
+  args = parser.parse_args()
 
-  youtube = get_authenticated_service(args)
+  youtube = get_authenticated_service()
   try:
     channel_title = add_subscription(youtube, args.channel_id)
   except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
   else:
-    print "A subscription to '%s' was added." % channel_title
+    print 'A subscription to \'%s\' was added.' % channel_title
