@@ -1,13 +1,18 @@
 #!/usr/bin/python
 
-import httplib2
-import os
-import sys
+# Retrieve the authenticated user's uploaded videos.
+# Sample usage:
+# python my_uploads.py
 
-from apiclient.discovery import build
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import argparse
+import os
+import re
+
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -20,77 +25,63 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = "client_secrets.json"
-
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = """
-WARNING: Please configure OAuth 2.0
-
-To make this sample run you will need to populate the client_secrets.json file
-found at:
-
-   %s
-
-with information from the {{ Cloud Console }}
-{{ https://cloud.google.com/console }}
-
-For more information about the client_secrets.json file format, please visit:
-https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   CLIENT_SECRETS_FILE))
+CLIENT_SECRETS_FILE = 'client_secret.json'
 
 # This OAuth 2.0 access scope allows for read-only access to the authenticated
 # user's account, but not other types of account access.
-YOUTUBE_READONLY_SCOPE = "https://www.googleapis.com/auth/youtube.readonly"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
 
-flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
-  message=MISSING_CLIENT_SECRETS_MESSAGE,
-  scope=YOUTUBE_READONLY_SCOPE)
+# Authorize the request and store authorization credentials.
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+  credentials = flow.run_console()
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
-storage = Storage("%s-oauth2.json" % sys.argv[0])
-credentials = storage.get()
+def get_my_uploads_list():
+  # Retrieve the contentDetails part of the channel resource for the
+  # authenticated user's channel.
+  channels_response = youtube.channels().list(
+    mine=True,
+    part='contentDetails'
+  ).execute()
 
-if credentials is None or credentials.invalid:
-  flags = argparser.parse_args()
-  credentials = run_flow(flow, storage, flags)
+  for channel in channels_response['items']:
+    # From the API response, extract the playlist ID that identifies the list
+    # of videos uploaded to the authenticated user's channel.
+    return channel['contentDetails']['relatedPlaylists']['uploads']
 
-youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-  http=credentials.authorize(httplib2.Http()))
+  return None
 
-# Retrieve the contentDetails part of the channel resource for the
-# authenticated user's channel.
-channels_response = youtube.channels().list(
-  mine=True,
-  part="contentDetails"
-).execute()
-
-for channel in channels_response["items"]:
-  # From the API response, extract the playlist ID that identifies the list
-  # of videos uploaded to the authenticated user's channel.
-  uploads_list_id = channel["contentDetails"]["relatedPlaylists"]["uploads"]
-
-  print "Videos in list %s" % uploads_list_id
-
+def list_my_uploaded_videos(uploads_playlist_id):
   # Retrieve the list of videos uploaded to the authenticated user's channel.
   playlistitems_list_request = youtube.playlistItems().list(
-    playlistId=uploads_list_id,
-    part="snippet",
-    maxResults=50
+    playlistId=uploads_playlist_id,
+    part='snippet',
+    maxResults=5
   )
 
+  print 'Videos in list %s' % uploads_playlist_id
   while playlistitems_list_request:
     playlistitems_list_response = playlistitems_list_request.execute()
 
     # Print information about each video.
-    for playlist_item in playlistitems_list_response["items"]:
-      title = playlist_item["snippet"]["title"]
-      video_id = playlist_item["snippet"]["resourceId"]["videoId"]
-      print "%s (%s)" % (title, video_id)
+    for playlist_item in playlistitems_list_response['items']:
+      title = playlist_item['snippet']['title']
+      video_id = playlist_item['snippet']['resourceId']['videoId']
+      print '%s (%s)' % (title, video_id)
 
     playlistitems_list_request = youtube.playlistItems().list_next(
       playlistitems_list_request, playlistitems_list_response)
 
-  print
+if __name__ == '__main__':
+  youtube = get_authenticated_service()
+  try:
+    uploads_playlist_id = get_my_uploads_list()
+    if uploads_playlist_id:
+      list_my_uploaded_videos(uploads_playlist_id)
+    else:
+      print('There is no uploaded videos playlist for this user.')
+  except HttpError, e:
+    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
