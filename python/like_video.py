@@ -1,14 +1,18 @@
 #!/usr/bin/python
 
-import httplib2
-import os
-import sys
+# This sample shows how to rate a video.
+# Sample usage:
+#   python like_video.py --videoId=OE63BYWdqC4 --rating=like
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import argparse
+import os
+import re
+
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -21,64 +25,45 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = "client_secrets.json"
-
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = """
-WARNING: Please configure OAuth 2.0
-
-To make this sample run you will need to populate the client_secrets.json file
-found at:
-
-   %s
-
-with information from the {{ Cloud Console }}
-{{ https://cloud.google.com/console }}
-
-For more information about the client_secrets.json file format, please visit:
-https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   CLIENT_SECRETS_FILE))
+CLIENT_SECRETS_FILE = 'client_secret.json'
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
-YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
 
-def get_authenticated_service(args):
-  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
-    scope=YOUTUBE_READ_WRITE_SCOPE,
-    message=MISSING_CLIENT_SECRETS_MESSAGE)
+RATINGS = ('like', 'dislike', 'none')
 
-  storage = Storage("%s-oauth2.json" % sys.argv[0])
-  credentials = storage.get()
+# Authorize the request and store authorization credentials.
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+  credentials = flow.run_console()
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
-  if credentials is None or credentials.invalid:
-    credentials = run_flow(flow, storage, args)
-
-  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    http=credentials.authorize(httplib2.Http()))
-
-# Add the video rating. This code sets the rating to "like," but you could
-# also support an additional option that supports values of "like" and
-# "dislike."
-def like_video(youtube, video_id):
+# Add the video rating. This code sets the rating to 'like,' but you could
+# also support an additional option that supports values of 'like' and
+# 'dislike.'
+def like_video(youtube, args):
   youtube.videos().rate(
-    id=video_id,
-    rating="like"
+    id=args.videoId,
+    rating=args.rating
   ).execute()
 
-if __name__ == "__main__":
-  argparser.add_argument("--videoid", default="L-oNKK1CrnU",
-    help="ID of video to like.")
-  args = argparser.parse_args()
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--videoId', default='OE63BYWdqC4',
+    help='ID of video to like.')
+  parser.add_argument('--rating', default='like',
+    choices=RATINGS,
+    help='Indicates whether the rating is "like", "dislike", or "none".')
+  args = parser.parse_args()
 
-  youtube = get_authenticated_service(args)
+  youtube = get_authenticated_service()
   try:
-    like_video(youtube, args.videoid)
+    like_video(youtube, args)
   except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
   else:
-    print "%s has been liked." % args.videoid
+    print ('The %s rating has been added for video ID %s.' %
+           (args.rating, args.videoId))
