@@ -3,15 +3,15 @@
 # Usage example:
 # python video_localizations.py --action='<action>' --video_id='<video_id>' --default_language='<default_language>' --language='<language>' --title='<title>' --description='<description>'
 
-import httplib2
+import argparse
 import os
-import sys
+import re
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -25,142 +25,153 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = "client_secrets.json"
+CLIENT_SECRETS_FILE = 'client_secret.json'
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
-YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+SCOPES = ['https://www.googleapis.com/auth/youtube']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
 
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = """
-WARNING: Please configure OAuth 2.0
-
-To make this sample run you will need to populate the client_secrets.json file
-found at:
-   %s
-with information from the APIs Console
-https://console.developers.google.com
-
-For more information about the client_secrets.json file format, please visit:
-https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   CLIENT_SECRETS_FILE))
+# Supported actions
+ACTIONS = ('get', 'list', 'set')
 
 # Authorize the request and store authorization credentials.
-def get_authenticated_service(args):
-  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE, scope=YOUTUBE_READ_WRITE_SCOPE,
-    message=MISSING_CLIENT_SECRETS_MESSAGE)
-
-  storage = Storage("%s-oauth2.json" % sys.argv[0])
-  credentials = storage.get()
-
-  if credentials is None or credentials.invalid:
-    credentials = run_flow(flow, storage, args)
-
-  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    http=credentials.authorize(httplib2.Http()))
-
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+  credentials = flow.run_console()
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
 # Call the API's videos.update method to update an existing video's default language,
 # localized title and description in a specific language.
-def set_video_localization(youtube, video_id, default_language, language, title, description):
+def set_video_localization(youtube, args):
+
+  # Retrieve the snippet and localizations for the video.
   results = youtube.videos().list(
-    part="snippet,localizations",
-    id=video_id
+    part='snippet,localizations',
+    id=args.video_id
   ).execute()
 
-  video = results["items"][0]
-  # Ensure that a value is set for the resource's snippet.defaultLanguage property.
-  video["snippet"]["defaultLanguage"] = default_language
-  if "localizations" not in video:
-    video["localizations"] = {}
-  video["localizations"][language] = {
-    "title": title,
-    "description": description
-  }
+  video = results['items'][0]
 
+  # If the language argument is set, set the localized title and description
+  # for that language. The "title" and "description" arguments have default
+  # values to make the script simpler to run as a demo. In an actual app, you
+  # would likely want to set those arguments also.
+  if args.language and args.language != '':
+    if 'localizations' not in video:
+      video['localizations'] = {}
+
+    video['localizations'][args.language] = {
+      'title': args.title,
+      'description': args.description
+    }
+
+  # If the default language is set AND there is localized metadata for that
+  # language, set the video's title and description to match the localized
+  # title and description for the newly set default language.
+  if args.default_language and args.default_language in video['localizations']:
+    video['snippet']['defaultLanguage'] = args.default_language
+    video['snippet']['title'] = (
+        video['localizations'][args.default_language]['title'])
+    video['snippet']['description'] = (
+        video['localizations'][args.default_language]['description'])
+
+  # Update the video resource.
   update_result = youtube.videos().update(
-    part="snippet,localizations",
-    body=video
-  ).execute()
+      part='snippet,localizations',
+      body=video
+    ).execute()
 
-  localization = update_result["localizations"][language]
+  # Print the actions taken by running the script.
+  if args.language:
+    for language in update_result['localizations']:
+      # Languages with locales, like "pt-br" are returned as pt-BR in metadata.
+      # This ensures that the language specified when running the script can be
+      # matched to the language returned in the metadata.
+      if language.lower() == args.language.lower():
+        localization = update_result['localizations'][args.language]
+        print ('Updated video \'%s\' localized title to \'%s\''
+               ' and description to \'%s\' in language \'%s\'' %
+               (args.video_id,
+                localization['title'],
+                localization['description'],
+                args.language))
+        break
 
-  print ("Updated video '%s' default language to '%s', localized title to '%s'"
-         " and description to '%s' in language '%s'"
-          % (video_id, default_language, localization["title"], localization["description"], language))
-
+  if (args.default_language and
+      args.default_language == update_result['snippet']['defaultLanguage']):
+    print 'Updated default language to %s' % args.default_language
 
 # Call the API's videos.list method to retrieve an existing video localization.
 # If the localized text is not available in the requested language,
-# this method will return text in the default language.
-def get_video_localization(youtube, video_id, language):
+# this method returns text in the default language.
+def get_video_localization(youtube, args):
   results = youtube.videos().list(
-    part="snippet",
-    id=video_id,
-    hl=language
+    part='snippet',
+    id=args.video_id,
+    hl=args.language
   ).execute()
 
   # The localized object contains localized text if the hl parameter specified
   # a language for which localized text is available. Otherwise, the localized
-  # object will contain metadata in the default language.
-  localized = results["items"][0]["snippet"]["localized"]
+  # object contains metadata in the default language.
+  localized = results['items'][0]['snippet']['localized']
 
-  print ("Video title is '%s' and description is '%s' in language '%s'"
-         % (localized["title"], localized["description"], language))
+  print ('Video title is \'%s\' and description is \'%s\' in language \'%s\''
+         % (localized['title'], localized['description'], args.language))
 
 
 # Call the API's videos.list method to list the existing video localizations.
-def list_video_localizations(youtube, video_id):
+def list_video_localizations(youtube, args):
   results = youtube.videos().list(
-    part="snippet,localizations",
-    id=video_id
+    part='snippet,localizations',
+    id=args.video_id
   ).execute()
 
-  localizations = results["items"][0]["localizations"]
+  localizations = results['items'][0]['localizations']
 
   for language, localization in localizations.iteritems():
-    print ("Video title is '%s' and description is '%s' in language '%s'"
-           % (localization["title"], localization["description"], language))
+    print ('Video title is \'%s\' and description is \'%s\' in language \'%s\''
+           % (localization['title'], localization['description'], language))
 
 
-if __name__ == "__main__":
-  # The "action" option specifies the action to be processed.
-  argparser.add_argument("--action", help="Action")
-  # The "video_id" option specifies the ID of the selected YouTube video.
-  argparser.add_argument("--video_id",
-    help="ID for video for which the localization will be applied.")
-  # The "default_language" option specifies the language of the video's default metadata.
-  argparser.add_argument("--default_language", help="Default language of the video to update.",
-    default="en")
-  # The "language" option specifies the language of the localization that is being processed.
-  argparser.add_argument("--language", help="Language of the localization.", default="de")
-  # The "title" option specifies the localized title of the video to be set.
-  argparser.add_argument("--title", help="Localized title of the video to be set.",
-    default="Localized Title")
-  # The "description" option specifies the localized description of the video to be set.
-  argparser.add_argument("--description", help="Localized description of the video to be set.",
-    default="Localized Description")
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  # The action to be processed: 'get', 'list', and 'set' are supported.
+  parser.add_argument('--action', help='Action', choices=ACTIONS, required=True)
+  # The ID of the selected YouTube video.
+  parser.add_argument('--video_id',
+      help='The video ID for which localizations are being set or retrieved.',
+      required=True)
+  # The language of the video's default metadata.
+  parser.add_argument('--default_language',
+      help='Default language of the video to update.')
+  # The language of the localization that is being processed.
+  parser.add_argument('--language', help='Language of the localization.')
+  # The localized video title for the specified language.
+  parser.add_argument('--title',
+    help='Localized title of the video to be set.',
+    default='Localized Title')
+  # The localized description for the specified language.
+  parser.add_argument('--description',
+    help='Localized description of the video to be set.',
+    default='Localized Description')
 
-  args = argparser.parse_args()
+  args = parser.parse_args()
 
   if not args.video_id:
-    exit("Please specify video id using the --video_id= parameter.")
+    exit('Please specify video id using the --video_id= parameter.')
 
-  youtube = get_authenticated_service(args)
+  youtube = get_authenticated_service()
   try:
     if args.action == 'set':
-      set_video_localization(youtube, args.video_id, args.default_language, args.language, args.title, args.description)
+      set_video_localization(youtube, args)
     elif args.action == 'get':
-      get_video_localization(youtube, args.video_id, args.language)
+      get_video_localization(youtube, args)
     elif args.action == 'list':
-      list_video_localizations(youtube, args.video_id)
-    else:
-      exit("Please specify a valid action using the --action= parameter.")
+      list_video_localizations(youtube, args)
   except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
   else:
-    print "Set and retrieved localized metadata for a video."
+    print 'Set and retrieved localized metadata for a video
