@@ -1,15 +1,13 @@
 #!/usr/bin/python
 
-import httplib2
 import os
 import random
-import sys
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -23,52 +21,27 @@ from oauth2client.tools import argparser, run_flow
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
-CLIENT_SECRETS_FILE = "client_secrets.json"
-
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = """
-WARNING: Please configure OAuth 2.0
-
-To make this sample run you will need to populate the client_secrets.json file
-found at:
-
-   %s
-
-with information from the {{ Cloud Console }}
-{{ https://cloud.google.com/console }}
-
-For more information about the client_secrets.json file format, please visit:
-https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   CLIENT_SECRETS_FILE))
+CLIENT_SECRETS_FILE = 'client_secret.json'
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
-YOUTUBE_SCOPE = "https://www.googleapis.com/auth/youtube"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+SCOPES = ['https://www.googleapis.com/auth/youtube']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
 
-def get_authenticated_service(args):
-  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE, scope=YOUTUBE_SCOPE,
-    message=MISSING_CLIENT_SECRETS_MESSAGE)
-
-  storage = Storage("%s-oauth2.json" % sys.argv[0])
-  credentials = storage.get()
-
-  if credentials is None or credentials.invalid:
-    credentials = run_flow(flow, storage, args)
-
-  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    http=credentials.authorize(httplib2.Http()))
+# Authorize the request and store authorization credentials.
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+  credentials = flow.run_console()
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
 def get_current_channel_sections(youtube):
   channel_sections_list_response = youtube.channelSections().list(
-    part="snippet,contentDetails",
+    part='snippet,contentDetails',
     mine=True
   ).execute()
 
-  return channel_sections_list_response["items"]
+  return channel_sections_list_response['items']
 
 def shuffle_channel_sections(youtube, channel_sections):
   # This will randomly reorder the items in the channel_sections list.
@@ -77,21 +50,19 @@ def shuffle_channel_sections(youtube, channel_sections):
   for channel_section in channel_sections:
     # Each section in the list of shuffled sections is sequentially
     # set to position 0, i.e. the top.
-    channel_section["snippet"]["position"] = 0
+    channel_section['snippet']['position'] = 0
 
     youtube.channelSections().update(
-      part="snippet,contentDetails",
+      part='snippet,contentDetails',
       body=channel_section
     ).execute()
 
 if __name__ == '__main__':
-  args = argparser.parse_args()
-
-  youtube = get_authenticated_service(args)
+  youtube = get_authenticated_service()
   try:
     channel_sections = get_current_channel_sections(youtube)
     shuffle_channel_sections(youtube, channel_sections)
   except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
   else:
-    print "The existing channel sections have been randomly shuffled."
+    print 'The existing channel sections have been randomly shuffled.'
