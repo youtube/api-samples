@@ -66,27 +66,17 @@ def get_authenticated_services(args):
 
   http = credentials.authorize(httplib2.Http())
 
-  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    http=http)
   youtube_analytics = build(YOUTUBE_ANALYTICS_API_SERVICE_NAME,
     YOUTUBE_ANALYTICS_API_VERSION, http=http)
 
-  return (youtube, youtube_analytics)
+  return youtube_analytics
 
-def get_channel_id(youtube):
-  channels_list_response = youtube.channels().list(
-    mine=True,
-    part="id"
-  ).execute()
-
-  return channels_list_response["items"][0]["id"]
-
-def run_analytics_report(youtube_analytics, channel_id, options):
+def run_analytics_report(youtube_analytics, options):
   # Call the Analytics API to retrieve a report. For a list of available
   # reports, see:
   # https://developers.google.com/youtube/analytics/v1/channel_reports
   analytics_query_response = youtube_analytics.reports().query(
-    ids="channel==%s" % channel_id,
+    ids="channel==%s" % options.channel_id,
     metrics=options.metrics,
     dimensions=options.dimensions,
     start_date=options.start_date,
@@ -95,7 +85,7 @@ def run_analytics_report(youtube_analytics, channel_id, options):
     sort=options.sort
   ).execute()
 
-  print "Analytics Data for Channel %s" % channel_id
+  print "Analytics Data for Channel %s" % options.channel_id
 
   for column_header in analytics_query_response.get("columnHeaders", []):
     print "%-20s" % column_header["name"],
@@ -111,6 +101,8 @@ if __name__ == "__main__":
   one_day_ago = (now - timedelta(days=1)).strftime("%Y-%m-%d")
   one_week_ago = (now - timedelta(days=7)).strftime("%Y-%m-%d")
 
+  argparser.add_argument("--channel-id", help="Channel ID",
+    default="MINE")
   argparser.add_argument("--metrics", help="Report metrics",
     default="views,comments,favoritesAdded,favoritesRemoved,likes,dislikes,shares")
   argparser.add_argument("--dimensions", help="Report dimensions",
@@ -123,9 +115,8 @@ if __name__ == "__main__":
   argparser.add_argument("--sort", help="Sort order", default="-views")
   args = argparser.parse_args()
 
-  (youtube, youtube_analytics) = get_authenticated_services(args)
+  youtube_analytics = get_authenticated_services(args)
   try:
-    channel_id = get_channel_id(youtube)
-    run_analytics_report(youtube_analytics, channel_id, args)
+    run_analytics_report(youtube_analytics, args)
   except HttpError, e:
     print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
