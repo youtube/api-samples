@@ -1,14 +1,18 @@
 #!/usr/bin/python
 
-import httplib2
-import os
-import sys
+# This code sample creates a private playlist in the authorizing user's
+# YouTube channel.
+# Usage:
+#   python playlist_updates.py --title=<TITLE> --description=<DESCRIPTION>
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import argparse
+import os
+
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -21,58 +25,54 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = "client_secrets.json"
-
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = """
-WARNING: Please configure OAuth 2.0
-
-To make this sample run you will need to populate the client_secrets.json file
-found at:
-
-   %s
-
-with information from the {{ Cloud Console }}
-{{ https://cloud.google.com/console }}
-
-For more information about the client_secrets.json file format, please visit:
-https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   CLIENT_SECRETS_FILE))
+    
+CLIENT_SECRETS_FILE = 'client_secret.json'
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
-YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
-
-flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
-  message=MISSING_CLIENT_SECRETS_MESSAGE,
-  scope=YOUTUBE_READ_WRITE_SCOPE)
-
-storage = Storage("%s-oauth2.json" % sys.argv[0])
-credentials = storage.get()
-
-if credentials is None or credentials.invalid:
-  flags = argparser.parse_args()
-  credentials = run_flow(flow, storage, flags)
-
-youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-  http=credentials.authorize(httplib2.Http()))
-
-# This code creates a new, private playlist in the authorized user's channel.
-playlists_insert_response = youtube.playlists().insert(
-  part="snippet,status",
-  body=dict(
+SCOPES = ['https://www.googleapis.com/auth/youtube']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
+    
+# Authorize the request and store authorization credentials.
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+  credentials = flow.run_console()
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
+    
+def add_playlist(youtube, args):
+  
+  body = dict(
     snippet=dict(
-      title="Test Playlist",
-      description="A private playlist created with the YouTube API v3"
+      title=args.title,
+      description=args.description
     ),
     status=dict(
-      privacyStatus="private"
-    )
-  )
-).execute()
+      privacyStatus='private'
+    ) 
+  ) 
+    
+  playlists_insert_response = youtube.playlists().insert(
+    part='snippet,status',
+    body=body
+  ).execute()
 
-print "New playlist id: %s" % playlists_insert_response["id"]
+  print 'New playlist ID: %s' % playlists_insert_response['id']
+  
+if __name__ == '__main__':
+           
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--title',
+      default='Test Playlist',
+      help='The title of the new playlist.')
+  parser.add_argument('--description',
+      default='A private playlist created with the YouTube Data API.',
+      help='The description of the new playlist.')
+    
+  args = parser.parse_args()
+    
+  youtube = get_authenticated_service()
+  try:
+    add_playlist(youtube, args)
+  except HttpError, e:
+    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
