@@ -124,11 +124,14 @@ def list_channel_section_localizations(youtube, args):
     id=args.channel_section_id
   ).execute()
 
-  localizations = results['items'][0]['localizations']
+  if 'localizations' in results['items'][0]:
+    localizations = results['items'][0]['localizations']
 
-  for language, localization in localizations.iteritems():
-    print('The channel section title is \'%s\' in language \'%s\'.' %
-          (localization['title'], language))
+    for language, localization in localizations.iteritems():
+      print('The channel section title is \'%s\' in language \'%s\'.' %
+            (localization['title'], language))
+  else:
+    print 'This channel section does not have localizations yet.'
 
 # Call the API's channelSections.list method to list localizations for all
 # channel sections in the authorizing user\'s channel. This function might
