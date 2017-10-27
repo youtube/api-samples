@@ -1,17 +1,16 @@
 #!/usr/bin/python
 
 # Usage example:
-# python playlist_localizations.py --action='<action>' --playlist_id='<playlist_id>' --defaultlanguage='<default_language>' --language='<language>' --title='<title>' --description='<description>'
+# python playlist_localizations.py --action='<action>' --playlist_id='<playlist_id>' --default_language='<default_language>' --language='<language>' --title='<title>' --description='<description>'
 
-import httplib2
+import argparse
 import os
-import sys
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -25,142 +24,154 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = "client_secrets.json"
+CLIENT_SECRETS_FILE = 'client_secret.json'
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
-YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+SCOPES = ['https://www.googleapis.com/auth/youtube']
+API_SERVICE_NAME = 'youtube'
+API_VERSION = 'v3'
 
-# This variable defines a message to display if the CLIENT_SECRETS_FILE is
-# missing.
-MISSING_CLIENT_SECRETS_MESSAGE = """
-WARNING: Please configure OAuth 2.0
-
-To make this sample run you will need to populate the client_secrets.json file
-found at:
-   %s
-with information from the APIs Console
-https://console.developers.google.com
-
-For more information about the client_secrets.json file format, please visit:
-https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   CLIENT_SECRETS_FILE))
+ACTIONS = ('get', 'list', 'set')
 
 # Authorize the request and store authorization credentials.
-def get_authenticated_service(args):
-  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE, scope=YOUTUBE_READ_WRITE_SCOPE,
-    message=MISSING_CLIENT_SECRETS_MESSAGE)
-
-  storage = Storage("%s-oauth2.json" % sys.argv[0])
-  credentials = storage.get()
-
-  if credentials is None or credentials.invalid:
-    credentials = run_flow(flow, storage, args)
-
-  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    http=credentials.authorize(httplib2.Http()))
-
+def get_authenticated_service():
+  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+  credentials = flow.run_console()
+  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
 
 # Call the API's playlists.update method to update an existing playlist's default language,
 # localized title and description in a specific language.
-def set_playlist_localization(youtube, playlist_id, default_language, language, title, description):
+def set_playlist_localization(youtube, args):
+
   results = youtube.playlists().list(
-    part="snippet,localizations",
-    id=playlist_id
+    part='snippet,localizations',
+    id=args.playlist_id
   ).execute()
 
-  playlist = results["items"][0]
-  # Ensure that a value is set for the resource's snippet.defaultLanguage property.
-  playlist["snippet"]["defaultLanguage"] = default_language
-  if "localizations" not in playlist:
-    playlist["localizations"] = {}
-  playlist["localizations"][language] = {
-    "title": title,
-    "description": description
-  }
+  playlist = results['items'][0]
 
+  # If the language argument is set, set the localized title and description
+  # for that language. The "title" and "description" arguments have default
+  # values to make the script simpler to run as a demo. In an actual app, you
+  # would likely want to set those arguments also.
+  if args.language and args.language != '':
+    if 'localizations' not in playlist:
+      playlist['localizations'] = {}
+
+    playlist['localizations'][args.language] = {
+      'title': args.title,
+      'description': args.description
+    }
+
+  # If the default language is set AND there is localized metadata for that
+  # language, set the video's title and description to match the localized
+  # title and description for the newly set default language.
+  if args.default_language:
+    playlist['snippet']['defaultLanguage'] = args.default_language
+    if args.default_language in playlist['localizations']:
+      playlist['snippet']['title'] = (
+          playlist['localizations'][args.default_language]['title'])
+      playlist['snippet']['description'] = (
+          playlist['localizations'][args.default_language]['description'])
+
+  print(playlist)
+
+  # Update the playlist resource
   update_result = youtube.playlists().update(
-    part="snippet,localizations",
+    part='snippet,localizations',
     body=playlist
   ).execute()
 
-  localization = update_result["localizations"][language]
+  # Print the actions taken by running the script.
+  if args.language:
+    for language in update_result['localizations']:
+      # Languages with locales, like "pt-br" are returned as pt-BR in metadata.
+      # This ensures that the language specified when running the script can be
+      # matched to the language returned in the metadata.
+      if language.lower() == args.language.lower():
+        localization = update_result['localizations'][args.language]
+        print ('Updated playlist \'%s\' localized title to \'%s\''
+               ' and description to \'%s\' in language \'%s\'' %
+               (args.playlist_id,
+                localization['title'],
+                localization['description'],
+                args.language))
+        break
 
-  print ("Updated playlist '%s' default language to '%s', localized title to '%s'"
-         " and description to '%s' in language '%s'"
-         % (playlist_id, localization["title"], localization["description"], language))
-
+  if (args.default_language and
+      args.default_language == update_result['snippet']['defaultLanguage']):
+    print 'Updated default language to %s' % args.default_language
 
 # Call the API's playlists.list method to retrieve an existing playlist localization.
 # If the localized text is not available in the requested language,
 # this method will return text in the default language.
-def get_playlist_localization(youtube, playlist_id, language):
+def get_playlist_localization(youtube, args):
   results = youtube.playlists().list(
-    part="snippet",
-    id=playlist_id,
-    hl=language
+    part='snippet',
+    id=args.playlist_id,
+    hl=args.language
   ).execute()
 
   # The localized object contains localized text if the hl parameter specified
   # a language for which localized text is available. Otherwise, the localized
   # object will contain metadata in the default language.
-  localized = results["items"][0]["snippet"]["localized"]
+  localized = results['items'][0]['snippet']['localized']
 
-  print ("Playlist title is '%s' and description is '%s' in language '%s'"
-         % (localized["title"], localized["description"], language))
+  print ('Playlist title is "%s" and description is "%s" in language "%s"'
+         % (localized['title'], localized['description'], args.language))
 
 
-# Call the API's playlists.list method to list the existing playlist localizations.
-def list_playlist_localizations(youtube, playlist_id):
+# Call the API's playlists.list method to list existing localizations
+# for the playlist.
+def list_playlist_localizations(youtube, args):
   results = youtube.playlists().list(
-    part="snippet,localizations",
-    id=playlist_id
+    part='snippet,localizations',
+    id=args.playlist_id
   ).execute()
 
-  localizations = results["items"][0]["localizations"]
+  if 'localizations' in results['items'][0]:
+    localizations = results['items'][0]['localizations']
 
-  for language, localization in localizations.iteritems():
-    print ("Playlist title is '%s' and description is '%s' in language '%s'"
-           % (localization["title"], localization["description"], language))
+    for language, localization in localizations.iteritems():
+      print ('Playlist title is "%s" and description is "%s" in language "%s"'
+             % (localization['title'], localization['description'], language))
+  else:
+    print 'There aren\'t any localizations for this playlist yet.'
 
 
-if __name__ == "__main__":
-  # The "action" option specifies the action to be processed.
-  argparser.add_argument("--action", help="Action")
-  # The "playlist_id" option specifies the ID of the selected YouTube playlist.
-  argparser.add_argument("--playlist_id",
-    help="ID for playlist for which the localization will be applied.")
-  # The "default_language" option specifies the language of the playlist's default metadata.
-  argparser.add_argument("--default_language", help="Default language of the playlist to update.",
-    default="en")
-  # The "language" option specifies the language of the localization that is being processed.
-  argparser.add_argument("--language", help="Language of the localization.", default="de")
-  # The "title" option specifies the localized title of the playlist to be set.
-  argparser.add_argument("--title", help="Localized title of the playlist to be set.",
-    default="Localized Title")
-  # The "description" option specifies the localized description of the playlist to be set.
-  argparser.add_argument("--description", help="Localized description of the playlist to be set.",
-    default="Localized Description")
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  # The action to be processed: 'get', 'list', and 'set' are supported.
+  parser.add_argument('--action', required=True, help='Action', choices=ACTIONS)
+  # The ID of the selected YouTube olaylist.
+  parser.add_argument('--playlist_id',
+    help='The playlist ID for which localizations are being set or retrieved.',
+    required=True)
+  # The langauge of the playlist's default metadata.
+  parser.add_argument('--default_language',
+    help='Default language to set for the playlist.')
+  # The language of the localization that is being set or retrieved.
+  parser.add_argument('--language', help='Language of the localization.')
+  # The localized title to set in the specified language.
+  parser.add_argument('--title',
+    help='Localized title to be set for the playlist.',
+    default='Localized Title')
+  # The localized description to set in the specified language.
+  parser.add_argument('--description',
+    help='Localized description to be set for the playlist.',
+    default='Localized Description')
 
-  args = argparser.parse_args()
+  args = parser.parse_args()
 
-  if not args.playlist_id:
-    exit("Please specify playlist id using the --playlist_id= parameter.")
+  youtube = get_authenticated_service()
 
-  youtube = get_authenticated_service(args)
   try:
     if args.action == 'set':
-      set_playlist_localization(youtube, args.playlist_id, args.default_language, args.language, args.title, args.description)
+      set_playlist_localization(youtube, args)
     elif args.action == 'get':
-      get_playlist_localization(youtube, args.playlist_id, args.language)
+      get_playlist_localization(youtube, args)
     elif args.action == 'list':
-      list_playlist_localizations(youtube, args.playlist_id)
-    else:
-      exit("Please specify a valid action using the --action= parameter.")
+      list_playlist_localizations(youtube, args)
   except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
-  else:
-    print "Set and retrieved localized metadata for a playlist."
+    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
