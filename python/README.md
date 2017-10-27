@@ -1,3 +1,29 @@
+## Prerequisites
+
+*   Python 2.6 or greater
+
+*   The pip package management tool
+
+*   The Google APIs Client Library for Python:
+    ```
+    pip install --upgrade google-api-python-client
+    ```
+*   The google-auth, google-auth-oauthlib, and google-auth-httplib2 for user authorization.
+    ```
+    pip install --upgrade google-auth google-auth-oauthlib google-auth-httplib2
+    ```
+    
+### Setting up your project and running code samples
+
+1.  Create a project in the API Console and set up credentials for a web application. Set the authorized redirect URIs as appropriate.
+2.  Save the client_secrets.json file associated with your credentials to a local file.
+3.  Copy the full code sample to a local file in the same directory as the client_secrets.json file (or modify the sample to correctly identify that file's location.
+4.  Run the sample from the command line and set command-line arguments as necessary:
+
+    ```python sample.py --arg1=value1 --arg2=value2 ...```
+
+5.  Most samples print something to STDOUT. You can also check the YouTube website to see the effects of requests that write data, such as requests that create playlists or channel sections.
+
 ## Samples in this directory:
 
 ### [Add a channel section](/python/add_channel_section.py)
