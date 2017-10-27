@@ -118,11 +118,12 @@ def list_channel_localizations(youtube, channel_id):
     id=channel_id
   ).execute()
 
-  localizations = results['items'][0]['localizations']
-
-  for language, localization in localizations.iteritems():
-    print 'Channel description is \'%s\' in language \'%s\'' % (localization['description'], language)
-
+  if 'localizations' in results['items'][0]:
+    localizations = results['items'][0]['localizations']
+    for language, localization in localizations.iteritems():
+      print 'Channel description is \'%s\' in language \'%s\'' % (localization['description'], language)
+  else:
+    print 'There aren\'t any localizations for this channel yet.'
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
