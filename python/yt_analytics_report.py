@@ -22,8 +22,8 @@
 #   * --filters="channel==CHANNEL_ID"
 #   * --filters="channel==CHANNEL_ID;country==COUNTRY_CODE"
 #   * --filters="video==VIDEO_ID"
-#   " --filters="claimedStatus==claimed;uploaderType==thirdParty"
-#   and so forth.
+#   * --filters="claimedStatus==claimed;uploaderType==thirdParty"
+#   * etc.
 #
 ###
 
