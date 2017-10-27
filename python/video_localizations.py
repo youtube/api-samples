@@ -129,12 +129,14 @@ def list_video_localizations(youtube, args):
     id=args.video_id
   ).execute()
 
-  localizations = results['items'][0]['localizations']
-
-  for language, localization in localizations.iteritems():
-    print ('Video title is \'%s\' and description is \'%s\' in language \'%s\''
-           % (localization['title'], localization['description'], language))
-
+  if 'localizations' in results['items'][0]:
+    localizations = results['items'][0]['localizations']
+    
+    for language, localization in localizations.iteritems():
+      print ('Video title is \'%s\' and description is \'%s\' in language \'%s\''
+             % (localization['title'], localization['description'], language))
+  else:
+    print 'There aren\'t any localizations for this video yet.'
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
