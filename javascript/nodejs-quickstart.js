@@ -1,7 +1,7 @@
 var fs = require('fs');
 var readline = require('readline');
-var google = require('googleapis');
-var googleAuth = require('google-auth-library');
+var { google } = require('googleapis');
+var { OAuth2Client } = require('google-auth-library');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/youtube-nodejs-quickstart.json
@@ -31,8 +31,7 @@ function authorize(credentials, callback) {
   var clientSecret = credentials.installed.client_secret;
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
-  var auth = new googleAuth();
-  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+  var oauth2Client = new OAuth2Client(clientId, clientSecret, redirectUrl);
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
@@ -100,9 +99,11 @@ function storeToken(token) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function getChannel(auth) {
-  var service = google.youtube('v3');
+  var service = google.youtube({
+    version: 'v3',
+    auth
+  });
   service.channels.list({
-    auth: auth,
     part: 'snippet,contentDetails,statistics',
     forUsername: 'GoogleDevelopers'
   }, function(err, response) {
@@ -110,7 +111,7 @@ function getChannel(auth) {
       console.log('The API returned an error: ' + err);
       return;
     }
-    var channels = response.items;
+    var channels = response.data.items;
     if (channels.length == 0) {
       console.log('No channel found.');
     } else {
