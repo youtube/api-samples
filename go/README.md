@@ -54,10 +54,10 @@ Description: This code sample calls the API's `playlists.list` method. Use comma
  
 ```
 # Retrieve playlists for a specified channel
-go run playlists.go oauth.go errors.go --channelId=UC_x5XG1OV2P6uZZ5FSM9Ttw
+go run playlists.go oauth2.go errors.go --channelId=UC_x5XG1OV2P6uZZ5FSM9Ttw
 
 # Retrieve authenticated user's playlists
-go run playlists.go oauth.go errors.go --mine=true
+go run playlists.go oauth2.go errors.go --mine=true
 ```
 
 ### [Retrieve my uploads](/go/my_uploads.go)
