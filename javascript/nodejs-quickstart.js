@@ -93,7 +93,6 @@ function storeToken(token) {
     if (err) throw err;
     console.log('Token stored to ' + TOKEN_PATH);
   });
-  console.log('Token stored to ' + TOKEN_PATH);
 }
 
 /**
