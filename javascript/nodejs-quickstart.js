@@ -1,7 +1,7 @@
 var fs = require('fs');
 var readline = require('readline');
-var google = require('googleapis');
-var googleAuth = require('google-auth-library');
+var {google} = require('googleapis');
+var OAuth2 = google.auth.OAuth2;
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/youtube-nodejs-quickstart.json
@@ -31,8 +31,7 @@ function authorize(credentials, callback) {
   var clientSecret = credentials.installed.client_secret;
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
-  var auth = new googleAuth();
-  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+  var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
@@ -90,7 +89,10 @@ function storeToken(token) {
       throw err;
     }
   }
-  fs.writeFile(TOKEN_PATH, JSON.stringify(token));
+  fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+    if (err) throw err;
+    console.log('Token stored to ' + TOKEN_PATH);
+  });
   console.log('Token stored to ' + TOKEN_PATH);
 }
 
@@ -110,7 +112,7 @@ function getChannel(auth) {
       console.log('The API returned an error: ' + err);
       return;
     }
-    var channels = response.items;
+    var channels = response.data.items;
     if (channels.length == 0) {
       console.log('No channel found.');
     } else {
