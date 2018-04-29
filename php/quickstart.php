@@ -42,7 +42,7 @@ function getClient() {
     if(!file_exists(dirname($credentialsPath))) {
       mkdir(dirname($credentialsPath), 0700, true);
     }
-    file_put_contents($credentialsPath, $accessToken);
+    file_put_contents($credentialsPath, json_encode($accessToken));
     printf("Credentials saved to %s\n", $credentialsPath);
   }
   $client->setAccessToken($accessToken);
@@ -50,7 +50,7 @@ function getClient() {
   // Refresh the token if it's expired.
   if ($client->isAccessTokenExpired()) {
     $client->refreshToken($client->getRefreshToken());
-    file_put_contents($credentialsPath, $client->getAccessToken());
+    file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
   }
   return $client;
 }
