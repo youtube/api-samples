@@ -103,12 +103,10 @@ if (isset($_GET['code'])) {
   header('Location: ' . $redirect);
 }
 
+// Check to ensure that the access token was successfully acquired.
 if (isset($_SESSION[$tokenSessionKey])) {
   $client->setAccessToken($_SESSION[$tokenSessionKey]);
-}
-
-// Check to ensure that the access token was successfully acquired.
-if ($client->getAccessToken()) {
+  
   // This code executes if the user enters an action in the form
   // and submits the form. Otherwise, the page displays the form above.
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
