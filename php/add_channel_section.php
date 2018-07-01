@@ -81,12 +81,9 @@ if (isset($_GET['code'])) {
   header('Location: ' . $redirect);
 }
 
+// Check to ensure that the access token was successfully acquired.
 if (isset($_SESSION[$tokenSessionKey])) {
   $client->setAccessToken($_SESSION[$tokenSessionKey]);
-}
-
-// Check to ensure that the access token was successfully acquired.
-if ($client->getAccessToken()) {
   try {
 
     /*
