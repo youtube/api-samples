@@ -100,9 +100,9 @@ def initialize_upload(youtube, options):
 # failed upload.
 def resumable_upload(request):
   response = None
-  error = None
   retry = 0
   while response is None:
+    error = None
     try:
       print 'Uploading file...'
       status, response = request.next_chunk()
