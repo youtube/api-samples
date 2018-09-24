@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
+SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
 
 API_SERVICE_NAME = 'youtubeAnalytics'
 API_VERSION = 'v2'
@@ -35,7 +35,7 @@ if __name__ == '__main__':
       ids='channel==MINE',
       startDate='2017-01-01',
       endDate='2017-12-31',
-      metrics='estimatedMinutesWatched,views,likes,subscribersGained'
+      metrics='estimatedMinutesWatched,views,likes,subscribersGained',
       dimensions='day',
       sort='day'
   )
