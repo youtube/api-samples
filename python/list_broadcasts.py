@@ -43,7 +43,7 @@ def list_broadcasts(youtube, broadcast_status):
 
   list_broadcasts_request = youtube.liveBroadcasts().list(
     broadcastStatus=broadcast_status,
-    part='id,snippet',
+    part='id,snippet', # could also include contentDetails,status
     maxResults=50
   )
 
