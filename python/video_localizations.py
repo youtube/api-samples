@@ -176,4 +176,4 @@ if __name__ == '__main__':
   except HttpError, e:
     print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
   else:
-    print 'Set and retrieved localized metadata for a video
+    print 'Set and retrieved localized metadata for a video'
