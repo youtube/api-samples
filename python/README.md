@@ -12,7 +12,11 @@
     ```
     pip install --upgrade google-auth google-auth-oauthlib google-auth-httplib2
     ```
-    
+*   Alternatively, you can install the requirements by
+    ```
+    pip install --upgrade -r requirements.txt
+    ```
+
 ### Setting up your project and running code samples
 
 1.  Create a project in the API Console and set up credentials for a web application. Set the authorized redirect URIs as appropriate.
