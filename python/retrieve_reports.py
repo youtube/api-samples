@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 ###
 #
@@ -57,12 +57,7 @@ def get_authenticated_service():
 
 # Remove keyword arguments that are not set.
 def remove_empty_kwargs(**kwargs):
-  good_kwargs = {}
-  if kwargs is not None:
-    for key, value in kwargs.iteritems():
-      if value:
-        good_kwargs[key] = value
-  return good_kwargs
+  return dict({k: v for k, v in kwargs.items() if v is not None})
 
 # Call the YouTube Reporting API's jobs.list method to retrieve reporting jobs.
 def list_reporting_jobs(youtube_reporting, **kwargs):
@@ -76,10 +71,9 @@ def list_reporting_jobs(youtube_reporting, **kwargs):
   if 'jobs' in results and results['jobs']:
     jobs = results['jobs']
     for job in jobs:
-      print ('Reporting job id: %s\n name: %s\n for reporting type: %s\n'
-        % (job['id'], job['name'], job['reportTypeId']))
+      print (f"Reporting job id:{job['id']}\n name:{job['name']}\n for reporting type: {job['reportTypeId']}\n")
   else:
-    print 'No jobs found'
+    print('No jobs found')
     return False
 
   return True
@@ -91,22 +85,17 @@ def retrieve_reports(youtube_reporting, **kwargs):
   kwargs = remove_empty_kwargs(**kwargs)
 
   # Retrieve available reports for the selected job.
-  results = youtube_reporting.jobs().reports().list(
-    **kwargs
-  ).execute()
+  results = youtube_reporting.jobs().reports().list(**kwargs).execute()
 
   if 'reports' in results and results['reports']:
     reports = results['reports']
     for report in reports:
-      print ('Report dates: %s to %s\n       download URL: %s\n'
-        % (report['startTime'], report['endTime'], report['downloadUrl']))
+      print (f"Report dates: {report['startTime']} to {report['endTime']}\n\tdownload URL: {report['downloadUrl']}\n")
 
 
 # Call the YouTube Reporting API's media.download method to download the report.
 def download_report(youtube_reporting, report_url, local_file):
-  request = youtube_reporting.media().download(
-    resourceName=' '
-  )
+  request = youtube_reporting.media().download(resourceName=' ')
   request.uri = report_url
   fh = FileIO(local_file, mode='wb')
   # Stream/download the report in a single request.
@@ -116,20 +105,20 @@ def download_report(youtube_reporting, report_url, local_file):
   while done is False:
     status, done = downloader.next_chunk()
     if status:
-      print 'Download %d%%.' % int(status.progress() * 100)
-  print 'Download Complete!'
+      print ('Download %d%%.' % int(status.progress() * 100))
+  print ('Download Complete!')
 
 
 # Prompt the user to select a job and return the specified ID.
 def get_job_id_from_user():
-  job_id = raw_input('Please enter the job id for the report retrieval: ')
-  print ('You chose "%s" as the job Id for the report retrieval.' % job_id)
+  job_id = input('Please enter the job id for the report retrieval: ')
+  print (f'You chose "{job_id}" as the job Id for the report retrieval.')
   return job_id
 
 # Prompt the user to select a report URL and return the specified URL.
 def get_report_url_from_user():
-  report_url = raw_input('Please enter the report URL to download: ')
-  print ('You chose "%s" to download.' % report_url)
+  report_url = input('Please enter the report URL to download: ')
+  print ('You chose "{report_url}" to download.')
   return report_url
 
 if __name__ == '__main__':
@@ -168,5 +157,5 @@ if __name__ == '__main__':
     # Download the selected report.
     if args.report_url:
       download_report(youtube_reporting, args.report_url, args.local_file)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print (f'An HTTP error {e.resp.status} occurred:\n{e.content}')
