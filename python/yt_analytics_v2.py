@@ -35,7 +35,7 @@ if __name__ == '__main__':
       ids='channel==MINE',
       startDate='2017-01-01',
       endDate='2017-12-31',
-      metrics='estimatedMinutesWatched,views,likes,subscribersGained'
+      metrics='estimatedMinutesWatched,views,likes,subscribersGained',
       dimensions='day',
       sort='day'
   )
