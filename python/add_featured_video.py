@@ -101,8 +101,8 @@ if __name__ == '__main__':
   youtube = get_authenticated_service(args)
   try:
     add_featured_video(youtube, args)
-  except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  except HttpError as e:
+    print ("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
   else:
-    print "Added featured video %s to channel %s." % (
-      args.video_id, args.channel_id)
+    print ("Added featured video %s to channel %s." % (
+      args.video_id, args.channel_id))

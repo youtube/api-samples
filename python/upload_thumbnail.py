@@ -85,7 +85,7 @@ if __name__ == "__main__":
   youtube = get_authenticated_service(args)
   try:
     upload_thumbnail(youtube, args.video_id, args.file)
-  except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  except HttpError as e:
+    print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
   else:
-    print "The custom thumbnail was successfully set."
+    print("The custom thumbnail was successfully set.")

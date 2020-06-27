@@ -78,7 +78,7 @@ def set_watermark(youtube, channel_id, file, metadata):
       body=metadata,
     ).execute()
   except HttpError as e:
-    print "Error while setting watermark: %s" % e.content
+    print("Error while setting watermark: %s" % e.content)
     raise e
 
 
@@ -108,4 +108,4 @@ if __name__ == "__main__":
     exit("Please specify watermark metadata using the --metadata= parameter.")
   set_watermark(youtube, args.channelid, args.file,
                 json.loads(args.metadata))
-  print "The watermark was successfully set."
+  print("The watermark was successfully set.")

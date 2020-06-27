@@ -78,7 +78,7 @@ def list_captions(youtube, video_id):
     id = item["id"]
     name = item["snippet"]["name"]
     language = item["snippet"]["language"]
-    print "Caption track '%s(%s)' in '%s' language." % (name, id, language)
+    print ("Caption track '%s(%s)' in '%s' language." % (name, id, language))
 
   return results["items"]
 
@@ -102,8 +102,8 @@ def upload_caption(youtube, video_id, language, name, file):
   name = insert_result["snippet"]["name"]
   language = insert_result["snippet"]["language"]
   status = insert_result["snippet"]["status"]
-  print "Uploaded caption track '%s(%s) in '%s' language, '%s' status." % (name,
-      id, language, status)
+  print ("Uploaded caption track '%s(%s) in '%s' language, '%s' status." % (name,
+      id, language, status))
 
 
 # Call the API's captions.update method to update an existing caption track's draft status
@@ -122,9 +122,9 @@ def update_caption(youtube, caption_id, file):
 
   name = update_result["snippet"]["name"]
   isDraft = update_result["snippet"]["isDraft"]
-  print "Updated caption track '%s' draft status to be: '%s'" % (name, isDraft)
+  print ("Updated caption track '%s' draft status to be: '%s'" % (name, isDraft))
   if file:
-    print "and updated the track with the new uploaded file."
+    print ("and updated the track with the new uploaded file.")
 
 
 # Call the API's captions.download method to download an existing caption track.
@@ -134,7 +134,7 @@ def download_caption(youtube, caption_id, tfmt):
     tfmt=tfmt
   ).execute()
 
-  print "First line of caption track: %s" % (subtitle)
+  print ("First line of caption track: %s" % (subtitle))
 
 # Call the API's captions.delete method to delete an existing caption track.
 def delete_caption(youtube, caption_id):
@@ -142,7 +142,7 @@ def delete_caption(youtube, caption_id):
     id=caption_id
   ).execute()
 
-  print "caption track '%s' deleted succesfully" % (caption_id)
+  print ("caption track '%s' deleted succesfully" % (caption_id))
 
 
 if __name__ == "__main__":
@@ -200,7 +200,7 @@ if __name__ == "__main__":
         update_caption(youtube, first_caption_id, None);
         download_caption(youtube, first_caption_id, 'srt')
         delete_caption(youtube, first_caption_id);
-  except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  except HttpError as e:
+    print ("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
   else:
-    print "Created and managed caption tracks."
+    print ("Created and managed caption tracks.")

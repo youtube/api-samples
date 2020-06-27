@@ -96,7 +96,7 @@ def set_channel_section_localization(youtube, args):
 
   if (args.default_language and
       args.default_language == update_result['snippet']['defaultLanguage']):
-    print 'Updated default language to %s.' % args.default_language
+    print('Updated default language to %s.' % args.default_language)
 
 # Call the API's channelSections.list method to retrieve an existing channel section localization.
 # If the localized text is not available in the requested language,
@@ -210,4 +210,4 @@ if __name__ == '__main__':
     else:
       exit('Please specify a valid action using the --action= parameter.')
   except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))

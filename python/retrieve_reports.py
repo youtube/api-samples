@@ -76,10 +76,10 @@ def list_reporting_jobs(youtube_reporting, **kwargs):
   if 'jobs' in results and results['jobs']:
     jobs = results['jobs']
     for job in jobs:
-      print ('Reporting job id: %s\n name: %s\n for reporting type: %s\n'
+      print('Reporting job id: %s\n name: %s\n for reporting type: %s\n'
         % (job['id'], job['name'], job['reportTypeId']))
   else:
-    print 'No jobs found'
+    print('No jobs found')
     return False
 
   return True
@@ -98,7 +98,7 @@ def retrieve_reports(youtube_reporting, **kwargs):
   if 'reports' in results and results['reports']:
     reports = results['reports']
     for report in reports:
-      print ('Report dates: %s to %s\n       download URL: %s\n'
+      print('Report dates: %s to %s\n       download URL: %s\n'
         % (report['startTime'], report['endTime'], report['downloadUrl']))
 
 
@@ -116,20 +116,20 @@ def download_report(youtube_reporting, report_url, local_file):
   while done is False:
     status, done = downloader.next_chunk()
     if status:
-      print 'Download %d%%.' % int(status.progress() * 100)
-  print 'Download Complete!'
+      print('Download %d%%.' % int(status.progress() * 100))
+  print('Download Complete!')
 
 
 # Prompt the user to select a job and return the specified ID.
 def get_job_id_from_user():
   job_id = raw_input('Please enter the job id for the report retrieval: ')
-  print ('You chose "%s" as the job Id for the report retrieval.' % job_id)
+  print('You chose "%s" as the job Id for the report retrieval.' % job_id)
   return job_id
 
 # Prompt the user to select a report URL and return the specified URL.
 def get_report_url_from_user():
   report_url = raw_input('Please enter the report URL to download: ')
-  print ('You chose "%s" to download.' % report_url)
+  print('You chose "%s" to download.' % report_url)
   return report_url
 
 if __name__ == '__main__':
@@ -168,5 +168,5 @@ if __name__ == '__main__':
     # Download the selected report.
     if args.report_url:
       download_report(youtube_reporting, args.report_url, args.local_file)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))

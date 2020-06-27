@@ -37,7 +37,7 @@ def get_authenticated_service():
 # Retrieve a list of the liveStream resources associated with the currently
 # authenticated user's channel.
 def list_streams(youtube):
-  print 'Live streams:'
+  print('Live streams:')
 
   list_streams_request = youtube.liveStreams().list(
     part='id,snippet',
@@ -49,7 +49,7 @@ def list_streams(youtube):
     list_streams_response = list_streams_request.execute()
   
     for stream in list_streams_response.get('items', []):
-      print '%s (%s)' % (stream['snippet']['title'], stream['id'])
+      print('%s (%s)' % (stream['snippet']['title'], stream['id']))
     
     list_streams_request = youtube.liveStreams().list_next(
       list_streams_request, list_streams_response)
@@ -58,5 +58,5 @@ if __name__ == '__main__':
   youtube = get_authenticated_service()
   try:
     list_streams(youtube)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))

@@ -67,7 +67,7 @@ def unset_watermark(youtube, channel_id):
   try:
     youtube.watermarks().unset(channelId=channel_id).execute()
   except HttpError as e:
-    print "Error while unsetting watermark: %s" % e.content
+    print("Error while unsetting watermark: %s" % e.content)
     raise e
 
 
@@ -83,4 +83,4 @@ if __name__ == "__main__":
   youtube = get_authenticated_service(args)
 
   unset_watermark(youtube, args.channelid)
-  print "The watermark was successfully unset."
+  print("The watermark was successfully unset.")

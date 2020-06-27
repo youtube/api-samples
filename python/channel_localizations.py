@@ -79,7 +79,7 @@ def set_channel_localization(youtube, args):
     ).execute()
     updated_default_language = (
         language_result['brandingSettings']['channel']['defaultLanguage'])
-    print 'Updated language to %s' % updated_default_language
+    print ('Updated language to %s' % updated_default_language)
 
   update_result = youtube.channels().update(
     part='localizations',
@@ -108,7 +108,7 @@ def get_channel_localization(youtube, channel_id, language):
   # object will contain metadata in the default language.
   localized = results['items'][0]['snippet']['localized']
 
-  print 'Channel description is \'%s\' in language \'%s\'' % (localized['description'], language)
+  print ('Channel description is \'%s\' in language \'%s\'' % (localized['description'], language))
 
 
 # Call the API's channels.list method to list the existing channel localizations.
@@ -121,9 +121,9 @@ def list_channel_localizations(youtube, channel_id):
   if 'localizations' in results['items'][0]:
     localizations = results['items'][0]['localizations']
     for language, localization in localizations.iteritems():
-      print 'Channel description is \'%s\' in language \'%s\'' % (localization['description'], language)
+      print ('Channel description is \'%s\' in language \'%s\'' % (localization['description'], language))
   else:
-    print 'There aren\'t any localizations for this channel yet.'
+    print('There aren\'t any localizations for this channel yet.')
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -159,7 +159,7 @@ if __name__ == '__main__':
       list_channel_localizations(youtube, args.channel_id)
     else:
       exit('Please specify a valid action using the --action= parameter.')
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print ('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))
   else:
-    print 'Set or retrieved localized metadata for a channel.'                                                         
+    print('Set or retrieved localized metadata for a channel.')                                                         

@@ -79,7 +79,7 @@ def get_comment_threads(youtube, video_id):
     comment = item["snippet"]["topLevelComment"]
     author = comment["snippet"]["authorDisplayName"]
     text = comment["snippet"]["textDisplay"]
-    print "Comment by %s: %s" % (author, text)
+    print("Comment by %s: %s" % (author, text))
 
   return results["items"]
 
@@ -95,7 +95,7 @@ def get_comments(youtube, parent_id):
   for item in results["items"]:
     author = item["snippet"]["authorDisplayName"]
     text = item["snippet"]["textDisplay"]
-    print "Comment by %s: %s" % (author, text)
+    print("Comment by %s: %s" % (author, text))
 
   return results["items"]
 
@@ -116,7 +116,7 @@ def insert_comment(youtube, parent_id, text):
 
   author = insert_result["snippet"]["authorDisplayName"]
   text = insert_result["snippet"]["textDisplay"]
-  print "Replied to a comment for %s: %s" % (author, text)
+  print("Replied to a comment for %s: %s" % (author, text))
 
 
 # Call the API's comments.update method to update an existing comment.
@@ -129,7 +129,7 @@ def update_comment(youtube, comment):
 
   author = update_result["snippet"]["authorDisplayName"]
   text = update_result["snippet"]["textDisplay"]
-  print "Updated comment for %s: %s" % (author, text)
+  print("Updated comment for %s: %s" % (author, text))
 
 
 # Call the API's comments.setModerationStatus method to set moderation status of an
@@ -140,7 +140,7 @@ def set_moderation_status(youtube, comment):
     moderationStatus="published"
   ).execute()
 
-  print "%s moderated succesfully" % (comment["id"])
+  print("%s moderated succesfully" % (comment["id"]))
 
 
 # Call the API's comments.markAsSpam method to mark an existing comment as spam.
@@ -149,7 +149,7 @@ def mark_as_spam(youtube, comment):
     id=comment["id"]
   ).execute()
 
-  print "%s marked as spam succesfully" % (comment["id"])
+  print("%s marked as spam succesfully" % (comment["id"]))
 
 
 # Call the API's comments.delete method to delete an existing comment.
@@ -158,7 +158,7 @@ def delete_comment(youtube, comment):
     id=comment["id"]
   ).execute()
 
-  print "%s deleted succesfully" % (comment["id"])
+  print("%s deleted succesfully" % (comment["id"]))
 
 
 if __name__ == "__main__":
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     set_moderation_status(youtube, video_comments[0])
     mark_as_spam(youtube, video_comments[0])
     delete_comment(youtube, video_comments[0])
-  except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  except HttpError as e:
+    print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
   else:
-    print "Inserted, listed, updated, moderated, marked and deleted comments."
+    print("Inserted, listed, updated, moderated, marked and deleted comments.")

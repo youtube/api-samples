@@ -101,7 +101,7 @@ def set_playlist_localization(youtube, args):
 
   if (args.default_language and
       args.default_language == update_result['snippet']['defaultLanguage']):
-    print 'Updated default language to %s' % args.default_language
+    print('Updated default language to %s' % args.default_language)
 
 # Call the API's playlists.list method to retrieve an existing playlist localization.
 # If the localized text is not available in the requested language,
@@ -137,7 +137,7 @@ def list_playlist_localizations(youtube, args):
       print ('Playlist title is "%s" and description is "%s" in language "%s"'
              % (localization['title'], localization['description'], language))
   else:
-    print 'There aren\'t any localizations for this playlist yet.'
+    print('There aren\'t any localizations for this playlist yet.')
 
 
 if __name__ == '__main__':
@@ -173,5 +173,5 @@ if __name__ == '__main__':
       get_playlist_localization(youtube, args)
     elif args.action == 'list':
       list_playlist_localizations(youtube, args)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))

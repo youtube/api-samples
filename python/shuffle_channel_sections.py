@@ -62,7 +62,7 @@ if __name__ == '__main__':
   try:
     channel_sections = get_current_channel_sections(youtube)
     shuffle_channel_sections(youtube, channel_sections)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))
   else:
-    print 'The existing channel sections have been randomly shuffled.'
+    print('The existing channel sections have been randomly shuffled.')
