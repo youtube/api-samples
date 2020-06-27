@@ -79,8 +79,8 @@ def insert_broadcast(youtube, options):
 
   snippet = insert_broadcast_response["snippet"]
 
-  print "Broadcast '%s' with title '%s' was published at '%s'." % (
-    insert_broadcast_response["id"], snippet["title"], snippet["publishedAt"])
+  print("Broadcast '%s' with title '%s' was published at '%s'." % (
+    insert_broadcast_response["id"], snippet["title"], snippet["publishedAt"]))
   return insert_broadcast_response["id"]
 
 # Create a liveStream resource and set its title, format, and ingestion type.
@@ -101,8 +101,8 @@ def insert_stream(youtube, options):
 
   snippet = insert_stream_response["snippet"]
 
-  print "Stream '%s' with title '%s' was inserted." % (
-    insert_stream_response["id"], snippet["title"])
+  print("Stream '%s' with title '%s' was inserted." % (
+    insert_stream_response["id"], snippet["title"]))
   return insert_stream_response["id"]
 
 # Bind the broadcast to the video stream. By doing so, you link the video that
@@ -114,9 +114,9 @@ def bind_broadcast(youtube, broadcast_id, stream_id):
     streamId=stream_id
   ).execute()
 
-  print "Broadcast '%s' was bound to stream '%s'." % (
+  print("Broadcast '%s' was bound to stream '%s'." % (
     bind_broadcast_response["id"],
-    bind_broadcast_response["contentDetails"]["boundStreamId"])
+    bind_broadcast_response["contentDetails"]["boundStreamId"]))
 
 if __name__ == "__main__":
   argparser.add_argument("--broadcast-title", help="Broadcast title",
@@ -136,5 +136,5 @@ if __name__ == "__main__":
     broadcast_id = insert_broadcast(youtube, args)
     stream_id = insert_stream(youtube, args)
     bind_broadcast(youtube, broadcast_id, stream_id)
-  except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  except HttpError as e:
+    print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))

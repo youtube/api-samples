@@ -39,7 +39,7 @@ def get_authenticated_service():
 
 # Retrieve a list of broadcasts with the specified status.
 def list_broadcasts(youtube, broadcast_status):
-  print 'Broadcasts with status "%s":' % broadcast_status
+  print('Broadcasts with status "%s":' % broadcast_status)
 
   list_broadcasts_request = youtube.liveBroadcasts().list(
     broadcastStatus=broadcast_status,
@@ -51,7 +51,7 @@ def list_broadcasts(youtube, broadcast_status):
     list_broadcasts_response = list_broadcasts_request.execute()
 
     for broadcast in list_broadcasts_response.get('items', []):
-      print '%s (%s)' % (broadcast['snippet']['title'], broadcast['id'])
+      print('%s (%s)' % (broadcast['snippet']['title'], broadcast['id']))
 
     list_broadcasts_request = youtube.liveBroadcasts().list_next(
       list_broadcasts_request, list_broadcasts_response)
@@ -65,5 +65,5 @@ if __name__ == '__main__':
   youtube = get_authenticated_service()
   try:
     list_broadcasts(youtube, args.broadcast_status)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))

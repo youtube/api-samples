@@ -80,7 +80,7 @@ def get_comments(youtube, video_id, channel_id):
     comment = item["snippet"]["topLevelComment"]
     author = comment["snippet"]["authorDisplayName"]
     text = comment["snippet"]["textDisplay"]
-    print "Comment by %s: %s" % (author, text)
+    print("Comment by %s: %s" % (author, text))
 
   return results["items"]
 
@@ -105,7 +105,7 @@ def insert_comment(youtube, channel_id, video_id, text):
   comment = insert_result["snippet"]["topLevelComment"]
   author = comment["snippet"]["authorDisplayName"]
   text = comment["snippet"]["textDisplay"]
-  print "Inserted comment for %s: %s" % (author, text)
+  print("Inserted comment for %s: %s" % (author, text))
 
 
 # Call the API's commentThreads.update method to update an existing comment.
@@ -119,7 +119,7 @@ def update_comment(youtube, comment):
   comment = update_result["snippet"]["topLevelComment"]
   author = comment["snippet"]["authorDisplayName"]
   text = comment["snippet"]["textDisplay"]
-  print "Updated comment for %s: %s" % (author, text)
+  print("Updated comment for %s: %s" % (author, text))
 
 
 if __name__ == "__main__":
@@ -155,8 +155,8 @@ if __name__ == "__main__":
     channel_comments = get_comments(youtube, None, args.channelid)
     if channel_comments:
       update_comment(youtube, channel_comments[0])
-  except HttpError, e:
-    print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+  except HttpError as e:
+    print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
   else:
-    print "Inserted, listed and updated top-level comments."
+    print("Inserted, listed and updated top-level comments.")
 

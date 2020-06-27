@@ -63,7 +63,7 @@ if __name__ == '__main__':
   youtube = get_authenticated_service()
   try:
     channel_title = add_subscription(youtube, args.channel_id)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print ('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))
   else:
-    print 'A subscription to \'%s\' was added.' % channel_title
+    print ('A subscription to \'%s\' was added.' % channel_title)

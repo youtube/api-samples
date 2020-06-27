@@ -114,7 +114,7 @@ if __name__ == '__main__':
     enable_browse_view(youtube)
 
     add_channel_section(youtube, args)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print ('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))
   else:
-    print 'Added new channel section.
+    print ('Added new channel section.')

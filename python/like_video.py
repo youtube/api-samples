@@ -62,8 +62,8 @@ if __name__ == '__main__':
   youtube = get_authenticated_service()
   try:
     like_video(youtube, args)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))
   else:
-    print ('The %s rating has been added for video ID %s.' %
+    print('The %s rating has been added for video ID %s.' %
            (args.rating, args.videoId))

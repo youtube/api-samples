@@ -89,7 +89,7 @@ def set_ids_parameter(args):
   else:
     args.ids = 'channel==MINE'
   args = remove_empty_args(args)
-  print args
+  print(args)
   return args
 
 def run_analytics_report(youtube_analytics, args):
@@ -115,12 +115,12 @@ def run_analytics_report(youtube_analytics, args):
   #print 'Analytics Data for Channel %s' % channel_id
 
   for column_header in analytics_query_response.get('columnHeaders', []):
-    print '%-20s' % column_header['name'],
+    print('%-20s' % column_header['name'],)
   print
 
   for row in analytics_query_response.get('rows', []):
     for value in row:
-      print '%-20s' % value,
+      print('%-20s' % value,)
     print
 
 if __name__ == '__main__':
@@ -166,5 +166,5 @@ if __name__ == '__main__':
   youtube_analytics = get_authenticated_service()
   try:
     run_analytics_report(youtube_analytics, args)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+  except HttpError as e:
+    print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))
