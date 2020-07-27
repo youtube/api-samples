@@ -9,9 +9,9 @@ import com.google.api.services.samples.youtube.cmdline.Auth;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelListResponse;
-import com.google.api.services.youtubeAnalytics.YouTubeAnalytics;
-import com.google.api.services.youtubeAnalytics.model.ResultTable;
-import com.google.api.services.youtubeAnalytics.model.ResultTable.ColumnHeaders;
+import com.google.api.services.youtubeAnalytics.v2.YouTubeAnalytics;
+import com.google.api.services.youtubeAnalytics.v2.model.QueryResponse;
+import com.google.api.services.youtubeAnalytics.v2.model.ResultTableColumnHeader;
 import com.google.common.collect.Lists;
 
 import java.io.IOException;
@@ -121,14 +121,15 @@ public class YouTubeAnalyticsReports {
      * @return The API response.
      * @throws IOException if an API error occurred.
      */
-    private static ResultTable executeViewsOverTimeQuery(YouTubeAnalytics analytics,
-                                                         String id) throws IOException {
+    private static QueryResponse executeViewsOverTimeQuery(YouTubeAnalytics analytics,
+                                                           String id) throws IOException {
 
         return analytics.reports()
-                .query("channel==" + id,     // channel id
-                        "2012-01-01",         // Start date.
-                        "2012-01-14",         // End date.
-                        "views,uniques")      // Metrics.
+                .query()
+                .setIds("channel==" + id)
+                .setMetrics("views")
+                .setStartDate("2019-01-01")
+                .setEndDate("2019-12-31")
                 .setDimensions("day")
                 .setSort("day")
                 .execute();
@@ -142,14 +143,15 @@ public class YouTubeAnalyticsReports {
      * @return the response from the API.
      * @throws IOException if an API error occurred.
      */
-    private static ResultTable executeTopVideosQuery(YouTubeAnalytics analytics,
+    private static QueryResponse executeTopVideosQuery(YouTubeAnalytics analytics,
                                                      String id) throws IOException {
 
         return analytics.reports()
-                .query("channel==" + id,                          // channel id
-                        "2012-01-01",                              // Start date.
-                        "2012-08-14",                              // End date.
-                        "views,subscribersGained,subscribersLost") // Metrics.
+                .query()
+                .setIds("channel==" + id)
+                .setMetrics("views,subscribersGained,subscribersLost")
+                .setStartDate("2019-01-01")
+                .setEndDate("2019-12-31")
                 .setDimensions("video")
                 .setSort("-views")
                 .setMaxResults(10)
@@ -164,13 +166,14 @@ public class YouTubeAnalyticsReports {
      * @return the response from the API.
      * @throws IOException if an API error occurred.
      */
-    private static ResultTable executeDemographicsQuery(YouTubeAnalytics analytics,
+    private static QueryResponse executeDemographicsQuery(YouTubeAnalytics analytics,
                                                         String id) throws IOException {
         return analytics.reports()
-                .query("channel==" + id,     // channel id
-                        "2007-01-01",         // Start date.
-                        "2012-08-14",         // End date.
-                        "viewerPercentage")   // Metrics.
+                .query()
+                .setIds("channel==" + id)
+                .setMetrics("viewerPercentage")
+                .setStartDate("2019-01-01")
+                .setEndDate("2019-12-31")
                 .setDimensions("ageGroup,gender")
                 .setSort("-viewerPercentage")
                 .execute();
@@ -184,14 +187,14 @@ public class YouTubeAnalyticsReports {
      * @param title   title of the report
      * @param results data returned from the API.
      */
-    private static void printData(PrintStream writer, String title, ResultTable results) {
+    private static void printData(PrintStream writer, String title, QueryResponse results) {
         writer.println("Report: " + title);
         if (results.getRows() == null || results.getRows().isEmpty()) {
             writer.println("No results Found.");
         } else {
 
             // Print column headers.
-            for (ColumnHeaders header : results.getColumnHeaders()) {
+            for (ResultTableColumnHeader header : results.getColumnHeaders()) {
                 writer.printf("%30s", header.getName());
             }
             writer.println();
@@ -199,7 +202,7 @@ public class YouTubeAnalyticsReports {
             // Print actual data.
             for (List<Object> row : results.getRows()) {
                 for (int colNum = 0; colNum < results.getColumnHeaders().size(); colNum++) {
-                    ColumnHeaders header = results.getColumnHeaders().get(colNum);
+                    ResultTableColumnHeader header = results.getColumnHeaders().get(colNum);
                     Object column = row.get(colNum);
                     if ("INTEGER".equals(header.getUnknownKeys().get("dataType"))) {
                         long l = ((BigDecimal) column).longValue();
