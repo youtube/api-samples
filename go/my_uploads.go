@@ -8,7 +8,7 @@ import (
 )
 
 // Retrieve playlistItems in the specified playlist
-func playlistItemsList(service *youtube.Service, part string, playlistId string, pageToken string) *youtube.PlaylistItemListResponse {
+func playlistItemsList(service *youtube.Service, part []string, playlistId string, pageToken string) *youtube.PlaylistItemListResponse {
 	call := service.PlaylistItems.List(part)
 	call = call.PlaylistId(playlistId)
 	if pageToken != "" {
@@ -20,7 +20,7 @@ func playlistItemsList(service *youtube.Service, part string, playlistId string,
 }
 
 // Retrieve resource for the authenticated user's channel
-func channelsListMine(service *youtube.Service, part string) *youtube.ChannelListResponse {
+func channelsListMine(service *youtube.Service, part []string) *youtube.ChannelListResponse {
 	call := service.Channels.List(part)
 	call = call.Mine(true)
 	response, err := call.Do()
@@ -31,24 +31,24 @@ func channelsListMine(service *youtube.Service, part string) *youtube.ChannelLis
 func main() {
 	client := getClient(youtube.YoutubeReadonlyScope)
 	service, err := youtube.New(client)
-	
+
 	if err != nil {
 		log.Fatalf("Error creating YouTube client: %v", err)
 	}
 
-	response := channelsListMine(service, "contentDetails")
+	response := channelsListMine(service, []string{"contentDetails"})
 
 	for _, channel := range response.Items {
 		playlistId := channel.ContentDetails.RelatedPlaylists.Uploads
-		
+
 		// Print the playlist ID for the list of uploaded videos.
 		fmt.Printf("Videos in list %s\r\n", playlistId)
 
 		nextPageToken := ""
 		for {
 			// Retrieve next set of items in the playlist.
-			playlistResponse := playlistItemsList(service, "snippet", playlistId, nextPageToken)
-			
+			playlistResponse := playlistItemsList(service, []string{"snippet"}, playlistId, nextPageToken)
+
 			for _, playlistItem := range playlistResponse.Items {
 				title := playlistItem.Snippet.Title
 				videoId := playlistItem.Snippet.ResourceId.VideoId
