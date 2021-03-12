@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Make the API call to YouTube.
-	call := service.Search.List("id,snippet").
+	call := service.Search.List([]string{"id", "snippet"}).
 		Q(*query).
 		MaxResults(*maxResults)
 	response, err := call.Do()
