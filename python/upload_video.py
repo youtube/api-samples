@@ -14,7 +14,7 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-# tell HTTP  library not to retry becasue we are handling the logic ourselves
+# tell HTTP library not to retry because we are handling the logic ourselves
 httplib2.RETRIES=1
 
 # Maximum number of times to retry before giving up
