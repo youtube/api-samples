@@ -2,6 +2,7 @@
 
 # This sample executes a search request for the specified search term.
 # Sample usage:
+
 #   python search.py --q=surfing --max-results=10
 # NOTE: To use the sample, you must provide a developer key obtained
 #       in the Google APIs Console. Search for "REPLACE_ME" in this code
