@@ -136,5 +136,5 @@ func main() {
 
   handleError(err, "Error creating YouTube client")
 
-  channelsListByUsername(service, "snippet,contentDetails,statistics", "GoogleDevelopers")
+  channelsListByUsername(service, []string{"snippet","contentDetails","statistics"}, "GoogleDevelopers")
 }
