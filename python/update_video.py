@@ -2,9 +2,11 @@
 
 # Update the snippet metadata for a video. Sample usage:
 #   python update_video.py --video_id=<VIDEO_ID> --tags="<TAG1, TAG2>" --title="New title" --description="New description"
+#<VIDEO_ID> <TAG1, TAG2> suggest to be String like video_id="abc" tags="x,y"
 
 import argparse
 import os
+import sys
 
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -47,7 +49,7 @@ def update_video(youtube, args):
   # If the response does not contain an array of 'items' then the video was
   # not found.
   if not videos_list_response['items']:
-    print 'Video "%s" was not found.' % args.video_id
+    print ('Video "%s" was not found.' % args.video_id)
     sys.exit(1)
 
   # Since the request specified a video ID, the response only contains one
@@ -104,6 +106,6 @@ if __name__ == '__main__':
   youtube = get_authenticated_service()
   try:
     update_video(youtube, args)
-  except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
-    print 'Tag "%s" was added to video id "%s".' % (args.add_tag, args.video_id)
+  except HttpError as e:
+    print ('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))
+    print ('Tag "%s" was added to video id "%s".' % (args.add_tag, args.video_id))
