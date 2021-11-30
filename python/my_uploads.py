@@ -62,7 +62,7 @@ def list_my_uploaded_videos(uploads_playlist_id):
     maxResults=5
   )
 
-  print 'Videos in list %s' % uploads_playlist_id
+  print('Videos in list {uploads_playlist_id}')
   while playlistitems_list_request:
     playlistitems_list_response = playlistitems_list_request.execute()
 
@@ -70,7 +70,7 @@ def list_my_uploaded_videos(uploads_playlist_id):
     for playlist_item in playlistitems_list_response['items']:
       title = playlist_item['snippet']['title']
       video_id = playlist_item['snippet']['resourceId']['videoId']
-      print '%s (%s)' % (title, video_id)
+      print(f'{title} ({video_id})')
 
     playlistitems_list_request = youtube.playlistItems().list_next(
       playlistitems_list_request, playlistitems_list_response)
@@ -84,4 +84,4 @@ if __name__ == '__main__':
     else:
       print('There is no uploaded videos playlist for this user.')
   except HttpError, e:
-    print 'An HTTP error %d occurred:\n%s' % (e.resp.status, e.content)
+    print(f'An HTTP error {e.resp.status} occurred:\n{e.content}')
