@@ -112,7 +112,7 @@ function getChannel(auth) {
       return;
     }
     var channels = response.data.items;
-    if (channels.length == 0) {
+    if (channels === undefined || channels.length == 0) {
       console.log('No channel found.');
     } else {
       console.log('This channel\'s ID is %s. Its title is \'%s\', and ' +
