@@ -9,7 +9,7 @@
  *   https://developers.google.com/youtube/v3/docs/search/list
  */
 function searchByKeyword() {
-  var results = YouTube.Search.list('id,snippet', {q: 'dogs', maxResults: 25});
+  var results = YouTube.Search.list.id('id,snippet', {q: 'dogs', maxResults: 25});
 
   for(var i in results.items) {
     var item = results.items[i];
