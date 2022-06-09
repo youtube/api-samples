@@ -2,7 +2,7 @@
 // based on the API's used in the code.
 
 function channelsListByUsername(part, params) {
-  var response = YouTube.Channels.list(part,
+  var response = YouTube.Channels.list.id(part,
                                        params);
   var channel = response.items[0];
   var dataRow = [channel.id, channel.snippet.title, channel.statistics.viewCount];
