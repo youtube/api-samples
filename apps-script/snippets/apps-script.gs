@@ -1,6 +1,6 @@
 // Sample Apps Script code for printing API response data
 function printResults(response) {
-  var props = ['type', 'title', 'textDisplay', 'channelId', 'videoId', 'hl', 'gl', 'label'];
+  var props = ['type', 'title', 'textDisplay', 'channelId', 'videoId', 'hl', 'gl', 'label' 'IDYoutube'];
   for (var r = 0; r < response['items'].length; r++) {
     var item = response['items'][r];
     var itemId = '';
@@ -29,7 +29,7 @@ function printResults(response) {
 }
 
 /**
- * This example retrieves the 25 most recent activities for the Google Developers 
+ * This example retrieves the 30 most recent activities for the Google Developers 
  * channel. It retrieves the snippet and contentDetails parts for each activity 
  * resource. 
  */
