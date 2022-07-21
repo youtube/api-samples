@@ -4,6 +4,7 @@ import (
         "flag"
         "fmt"
         "log"
+        "strings"
 
         "google.golang.org/api/youtube/v3"
 )
@@ -22,7 +23,7 @@ var (
 )
 
 func playlistsList(service *youtube.Service, part string, channelId string, hl string, maxResults int64, mine bool, onBehalfOfContentOwner string, pageToken string, playlistId string) *youtube.PlaylistListResponse {
-        call := service.Playlists.List(part)
+        call := service.Playlists.List(strings.Split(part, ","))
         if channelId != "" {
                 call = call.ChannelId(channelId)
         }
