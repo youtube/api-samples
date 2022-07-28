@@ -80,7 +80,7 @@ def get_comments(youtube, video_id, channel_id):
     comment = item["snippet"]["topLevelComment"]
     author = comment["snippet"]["authorDisplayName"]
     text = comment["snippet"]["textDisplay"]
-    print "Comment by %s: %s" % (author, text)
+    print("Comment by %s: %s" % (author, text))
 
   return results["items"]
 
