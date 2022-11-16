@@ -83,7 +83,7 @@ function getNewToken(oauth2Client, callback) {
  */
 function storeToken(token) {
   try {
-    fs.mkdirSync(TOKEN_DIR);
+    fs.mkdirSync(TOKEN_DIR, { recursive: true });
   } catch (err) {
     if (err.code != 'EEXIST') {
       throw err;
