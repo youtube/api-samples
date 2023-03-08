@@ -1,0 +1,929 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Apis.Auth</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Apis.Auth.JsonWebSignature">
+            <summary>
+            JSON Web Signature (JWS) implementation as specified in 
+            http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-11.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.JsonWebSignature.Header">
+            <summary>
+            Header as specified in http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-11#section-4.1.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.JsonWebToken.Header">
+            <summary>
+            JWT Header as specified in http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-08#section-5.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.JsonWebToken">
+            <summary>
+            JSON Web Token (JWT) implementation as specified in 
+            http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-08.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.JsonWebToken.Header">
+            <summary>
+            JWT Header as specified in http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-08#section-5.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Header.Type">
+            <summary>
+            Gets or sets type header parameter used to declare the type of this object or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Header.ContentType">
+            <summary>
+            Gets or sets content type header parameter used to declare structural information about the JWT or 
+            <c>null</c>.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.JsonWebToken.Payload">
+            <summary>
+            JWT Payload as specified in http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-08#section-4.1.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.Issuer">
+            <summary>
+            Gets or sets issuer claim that identifies the principal that issued the JWT or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.Subject">
+            <summary>
+            Gets or sets subject claim identifying the principal that is the subject of the JWT or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.Audience">
+            <summary>
+            Gets or sets audience claim that identifies the audience that the JWT is intended for (should either be
+            a string or list) or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.ExpirationTimeSeconds">
+            <summary>
+            Gets or sets expiration time claim that identifies the expiration time (in seconds) on or after which 
+            the token MUST NOT be accepted for processing or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.NotBeforeTimeSeconds">
+            <summary>
+            Gets or sets not before claim that identifies the time (in seconds) before which the token MUST NOT be
+            accepted for processing or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.IssuedAtTimeSeconds">
+            <summary>
+            Gets or sets issued at claim that identifies the time (in seconds) at which the JWT was issued or 
+            <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.JwtId">
+            <summary>
+            Gets or sets JWT ID claim that provides a unique identifier for the JWT or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.Type">
+            <summary>
+            Gets or sets type claim that is used to declare a type for the contents of this JWT Claims Set or 
+            <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.AudienceAsList">
+            <summary>Gets the audience property as a list.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.Algorithm">
+            <summary>
+            Gets or set the algorithm header parameter that identifies the cryptographic algorithm used to secure 
+            the JWS or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.JwkUrl">
+            <summary>
+            Gets or sets the JSON Web Key URL header parameter that is an absolute URL that refers to a resource 
+            for a set of JSON-encoded public keys, one of which corresponds to the key that was used to digitally 
+            sign the JWS or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.Jwk">
+            <summary>
+            Gets or sets JSON Web Key header parameter that is a public key that corresponds to the key used to 
+            digitally sign the JWS or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.KeyId">
+            <summary>
+            Gets or sets key ID header parameter that is a hint indicating which specific key owned by the signer 
+            should be used to validate the digital signature or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.X509Url">
+            <summary>
+            Gets or sets X.509 URL header parameter that is an absolute URL that refers to a resource for the X.509
+            public key certificate or certificate chain corresponding to the key used to digitally sign the JWS or 
+            <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.X509Thumbprint">
+            <summary>
+            Gets or sets X.509 certificate thumb print header parameter that provides a base64url encoded SHA-1 
+            thumb-print (a.k.a. digest) of the DER encoding of an X.509 certificate that can be used to match the 
+            certificate or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.X509Certificate">
+            <summary>
+            Gets or sets X.509 certificate chain header parameter contains the X.509 public key certificate or 
+            certificate chain corresponding to the key used to digitally sign the JWS or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.JsonWebSignature.Header.critical">
+            <summary>
+            Gets or sets array listing the header parameter names that define extensions that are used in the JWS 
+            header that MUST be understood and processed or <c>null</c>.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.JsonWebSignature.Payload">
+            <summary>JWS Payload.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.GoogleRevokeTokenRequest">
+            <summary>
+            Google OAuth 2.0 request to revoke an access token as specified in 
+            https://developers.google.com/accounts/docs/OAuth2WebServer#tokenrevoke.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.GoogleRevokeTokenRequest.Build">
+            <summary>Creates a <see cref="T:System.Uri"/> which is used to request the authorization code.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleRevokeTokenRequest.RevokeTokenUrl">
+            <summary>Gets the URI for token revocation.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleRevokeTokenRequest.Token">
+            <summary>Gets or sets the token to revoke.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp">
+            <summary>
+            Thread safe OAuth 2.0 authorization code flow for a web application that persists end-user credentials.
+            </summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.StateKey">
+            <summary>
+            The state key. As part of making the request for authorization code we save the original request to verify 
+            that this server create the original request.
+            </summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.StateRandomLength">
+            <summary>The length of the random number which will be added to the end of the state parameter.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.#ctor(Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow,System.String,System.String)">
+            <summary>
+            Constructs a new authorization code installed application with the given flow and code receiver.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.AuthorizeAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Asynchronously authorizes the web application to access user's protected data.</summary>
+            <param name="userId">User identifier</param>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation</param>
+            <returns>
+            Auth result object which contains the user's credential or redirect URI for the authorization server
+            </returns>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.Flow">
+            <summary>Gets the authorization code flow.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.RedirectUri">
+            <summary>Gets the OAuth2 callback redirect URI.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.State">
+            <summary>Gets the state which is used to navigate back to the page that started the OAuth flow.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.AuthResult">
+            <summary>
+            AuthResult which contains the user's credentials if it was loaded successfully from the store. Otherwise
+            it contains the redirect URI for the authorization server.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.AuthResult.Credential">
+            <summary>
+            Gets or sets the user's credentials or <c>null</c> in case the end user needs to authorize.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Web.AuthorizationCodeWebApp.AuthResult.RedirectUri">
+            <summary>
+            Gets or sets the redirect URI to for the user to authorize against the authorization server or 
+            <c>null</c> in case the <see cref="T:Google.Apis.Auth.OAuth2.UserCredential"/> was loaded from the data 
+            store.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.GoogleJsonWebSignature">
+            <summary>
+            Google JSON Web Signature as specified in https://developers.google.com/accounts/docs/OAuth2ServiceAccount.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.GoogleJsonWebSignature.Header">
+            <summary>
+            The header as specified in https://developers.google.com/accounts/docs/OAuth2ServiceAccount#formingheader.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.GoogleJsonWebSignature.Payload">
+            <summary>
+            The payload as specified in 
+            https://developers.google.com/accounts/docs/OAuth2ServiceAccount#formingclaimset.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.GoogleJsonWebSignature.Payload.Scope">
+            <summary>
+            a space-delimited list of the permissions the application requests or <c>null</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.GoogleJsonWebSignature.Payload.Prn">
+            <summary>
+            The email address of the user for which the application is requesting delegated access.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Web.AuthWebUtility">
+            <summary>Auth Utility methods for web development.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Web.AuthWebUtility.ExtracRedirectFromState(Google.Apis.Util.Store.IDataStore,System.String,System.String)">
+            <summary>Extracts the redirect URI from the state OAuth2 parameter.</summary>
+            <remarks>
+            If the data store is not <c>null</c>, this method verifies that the state parameter which was returned
+            from the authorization server is the same as the one we set before redirecting to the authorization server.
+            </remarks>
+            <param name="dataStore">The data store which contains the original state parameter.</param>
+            <param name="userId">User identifier.</param>
+            <param name="state">
+            The authorization state parameter which we got back from the authorization server.
+            </param>
+            <returns>Redirect URI to the address which initializes the authorization code flow.</returns>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow">
+            <summary>OAuth 2.0 authorization code flow that manages and persists end-user credentials.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.LoadTokenAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously loads the user's token using the flow's
+            <see cref="T:Google.Apis.Util.Store.IDataStore"/>.
+            </summary>
+            <param name="userId">User identifier</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation</param>
+            <returns>Token response</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.DeleteTokenAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously deletes the user's token using the flow's
+            <see cref="T:Google.Apis.Util.Store.IDataStore"/>.
+            </summary>
+            <param name="userId">User identifier.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.CreateAuthorizationCodeRequest(System.String)">
+            <summary>Creates an authorization code request with the specified redirect URI.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.ExchangeCodeForTokenAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Asynchronously exchanges code with a token.</summary>
+            <param name="userId">User identifier.</param>
+            <param name="code">Authorization code received from the authorization server.</param>
+            <param name="redirectUri">Redirect URI which is used in the token request.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation.</param>
+            <returns>Token response which contains the access token.</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.RefreshTokenAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Asynchronously refreshes an access token using a refresh token.</summary>
+            <param name="userId">User identifier.</param>
+            <param name="refreshToken">Refresh token which is used to get a new access token.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation.</param>
+            <returns>Token response which contains the access token and the input refresh token.</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.RevokeTokenAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously revokes the specified token. This method disconnects the user's account from the OAuth 2.0
+            application. It should be called upon removing the user account from the site.</summary>
+            <remarks>
+            If revoking the token succeeds, the user's credential is removed from the data store and the user MUST
+            authorize the application again before the application can access the user's private resources.
+            </remarks>
+            <param name="userId">User identifier.</param>
+            <param name="token">Access token to be revoked.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation.</param>
+            <returns><c>true</c> if the token was revoked successfully.</returns>        
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.AccessMethod">
+            <summary>Gets the method for presenting the access token to the resource server.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.Clock">
+            <summary>Gets the clock.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.DataStore">
+            <summary>Gets the data store used to store the credentials.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.AuthorizationCodeInstalledApp">
+            <summary>
+            Thread-safe OAuth 2.0 authorization code flow for an installed application that persists end-user credentials.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.IAuthorizationCodeInstalledApp">
+            <summary>
+            Authorization code flow for an installed application that persists end-user credentials.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.IAuthorizationCodeInstalledApp.AuthorizeAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Asynchronously authorizes the installed application to access user's protected data.</summary>
+            <param name="userId">User identifier</param>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation</param>
+            <returns>The user's credential</returns>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.IAuthorizationCodeInstalledApp.Flow">
+            <summary>Gets the authorization code flow.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.IAuthorizationCodeInstalledApp.CodeReceiver">
+            <summary>Gets the code receiver.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.AuthorizationCodeInstalledApp.#ctor(Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow,Google.Apis.Auth.OAuth2.ICodeReceiver)">
+            <summary>
+            Constructs a new authorization code installed application with the given flow and code receiver.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.AuthorizationCodeInstalledApp.Flow">
+            <summary>Gets the authorization code flow.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.AuthorizationCodeInstalledApp.CodeReceiver">
+            <summary>Gets the code receiver which is responsible for receiving the authorization code.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.BearerToken">
+            <summary>
+            OAuth 2.0 helper for accessing protected resources using the Bearer token as specified in
+            http://tools.ietf.org/html/rfc6750.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.BearerToken.AuthorizationHeaderAccessMethod">
+            <summary>
+            Thread-safe OAuth 2.0 method for accessing protected resources using the Authorization header as specified 
+            in http://tools.ietf.org/html/rfc6750#section-2.1.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.IAccessMethod">
+            <summary>
+            Method of presenting the access token to the resource server as specified in 
+            http://tools.ietf.org/html/rfc6749#section-7
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.IAccessMethod.Intercept(System.Net.Http.HttpRequestMessage,System.String)">
+            <summary>
+            Intercepts a HTTP request right before the HTTP request executes by providing the access token.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.IAccessMethod.GetAccessToken(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Retrieve the original access token in the HTTP request, as provided in the <see cref="M:Google.Apis.Auth.OAuth2.IAccessMethod.Intercept(System.Net.Http.HttpRequestMessage,System.String)"/> method.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.BearerToken.QueryParameterAccessMethod">
+            <summary>
+            Thread-safe OAuth 2.0 method for accessing protected resources using an <c>access_token</c> query parameter
+            as specified in http://tools.ietf.org/html/rfc6750#section-2.3.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.TokenRequestExtenstions">
+            <summary>Extension methods to <see cref="T:Google.Apis.Auth.OAuth2.Requests.TokenRequest"/>.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.TokenRequestExtenstions.ExecuteAsync(Google.Apis.Auth.OAuth2.Requests.TokenRequest,System.Net.Http.HttpClient,System.String,System.Threading.CancellationToken,Google.Apis.Util.IClock)">
+            <summary>
+            Executes the token request in order to receive a 
+            <see cref="T:Google.Apis.Auth.OAuth2.Responses.TokenResponse"/>. In case the token server returns an 
+            error, a <see cref="T:Google.Apis.Auth.OAuth2.Responses.TokenResponseException"/> is thrown.
+            </summary>
+            <param name="request">The token request.</param>
+            <param name="httpClient">The HTTP client used to create an HTTP request.</param>
+            <param name="tokenServerUrl">The token server URL.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation.</param>
+            <param name="clock">
+            The clock which is used to set the
+            <see cref="P:Google.Apis.Auth.OAuth2.Responses.TokenResponse.Issued"/> property.
+            </param>
+            <returns>Token response with the new access token.</returns>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.UserCredential">
+            <summary>
+            OAuth 2.0 credential for accessing protected resources using an access token, as well as optionally refreshing 
+            the access token when it expires using a refresh token.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.UserCredential.#ctor(Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow,System.String,Google.Apis.Auth.OAuth2.Responses.TokenResponse)">
+            <summary>Constructs a new credential instance.</summary>
+            <param name="flow">Authorization code flow.</param>
+            <param name="userId">User identifier.</param>
+            <param name="token">An initial token for the user.</param>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.UserCredential.InterceptAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Default implementation is to try to refresh the access token if there is no access token or if we are 1 
+            minute away from expiration. If token server is unavailable, it will try to use the access token even if 
+            has expired. If successful, it will call <see cref="M:Google.Apis.Auth.OAuth2.IAccessMethod.Intercept(System.Net.Http.HttpRequestMessage,System.String)"/>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.UserCredential.RefreshTokenAsync(System.Threading.CancellationToken)">
+            <summary>
+            Refreshes the token by calling to
+            <see cref="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.RefreshTokenAsync(System.String,System.String,System.Threading.CancellationToken)"/>.
+            Then it updates the <see cref="T:Google.Apis.Auth.OAuth2.Responses.TokenResponse"/> with the new token instance.
+            </summary>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation.</param>
+            <returns><c>true</c> if the token was refreshed.</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.UserCredential.RevokeTokenAsync(System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously revokes the token by calling
+            <see cref="M:Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow.RevokeTokenAsync(System.String,System.String,System.Threading.CancellationToken)"/>.
+            </summary>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation.</param>
+            <returns><c>true</c> if the token was revoked successfully.</returns>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.UserCredential.Token">
+            <summary>Gets or sets the token response which contains the access token.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.UserCredential.Flow">
+            <summary>Gets the authorization code flow.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.UserCredential.UderId">
+            <summary>Gets the user identity.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow">
+            <summary>
+            Thread-safe OAuth 2.0 authorization code flow that manages and persists end-user credentials.
+            <para>
+            This is designed to simplify the flow in which an end-user authorizes the application to access their protected
+            data, and then the application has access to their data based on an access token and a refresh token to refresh 
+            that access token when it expires.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.#ctor(Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer)">
+            <summary>Constructs a new flow using the initializer's properties.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.StoreTokenAsync(System.String,Google.Apis.Auth.OAuth2.Responses.TokenResponse,System.Threading.CancellationToken)">
+            <summary>Stores the token in the <see cref="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.DataStore"/>.</summary>
+            <param name="userId">User identifier.</param>
+            <param name="token">Token to store.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation.</param>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.FetchTokenAsync(System.String,Google.Apis.Auth.OAuth2.Requests.TokenRequest,System.Threading.CancellationToken)">
+            <summary>Retrieve a new token from the server using the specified request.</summary>
+            <param name="userId">User identifier.</param>
+            <param name="request">Token request.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel operation.</param>
+            <returns>Token response with the new access token.</returns>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.TokenServerUrl">
+            <summary>Gets the token server URL.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.AuthorizationServerUrl">
+            <summary>Gets the authorization code server URL.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.ClientSecrets">
+            <summary>Gets the client secrets which includes the client identifier and its secret.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.DataStore">
+            <summary>Gets the data store used to store the credentials.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Scopes">
+            <summary>Gets the scopes which indicate the API access your application is requesting.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.HttpClient">
+            <summary>Gets the HTTP client used to make authentication requests to the server.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer">
+            <summary>An initializer class for the authorization code flow. </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.#ctor(System.String,System.String)">
+            <summary>Constructs a new initializer.</summary>
+            <param name="authorizationServerUrl">Authorization server URL</param>
+            <param name="tokenServerUrl">Token server URL</param>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.AccessMethod">
+            <summary>
+            Gets or sets the method for presenting the access token to the resource server.
+            The default value is
+            <see cref="T:Google.Apis.Auth.OAuth2.BearerToken.AuthorizationHeaderAccessMethod"/>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.TokenServerUrl">
+            <summary>Gets the token server URL.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.AuthorizationServerUrl">
+            <summary>Gets or sets the authorization server URL.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.ClientSecrets">
+            <summary>Gets or sets the client secrets which includes the client identifier and its secret.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.ClientSecretsStream">
+            <summary>
+            Gets or sets the client secrets stream which contains the client identifier and its secret.
+            </summary>
+            <remarks>The AuthorizationCodeFlow constructor is responsible for disposing the stream.</remarks>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.DataStore">
+            <summary>Gets or sets the data store used to store the token response.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.Scopes">
+            <summary>
+            Gets or sets the scopes which indicate the API access your application is requesting.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.HttpClientFactory">
+            <summary>
+            Gets or sets the factory for creating <see cref="T:System.Net.Http.HttpClient"/> instance.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.DefaultExponentialBackOffPolicy">
+            <summary>
+            Get or sets the exponential back-off policy. Default value is  <c>UnsuccessfulResponse503</c>, which 
+            means that exponential back-off is used on 503 abnormal HTTP responses.
+            If the value is set to <c>None</c>, no exponential back-off policy is used, and it's up to user to
+            configure the <see cref="T:Google.Apis.Http.ConfigurableMessageHandler"/> in an
+            <see cref="T:Google.Apis.Http.IConfigurableHttpClientInitializer"/> to set a specific back-off
+            implementation (using <see cref="T:Google.Apis.Http.BackOffHandler"/>).
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer.Clock">
+            <summary>
+            Gets or sets the clock. The clock is used to determine if the token has expired, if so we will try to
+            refresh it. The default value is <see cref="F:Google.Apis.Util.SystemClock.Default"/>.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.ClientSecrets">
+            <summary>Client credential details for installed and web applications.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.ClientSecrets.ClientId">
+            <summary>Gets or sets the client identifier.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.ClientSecrets.ClientSecret">
+            <summary>Gets or sets the client Secret.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow">
+            <summary>
+            Google specific authorization code flow which inherits from <see cref="T:Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow"/>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.#ctor(Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Initializer)">
+            <summary>Constructs a new Google authorization code flow.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.RevokeTokenUrl">
+            <summary>Gets the token revocation URL.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Initializer">
+            <summary>An initializer class for Google authorization code flow. </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Initializer.#ctor">
+            <summary>
+            Constructs a new initializer. Sets Authorization server URL to 
+            <see cref="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.AuthorizationUrl"/>, and Token server URL to 
+            <see cref="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.TokenUrl"/>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Initializer.RevokeTokenUrl">
+            <summary>Gets or sets the token revocation URL.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.ICodeReceiver">
+            <summary>OAuth 2.0 verification code receiver.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.ICodeReceiver.ReceiveCodeAsync(Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeRequestUrl,System.Threading.CancellationToken)">
+            <summary>Receives the authorization code.</summary>
+            <param name="url">The authorization code request URL</param>
+            <param name="taskCancellationToken">Cancellation token</param>
+            <returns>The authorization code response</returns>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.ICodeReceiver.RedirectUri">
+            <summary>Gets the redirected URI.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeRequestUrl">
+            <summary>
+            OAuth 2.0 request URL for an authorization web page to allow the end user to authorize the application to 
+            access their protected resources and that returns an authorization code, as specified in 
+            http://tools.ietf.org/html/rfc6749#section-4.1.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl">
+            <summary>
+            OAuth 2.0 request URL for an authorization web page to allow the end user to authorize the application to 
+            access their protected resources, as specified in http://tools.ietf.org/html/rfc6749#section-3.1.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl.#ctor(System.Uri)">
+            <summary>Constructs a new authorization request with the specified URI.</summary>
+            <param name="authorizationServerUrl">Authorization server URI</param>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl.ResponseType">
+            <summary>
+            Gets or sets the response type which must be <c>code</c> for requesting an authorization code or 
+            <c>token</c> for requesting an access token (implicit grant), or space separated registered extension 
+            values. See http://tools.ietf.org/html/rfc6749#section-3.1.1 for more details
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl.ClientId">
+            <summary>Gets or sets the client identifier.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl.RedirectUri">
+            <summary>
+            Gets or sets the URI that the authorization server directs the resource owner's user-agent back to the 
+            client after a successful authorization grant, as specified in 
+            http://tools.ietf.org/html/rfc6749#section-3.1.2 or <c>null</c> for none.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl.Scope">
+            <summary>
+            Gets or sets space-separated list of scopes, as specified in http://tools.ietf.org/html/rfc6749#section-3.3
+            or <c>null</c> for none.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl.State">
+            <summary>
+            Gets or sets the state (an opaque value used by the client to maintain state between the request and 
+            callback, as mentioned in http://tools.ietf.org/html/rfc6749#section-3.1.2.2 or <c>null</c> for none.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationRequestUrl.AuthorizationServerUrl">
+            <summary>Gets the authorization server URI.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeRequestUrl.#ctor(System.Uri)">
+            <summary>
+            Constructs a new authorization code request with the specified URI and sets response_type to <c>code</c>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeRequestUrl.Build">
+            <summary>Creates a <see cref="T:System.Uri"/> which is used to request the authorization code.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeTokenRequest">
+            <summary>
+             OAuth 2.0 request for an access token using an authorization code as specified in 
+             http://tools.ietf.org/html/rfc6749#section-4.1.3.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.TokenRequest">
+            <summary>
+            OAuth 2.0 request for an access token as specified in http://tools.ietf.org/html/rfc6749#section-4.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.TokenRequest.Scope">
+            <summary>
+            Gets or sets space-separated list of scopes as specified in http://tools.ietf.org/html/rfc6749#section-3.3.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.TokenRequest.GrantType">
+            <summary>
+            Gets or sets the Grant type. Sets <c>authorization_code</c> or <c>password</c> or <c>client_credentials</c> 
+            or <c>refresh_token</c> or absolute URI of the extension grant type.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.TokenRequest.ClientId">
+            <summary>Gets or sets the client Identifier.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.TokenRequest.ClientSecret">
+            <summary>Gets or sets the client Secret.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeTokenRequest.#ctor">
+            <summary>
+            Constructs a new authorization code token request and sets grant_type to <c>authorization_code</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeTokenRequest.Code">
+            <summary>Gets or sets the authorization code received from the authorization server.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeTokenRequest.RedirectUri">
+            <summary>
+            Gets or sets the redirect URI parameter matching the redirect URI parameter in the authorization request.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.GoogleAssertionTokenRequest">
+            <summary>
+            Service account assertion token request as specified in 
+            https://developers.google.com/accounts/docs/OAuth2ServiceAccount#makingrequest.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.GoogleAssertionTokenRequest.#ctor">
+            <summary>
+            Constructs a new refresh code token request and sets grant_type to 
+            <c>urn:ietf:params:oauth:grant-type:jwt-bearer</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleAssertionTokenRequest.Assertion">
+            <summary>Gets or sets the JWT (including signature).</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl">
+            <summary>
+            Google-specific implementation of the OAuth 2.0 URL for an authorization web page to allow the end user to 
+            authorize the application to access their protected resources and that returns an authorization code, as 
+            specified in https://developers.google.com/accounts/docs/OAuth2WebServer.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl.#ctor(System.Uri)">
+            <summary>
+            Constructs a new authorization code request with the given authorization server URL. This constructor sets
+            the <see cref="P:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl.AccessType"/> to <c>offline</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl.AccessType">
+            <summary>
+            Gets or sets the access type. Set <c>online</c> to request on-line access or <c>offline</c> to request 
+            off-line access or <c>null</c> for the default behavior. The default value is <c>offline</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl.ApprovalPrompt">
+            <summary>
+            Gets pr sets prompt for consent behavior <c>auto</c> to request auto-approval or<c>force</c> to force the 
+            approval UI to show, or <c>null</c> for the default behavior.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl.LoginHint">
+            <summary>
+            Gets or sets the login hint. Sets <c>email address</c> or sub <c>identifier</c>.
+            When your application knows which user it is trying to authenticate, it may provide this parameter as a
+            hint to the Authentication Server. Passing this hint will either pre-fill the email box on the sign-in form
+            or select the proper multi-login session, thereby simplifying the login flow.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl">
+            <summary>
+            Authorization Code response for the redirect URL after end user grants or denies authorization as specified 
+            in http://tools.ietf.org/html/rfc6749#section-4.1.2.
+            <para>
+            Check that <see cref="P:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.Code"/> is not <c>null</c> or empty to verify the end-user granted authorization.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>Constructs a new authorization code response URL from the specified dictionary.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.#ctor(System.String)">
+            <summary>Constructs a new authorization code response URL from the specified query string.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.InitFromDictionary(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>Initializes this instance from the input dictionary.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.#ctor">
+            <summary>Constructs a new empty authorization code response URL.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.Code">
+            <summary>Gets or sets the authorization code generated by the authorization server.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.State">
+            <summary>
+            Gets or sets the state parameter matching the state parameter in the authorization request.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.Error">
+            <summary>
+            Gets or sets the error code (e.g. "invalid_request", "unauthorized_client", "access_denied", 
+            "unsupported_response_type", "invalid_scope", "server_error", "temporarily_unavailable") as specified in 
+            http://tools.ietf.org/html/rfc6749#section-4.1.2.1.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.ErrorDescription">
+            <summary>
+            Gets or sets the human-readable text which provides additional information used to assist the client 
+            developer in understanding the error occurred.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl.ErrorUri">
+            <summary>
+            Gets or sets the URI identifying a human-readable web page with provides information about the error.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.GoogleClientSecrets">
+            <summary>
+            OAuth 2.0 client secrets model as specified in https://cloud.google.com/console/.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.GoogleClientSecrets.Load(System.IO.Stream)">
+            <summary>Loads the Google client secret from the input stream.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.GoogleClientSecrets.Installed">
+            <summary>Gets or sets the details for installed applications.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.GoogleClientSecrets.Web">
+            <summary>Gets or sets the details for web applications.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.GoogleClientSecrets.Secrets">
+            <summary>Gets the client secrets which contains the client identifier and client secret. </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.GoogleAuthConsts">
+            <summary>Google OAuth2 constants.</summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.AuthorizationUrl">
+            <summary>The authorization code server URL.</summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.ApprovalUrl">
+            <summary>The approval URL (used in the Windows solution as a callback).</summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.TokenUrl">
+            <summary>The authorization token server URL</summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.RevokeTokenUrl">
+            <summary>The path to the Google revocation endpoint.</summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.InstalledAppRedirectUri">
+            <summary>Installed application redirect URI.</summary>
+        </member>
+        <member name="F:Google.Apis.Auth.OAuth2.GoogleAuthConsts.LocalhostRedirectUri">
+            <summary>Installed application localhost redirect URI.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Requests.RefreshTokenRequest">
+            <summary>
+            OAuth 2.0 request to refresh an access token using a refresh token as specified in 
+            http://tools.ietf.org/html/rfc6749#section-6.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Requests.RefreshTokenRequest.#ctor">
+            <summary>
+            Constructs a new refresh code token request and sets grant_type to <c>refresh_token</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Requests.RefreshTokenRequest.RefreshToken">
+            <summary>Gets or sets the Refresh token issued to the client.</summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Responses.TokenErrorResponse">
+            <summary>
+            OAuth 2.0 model for a unsuccessful access token response as specified in 
+            http://tools.ietf.org/html/rfc6749#section-5.2.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.TokenErrorResponse.#ctor">
+            <summary>Constructs a new empty token error response.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.TokenErrorResponse.#ctor(Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl)">
+            <summary>Constructs a new token error response from the given authorization code response.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenErrorResponse.Error">
+            <summary>
+            Gets or sets error code (e.g. "invalid_request", "invalid_client", "invalid_grant", "unauthorized_client", 
+            "unsupported_grant_type", "invalid_scope") as specified in http://tools.ietf.org/html/rfc6749#section-5.2.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenErrorResponse.ErrorDescription">
+            <summary>
+            Gets or sets a human-readable text which provides additional information used to assist the client 
+            developer in understanding the error occurred.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenErrorResponse.ErrorUri">
+            <summary>
+            Gets or sets the URI identifying a human-readable web page with provides information about the error.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Responses.TokenResponse">
+            <summary>
+            OAuth 2.0 model for a successful access token response as specified in 
+            http://tools.ietf.org/html/rfc6749#section-5.1.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.TokenResponse.IsExpired(Google.Apis.Util.IClock)">
+            <summary>
+            Returns <c>true</c> if the token is expired or it's going to be expired in the next minute.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenResponse.AccessToken">
+            <summary>Gets or sets the access token issued by the authorization server.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenResponse.TokenType">
+            <summary>
+            Gets or sets the token type as specified in http://tools.ietf.org/html/rfc6749#section-7.1.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenResponse.ExpiresInSeconds">
+            <summary>Gets or sets the lifetime in seconds of the access token.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenResponse.RefreshToken">
+            <summary>
+            Gets or sets the refresh token which can be used to obtain a new access token.
+            For example, the value "3600" denotes that the access token will expire in one hour from the time the 
+            response was generated.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenResponse.Scope">
+            <summary>
+            Gets or sets the scope of the access token as specified in http://tools.ietf.org/html/rfc6749#section-3.3.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenResponse.Issued">
+            <summary>The date and time that this token was issued. <remarks>
+            It should be set by the CLIENT after the token was received from the server.
+            </remarks> 
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.Responses.TokenResponseException">
+            <summary>
+            Token response exception which is thrown in case of receiving a token error when an authorization code or an 
+            access token is expected.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.Responses.TokenResponseException.#ctor(Google.Apis.Auth.OAuth2.Responses.TokenErrorResponse)">
+            <summary>Constructs a new token response exception from the given error.</summary>
+        </member>
+        <member name="P:Google.Apis.Auth.OAuth2.Responses.TokenResponseException.Error">
+            <summary>The error information.</summary>
+        </member>
+    </members>
+</doc>

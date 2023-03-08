@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Apis.PlatformServices</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Apis.Logging.Log4NetLogger">
+            <summary>A logger implementation which makes use of the log4net library.</summary>
+        </member>
+        <member name="M:Google.Apis.Logging.Log4NetLogger.#ctor">
+            <summary>Creates a new default log4net logger.</summary>
+        </member>
+        <member name="M:Google.Apis.Logging.Log4NetLogger.#ctor(System.Type)">
+            <summary>Creates a new log4net logger and associates it with the specified type.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.Store.FileDataStore">
+            <summary>
+            File data store that implements <see cref="T:Google.Apis.Util.Store.IDataStore"/>. This store creates a different file for each 
+            combination of type and key. This file data store stores a JSON format of the specified object.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.Store.FileDataStore.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructs a new file data store. If <c>fullPath</c> is <c>false</c> the path will be used as relative to 
+            <see cref="F:System.Environment.SpecialFolder.ApplicationData"/>, otherwise the input folder will be treated as
+            absolute.
+            The folder is created if it doesn't exist yet.
+            </summary>
+            <param name="folder">Folder path.</param>
+            <param name="fullPath">
+            Defines weather the folder parameter is absolute or relative to
+            <see cref="F:System.Environment.SpecialFolder.ApplicationData"/>.
+            </param>
+        </member>
+        <member name="M:Google.Apis.Util.Store.FileDataStore.StoreAsync``1(System.String,``0)">
+            <summary>
+            Stores the given value for the given key. It creates a new file (named <see cref="M:Google.Apis.Util.Store.FileDataStore.GenerateStoredKey(System.String,System.Type)"/>) in 
+            <see cref="P:Google.Apis.Util.Store.FileDataStore.FolderPath"/>.
+            </summary>
+            <typeparam name="T">The type to store in the data store.</typeparam>
+            <param name="key">The key.</param>
+            <param name="value">The value to store in the data store.</param>
+        </member>
+        <member name="M:Google.Apis.Util.Store.FileDataStore.DeleteAsync``1(System.String)">
+            <summary>
+            Deletes the given key. It deletes the <see cref="M:Google.Apis.Util.Store.FileDataStore.GenerateStoredKey(System.String,System.Type)"/> named file in 
+            <see cref="P:Google.Apis.Util.Store.FileDataStore.FolderPath"/>.
+            </summary>
+            <param name="key">The key to delete from the data store.</param>
+        </member>
+        <member name="M:Google.Apis.Util.Store.FileDataStore.GetAsync``1(System.String)">
+            <summary>
+            Returns the stored value for the given key or <c>null</c> if the matching file (<see cref="M:Google.Apis.Util.Store.FileDataStore.GenerateStoredKey(System.String,System.Type)"/>
+            in <see cref="P:Google.Apis.Util.Store.FileDataStore.FolderPath"/> doesn't exist.
+            </summary>
+            <typeparam name="T">The type to retrieve.</typeparam>
+            <param name="key">The key to retrieve from the data store.</param>
+            <returns>The stored object.</returns>
+        </member>
+        <member name="M:Google.Apis.Util.Store.FileDataStore.ClearAsync">
+            <summary>
+            Clears all values in the data store. This method deletes all files in <see cref="P:Google.Apis.Util.Store.FileDataStore.FolderPath"/>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.Store.FileDataStore.GenerateStoredKey(System.String,System.Type)">
+            <summary>Creates a unique stored key based on the key and the class type.</summary>
+            <param name="key">The object key.</param>
+            <param name="t">The type to store or retrieve.</param>
+        </member>
+        <member name="P:Google.Apis.Util.Store.FileDataStore.FolderPath">
+            <summary>Gets the full folder path.</summary>
+        </member>
+    </members>
+</doc>

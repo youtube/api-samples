@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Apis.PlatformServices</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Apis.Util.Protect.DataProtection">
+            <summary>Data protection utility to protect data.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Protect.DataProtection.Protect(System.String)">
+            <summary>Protects the given content and transform it into a byte array.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Protect.DataProtection.Unprotect(System.Byte[])">
+            <summary>Unprotects the given byte array and return the original content.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.Store.StorageDataStore">
+            <summary>
+            Windows phone data store that implements <see cref="T:Google.Apis.Util.Store.IDataStore"/>. This store creates a different file for each 
+            combination of type and key.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.Store.StorageDataStore.ReadFileContentAsync(System.String)">
+            <summary>Reads and returns the content of the given file.</summary>
+        </member>
+    </members>
+</doc>

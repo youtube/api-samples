@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Apis.PlatformServices</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Apis.Util.Store.StroageDataStore">
+            <summary>
+            Windows Store data store that implements <see cref="T:Google.Apis.Util.Store.IDataStore"/>. This store creates a different file for each 
+            combination of type and key.
+            </summary>
+        </member>
+    </members>
+</doc>
