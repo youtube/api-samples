@@ -1,0 +1,1004 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Apis.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Apis.Discovery.DiscoveryVersion">
+            <summary>An enumeration of all supported discovery versions.</summary>
+        </member>
+        <member name="F:Google.Apis.Discovery.DiscoveryVersion.Version_1_0">
+            <summary>Discovery version 1.0.</summary>
+        </member>
+        <member name="T:Google.Apis.Discovery.Features">
+            <summary>
+            Specifies a list of features which can be defined within the discovery document of a service.
+            </summary>
+        </member>
+        <member name="F:Google.Apis.Discovery.Features.LegacyDataResponse">
+            <summary>
+            If this feature is specified, then the data of a response is encapsulated within a "data" resource.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Discovery.IParameter">
+            <summary>Represents a parameter for a method.</summary>
+        </member>
+        <member name="P:Google.Apis.Discovery.IParameter.Name">
+            <summary>Gets the name of the parameter.</summary>
+        </member>
+        <member name="P:Google.Apis.Discovery.IParameter.Pattern">
+            <summary>Gets the pattern that this parameter must follow.</summary>
+        </member>
+        <member name="P:Google.Apis.Discovery.IParameter.IsRequired">
+            <summary>Gets an indication whether this parameter is optional or required.</summary>
+        </member>
+        <member name="P:Google.Apis.Discovery.IParameter.DefaultValue">
+            <summary>Gets the default value of this parameter.</summary>
+        </member>
+        <member name="P:Google.Apis.Discovery.IParameter.ParameterType">
+            <summary>Gets the type of the parameter.</summary>
+        </member>
+        <member name="T:Google.Apis.Discovery.Parameter">
+            <summary>Represents a method's parameter.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.BackOffHandler">
+            <summary>
+            A thread-safe back-off handler which handles an abnormal HTTP response or an exception with 
+            <see cref="T:Google.Apis.Util.IBackOff"/>.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Http.IHttpUnsuccessfulResponseHandler">
+            <summary>
+            Unsuccessful response handler which is invoked when an abnormal HTTP response is returned when sending a HTTP
+            request.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.IHttpUnsuccessfulResponseHandler.HandleResponseAsync(Google.Apis.Http.HandleUnsuccessfulResponseArgs)">
+            <summary>
+            Handles an abnormal response when sending a HTTP request. 
+            A simple rule must be followed, if you modify the request object in a way that the abnormal response can 
+            be resolved, you must return <c>true</c>.
+            </summary>
+            <param name="args">
+            Handle response argument which contains properties such as the request, response, current failed try.
+            </param>
+            <returns>Whether this handler has made a change that requires the request to be resent.</returns>
+        </member>
+        <member name="T:Google.Apis.Http.IHttpExceptionHandler">
+            <summary>Exception handler is invoked when an exception is thrown during a HTTP request.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.IHttpExceptionHandler.HandleExceptionAsync(Google.Apis.Http.HandleExceptionArgs)">
+            <summary>
+            Handles an exception thrown when sending a HTTP request. 
+            A simple rule must be followed, if you modify the request object in a way that the exception can be 
+            resolved, you must return <c>true</c>.
+            </summary>
+            <param name="args">
+            Handle exception argument which properties such as the request, exception, current failed try.
+            </param>
+            <returns>Whether this handler has made a change that requires the request to be resent.</returns>
+        </member>
+        <member name="M:Google.Apis.Http.BackOffHandler.#ctor(Google.Apis.Util.IBackOff)">
+            <summary>Constructs a new back-off handler with the given back-off.</summary>
+            <param name="backOff">The back-off policy.</param>
+        </member>
+        <member name="M:Google.Apis.Http.BackOffHandler.#ctor(Google.Apis.Http.BackOffHandler.Initializer)">
+            <summary>Constructs a new back-off handler with the given initializer.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.BackOffHandler.HandleAsync(System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Handles back-off. In case the request doesn't support retry or the back-off time span is greater than the
+            maximum time span allowed for a request, the handler returns <c>false</c>. Otherwise the current thread 
+            will block for x milliseconds (x is defined by the <see cref="P:Google.Apis.Http.BackOffHandler.BackOff"/> instance), and this handler 
+            returns <c>true</c>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.BackOffHandler.Wait(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>Waits the given time span. Overriding this method is recommended for mocking purposes.</summary>
+            <param name="ts">TimeSpan to wait (and block the current thread).</param>
+            <param name="cancellationToken">The cancellation token in case the user wants to cancel the operation in 
+            the middle.</param>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.BackOff">
+            <summary>Gets the back-off policy used by this back-off handler.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.MaxTimeSpan">
+            <summary>
+            Gets the maximum time span to wait. If the back-off instance returns a greater time span, the handle method
+            returns <c>false</c>. Default value is 16 seconds per a retry request.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.HandleUnsuccessfulResponseFunc">
+            <summary>
+            Gets a delegate function which indicates whether this back-off handler should handle an abnormal HTTP 
+            response. The default is <see cref="F:Google.Apis.Http.BackOffHandler.Initializer.DefaultHandleUnsuccessfulResponseFunc"/>. 
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.HandleExceptionFunc">
+            <summary>
+            Gets a delegate function which indicates whether this back-off handler should handle an exception. The 
+            default is <see cref="F:Google.Apis.Http.BackOffHandler.Initializer.DefaultHandleExceptionFunc"/>. 
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Http.BackOffHandler.Initializer">
+            <summary>An initializer class to initialize a back-off handler.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.BackOffHandler.Initializer.DefaultHandleUnsuccessfulResponseFunc">
+            <summary>Default function which handles server errors (503).</summary>
+        </member>
+        <member name="F:Google.Apis.Http.BackOffHandler.Initializer.DefaultHandleExceptionFunc">
+            <summary>
+            Default function which handles exception which aren't 
+            <see cref="T:System.Threading.Tasks.TaskCanceledException"/> or 
+            <see cref="T:System.OperationCanceledException"/>. Those exceptions represent a task or an operation
+            which was canceled and shouldn't be retried.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.BackOffHandler.Initializer.#ctor(Google.Apis.Util.IBackOff)">
+            <summary>Constructs a new initializer by the given back-off.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.Initializer.BackOff">
+            <summary>Gets the back-off policy used by this back-off handler.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.Initializer.MaxTimeSpan">
+            <summary>
+            Gets or sets the maximum time span to wait. If the back-off instance returns a greater time span than
+            this value, this handler returns <c>false</c> to both <c>HandleExceptionAsync</c> and 
+            <c>HandleResponseAsync</c>. Default value is 16 seconds per a retry request.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.Initializer.HandleUnsuccessfulResponseFunc">
+            <summary>
+            Gets or sets a delegate function which indicates whether this back-off handler should handle an 
+            abnormal HTTP response. The default is <see cref="F:Google.Apis.Http.BackOffHandler.Initializer.DefaultHandleUnsuccessfulResponseFunc"/>. 
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.BackOffHandler.Initializer.HandleExceptionFunc">
+            <summary>
+            Gets or sets a delegate function which indicates whether this back-off handler should handle an 
+            exception. The default is <see cref="F:Google.Apis.Http.BackOffHandler.Initializer.DefaultHandleExceptionFunc"/>. 
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Http.ConfigurableHttpClient">
+            <summary>
+            Configurable HTTP client inherits from <see cref="T:System.Net.Http.HttpClient"/> and contains a reference to 
+            <see cref="T:Google.Apis.Http.ConfigurableMessageHandler"/>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.ConfigurableHttpClient.#ctor(Google.Apis.Http.ConfigurableMessageHandler)">
+            <summary>Constructs a new HTTP client.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableHttpClient.MessageHandler">
+            <summary>Gets the configurable message handler.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.ConfigurableMessageHandler">
+            <summary>
+            A message handler which contains the main logic of our HTTP requests. It contains a list of 
+            <see cref="T:Google.Apis.Http.IHttpUnsuccessfulResponseHandler"/>s for handling abnormal responses, a list of 
+            <see cref="T:Google.Apis.Http.IHttpExceptionHandler"/>s for handling exception in a request and a list of 
+            <see cref="T:Google.Apis.Http.IHttpExecuteInterceptor"/>s for intercepting a request before it has been sent to the server.
+            It also contains important properties like number of tries, follow redirect, etc.
+            </summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.MaxAllowedNumTries">
+            <summary>Maximum allowed number of tries.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.Logger">
+            <summary>The class logger.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.ApiVersion">
+            <summary>The current API version of this client library.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.UserAgentSuffix">
+            <summary>The User-Agent suffix header which contains the <see cref="F:Google.Apis.Http.ConfigurableMessageHandler.ApiVersion"/>.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.unsuccessfulResponseHandlers">
+            <summary>A list of <see cref="T:Google.Apis.Http.IHttpUnsuccessfulResponseHandler"/>.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.exceptionHandlers">
+            <summary>A list of <see cref="T:Google.Apis.Http.IHttpExceptionHandler"/>.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.executeInterceptors">
+            <summary>A list of <see cref="T:Google.Apis.Http.IHttpExecuteInterceptor"/>.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.numTries">
+            <summary>Number of tries. Default is <c>3</c>.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.numRedirects">
+            <summary>Number of redirects allowed. Default is <c>10</c>.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.ConfigurableMessageHandler.#ctor(System.Net.Http.HttpMessageHandler)">
+            <summary>Constructs a new configurable message handler.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.ConfigurableMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            The main logic of sending a request to the server. This send method adds the User-Agent header to a request
+            with <see cref="P:Google.Apis.Http.ConfigurableMessageHandler.ApplicationName"/> and the library version. It also calls interceptors before each attempt,
+            and unsuccessful response handler or exception handlers when abnormal response or exception occurred.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.ConfigurableMessageHandler.HandleRedirect(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Handles redirect if the response's status code is redirect, redirects are turned on, and the header has
+            a location.
+            When the status code is <c>303</c> the method on the request is changed to a GET as per the RFC2616 
+            specification. On a redirect, it also removes the <c>Authorization</c> and all <c>If-*</c> request headers.
+            </summary>
+            <returns> Whether this method changed the request and handled redirect successfully. </returns>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.UnsuccessfulResponseHandlers">
+            <summary>Gets a list of <see cref="T:Google.Apis.Http.IHttpUnsuccessfulResponseHandler"/>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.ExceptionHandlers">
+            <summary>Gets a list of <see cref="T:Google.Apis.Http.IHttpExceptionHandler"/>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.ExecuteInterceptors">
+            <summary>Gets a list of <see cref="T:Google.Apis.Http.IHttpExecuteInterceptor"/>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.NumTries">
+            <summary>
+            Gets or sets the number of tries that will be allowed to execute. Retries occur as a result of either
+            <see cref="T:Google.Apis.Http.IHttpUnsuccessfulResponseHandler"/> or <see cref="T:Google.Apis.Http.IHttpExceptionHandler"/> which handles the
+            abnormal HTTP response or exception before being terminated. 
+            Set <c>1</c> for not retrying requests. The default value is <c>3</c>.
+            <remarks>
+            The number of allowed redirects (3xx) is defined by <see cref="P:Google.Apis.Http.ConfigurableMessageHandler.NumRedirects"/>. This property defines
+            only the allowed tries for &gt;=400 responses, or when an exception is thrown. For example if you set 
+            <see cref="P:Google.Apis.Http.ConfigurableMessageHandler.NumTries"/> to 1 and <see cref="P:Google.Apis.Http.ConfigurableMessageHandler.NumRedirects"/> to 5, the library will send up to five redirect
+            requests, but will not send any retry requests due to an error HTTP status code.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.NumRedirects">
+            <summary>
+            Gets or sets the number of redirects that will be allowed to execute. The default value is <c>10</c>.
+            See <see cref="P:Google.Apis.Http.ConfigurableMessageHandler.NumTries"/> for more information.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.FollowRedirect">
+            <summary>
+            Gets or sets whether the handler should follow a redirect when a redirect response is received. Default 
+            value is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.IsLoggingEnabled">
+            <summary>Gets or sets whether logging is enabled. Default value is <c>true</c>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.ApplicationName">
+            <summary>Gets or sets the application name which will be used on the User-Agent header.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.ExponentialBackOffPolicy">
+            <summary>
+            Indicates if exponential back-off is used automatically on exceptions in a service requests and \ or when 503 
+            responses is returned form the server.
+            </summary>
+        </member>
+        <member name="F:Google.Apis.Http.ExponentialBackOffPolicy.None">
+            <summary>Exponential back-off is disabled.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ExponentialBackOffPolicy.Exception">
+            <summary>Exponential back-off is enabled only for exceptions.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.ExponentialBackOffPolicy.UnsuccessfulResponse503">
+            <summary>Exponential back-off is enabled only for 503 HTTP Status code.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.ExponentialBackOffInitializer">
+            <summary>
+            An initializer which adds exponential back-off as exception handler and \ or unsuccessful response handler by
+            the given <see cref="T:Google.Apis.Http.ExponentialBackOffPolicy"/>.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Http.IConfigurableHttpClientInitializer">
+            <summary> 
+            HTTP client initializer for changing the default behavior of HTTP client. 
+            Use this initializer to change default values like timeout and number of tries. 
+            You can also set different handlers and interceptors like <see cref="T:Google.Apis.Http.IHttpUnsuccessfulResponseHandler"/>s, 
+            <see cref="T:Google.Apis.Http.IHttpExceptionHandler"/>s and <see cref="T:Google.Apis.Http.IHttpExecuteInterceptor"/>s.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.IConfigurableHttpClientInitializer.Initialize(Google.Apis.Http.ConfigurableHttpClient)">
+            <summary>Initializes a HTTP client after it was created.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.ExponentialBackOffInitializer.#ctor(Google.Apis.Http.ExponentialBackOffPolicy,System.Func{Google.Apis.Http.BackOffHandler})">
+            <summary>
+            Constructs a new back-off initializer with the given policy and back-off handler create function.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Http.ExponentialBackOffInitializer.Policy">
+            <summary>Gets or sets the used back-off policy.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.ExponentialBackOffInitializer.CreateBackOff">
+            <summary>Gets or sets the back-off handler creation function.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.HttpClientFactory">
+            <summary>The default implementation of the HTTP client factory.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.IHttpClientFactory">
+            <summary>
+            HTTP client factory creates configurable HTTP clients. A unique HTTP client should be created for each service.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.IHttpClientFactory.CreateHttpClient(Google.Apis.Http.CreateHttpClientArgs)">
+            <summary>Creates a new configurable HTTP client.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.HttpClientFactory.Logger">
+            <summary>The class logger.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.HttpClientFactory.CreateHandler(Google.Apis.Http.CreateHttpClientArgs)">
+            <summary>Creates a HTTP message handler. Override this method to mock a message handler.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.HttpConsts">
+            <summary>HTTP constants.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.HttpExtenstions">
+            <summary>
+            Extension methods to <see cref="T:System.Net.Http.HttpRequestMessage"/> and 
+            <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.HttpExtenstions.IsRedirectStatusCode(System.Net.Http.HttpResponseMessage)">
+            <summary>Returns <c>true</c> if the response contains one of the redirect status codes.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.HttpExtenstions.SetEmptyContent(System.Net.Http.HttpRequestMessage)">
+            <summary>Sets an empty HTTP content.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.CreateHttpClientArgs">
+            <summary>Arguments for creating a HTTP client.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.CreateHttpClientArgs.#ctor">
+            <summary>Constructs a new argument instance.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.CreateHttpClientArgs.GZipEnabled">
+            <summary>Gets or sets whether GZip is enabled.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.CreateHttpClientArgs.ApplicationName">
+            <summary>Gets or sets the application name that is sent in the User-Agent header.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.CreateHttpClientArgs.Initializers">
+            <summary>Gets a list of initializers to initialize the HTTP client instance.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.HandleExceptionArgs">
+            <summary>Argument class to <see cref="M:Google.Apis.Http.IHttpExceptionHandler.HandleExceptionAsync(Google.Apis.Http.HandleExceptionArgs)"/>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleExceptionArgs.Request">
+            <summary>Gets or sets the sent request.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleExceptionArgs.Exception">
+            <summary>Gets or sets the exception which occurred during sending the request.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleExceptionArgs.TotalTries">
+            <summary>Gets or sets the total number of tries to send the request.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleExceptionArgs.CurrentFailedTry">
+            <summary>Gets or sets the current failed try.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleExceptionArgs.SupportsRetry">
+            <summary>Gets an indication whether a retry will occur if the handler returns <c>true</c>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleExceptionArgs.CancellationToken">
+            <summary>Gets or sets the request's cancellation token.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.IHttpExecuteInterceptor">
+            <summary>
+            HTTP request execute interceptor to intercept a <see cref="T:System.Net.Http.HttpRequestMessage"/> before it has
+            been sent. Sample usage is attaching "Authorization" header to a request.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.IHttpExecuteInterceptor.InterceptAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            <summary>Invoked before the request is being sent.</summary>
+            </summary>
+            <param name="request">The HTTP request message.</param>
+            <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+        </member>
+        <member name="T:Google.Apis.Http.HandleUnsuccessfulResponseArgs">
+            <summary>Argument class to <see cref="M:Google.Apis.Http.IHttpUnsuccessfulResponseHandler.HandleResponseAsync(Google.Apis.Http.HandleUnsuccessfulResponseArgs)"/>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleUnsuccessfulResponseArgs.Request">
+            <summary>Gets or sets the sent request.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleUnsuccessfulResponseArgs.Response">
+            <summary>Gets or sets the abnormal response.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleUnsuccessfulResponseArgs.TotalTries">
+            <summary>Gets or sets the total number of tries to send the request.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleUnsuccessfulResponseArgs.CurrentFailedTry">
+            <summary>Gets or sets the current failed try.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleUnsuccessfulResponseArgs.SupportsRetry">
+            <summary>Gets an indication whether a retry will occur if the handler returns <c>true</c>.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.HandleUnsuccessfulResponseArgs.CancellationToken">
+            <summary>Gets or sets the request's cancellation token.</summary>
+        </member>
+        <member name="T:Google.Apis.Http.MaxUrlLengthInterceptor">
+            <summary>
+            Intercepts HTTP GET requests with a URLs longer than a specified maximum number of characters.
+            The interceptor will change such requests as follows:
+            <list type="bullet">
+            <item>The request's method will be changed to POST</item>
+            <item>A <c>X-HTTP-Method-Override</c> header will be added with the value <c>GET</c></item>
+            <item>Any query parameters from the URI will be moved into the body of the request.</item>
+            <item>If query parameters are moved, the content type is set to <c>application/x-www-form-urlencoded</c></item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.MaxUrlLengthInterceptor.#ctor(System.UInt32)">
+            <summary>Constructs a new Max URL length interceptor with the given max length.</summary>
+        </member>
+        <member name="T:Google.Apis.ISerializer">
+            <summary>Serialization interface that supports serialize and deserialize methods.</summary>
+        </member>
+        <member name="M:Google.Apis.ISerializer.Serialize(System.Object,System.IO.Stream)">
+            <summary>Serializes the specified object into a Stream.</summary>
+        </member>
+        <member name="M:Google.Apis.ISerializer.Serialize(System.Object)">
+            <summary>Serializes the specified object into a string.</summary>
+        </member>
+        <member name="M:Google.Apis.ISerializer.Deserialize``1(System.String)">
+            <summary>Deserializes the string into an object.</summary>
+        </member>
+        <member name="M:Google.Apis.ISerializer.Deserialize(System.String,System.Type)">
+            <summary>Deserializes the string into an object.</summary>
+        </member>
+        <member name="M:Google.Apis.ISerializer.Deserialize``1(System.IO.Stream)">
+            <summary>Deserializes the stream into an object.</summary>
+        </member>
+        <member name="P:Google.Apis.ISerializer.Format">
+            <summary>Gets the application format this serializer supports (e.g. "json", "xml", etc.).</summary>
+        </member>
+        <member name="T:Google.Apis.Json.IJsonSerializer">
+            <summary>Represents a JSON serializer.</summary>
+        </member>
+        <member name="T:Google.Apis.Json.RFC3339DateTimeConverter">
+            <summary>
+            A JSON converter which honers RFC 3339 and the serialized date is accepted by Google services.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Json.NewtonsoftJsonSerializer">
+            <summary>Class for serialization and deserialization of JSON documents using the Newtonsoft Library.</summary>
+        </member>
+        <member name="P:Google.Apis.Json.NewtonsoftJsonSerializer.Instance">
+            <summary>A singleton instance of the Newtonsoft JSON Serializer.</summary>
+        </member>
+        <member name="T:Google.Apis.Logging.ILogger">
+            <summary>Describes a logging interface which is used for outputting messages.</summary>
+        </member>
+        <member name="M:Google.Apis.Logging.ILogger.ForType(System.Type)">
+            <summary>Returns a logger which will be associated with the specified type.</summary>
+            <param name="type">Type to which this logger belongs.</param>
+            <returns>A type-associated logger.</returns>
+        </member>
+        <member name="M:Google.Apis.Logging.ILogger.ForType``1">
+            <summary>Returns a logger which will be associated with the specified type.</summary>
+            <returns>A type-associated logger.</returns>
+        </member>
+        <member name="M:Google.Apis.Logging.ILogger.Info(System.String,System.Object[])">
+            <summary>Logs an info message.</summary>
+            <param name="message">The message to log.</param>
+            <param name="formatArgs">String.Format arguments (if applicable).</param>
+        </member>
+        <member name="M:Google.Apis.Logging.ILogger.Warning(System.String,System.Object[])">
+            <summary>Logs a warning.</summary>
+            <param name="message">The message to log.</param>
+            <param name="formatArgs">String.Format arguments (if applicable).</param>
+        </member>
+        <member name="M:Google.Apis.Logging.ILogger.Debug(System.String,System.Object[])">
+            <summary>Logs a debug message.</summary>
+            <param name="message">The message to log.</param>
+            <param name="formatArgs">String.Format arguments (if applicable).</param>
+        </member>
+        <member name="M:Google.Apis.Logging.ILogger.Error(System.Exception,System.String,System.Object[])">
+            <summary>Logs an error message resulting from an exception.</summary>
+            <param name="exception"></param>
+            <param name="message">The message to log.</param>
+            <param name="formatArgs">String.Format arguments (if applicable).</param>
+        </member>
+        <member name="M:Google.Apis.Logging.ILogger.Error(System.String,System.Object[])">
+            <summary>Logs an error message.</summary>
+            <param name="message">The message to log.</param>
+            <param name="formatArgs">String.Format arguments (if applicable).</param>
+        </member>
+        <member name="P:Google.Apis.Logging.ILogger.IsDebugEnabled">
+            <summary>Gets an indication whether debug output is logged or not.</summary>
+        </member>
+        <member name="T:Google.Apis.Logging.NullLogger">
+            <summary>
+            Represents a NullLogger which does not do any logging.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Requests.Parameters.ParameterCollection">
+            <summary>A collection of parameters (key value pairs). May contain duplicate keys.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.#ctor">
+            <summary>Constructs a new parameter collection.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>Constructs a new parameter collection from the given collection.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.Add(System.String,System.String)">
+            <summary>Adds a single parameter to this collection.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.ContainsKey(System.String)">
+            <summary>Returns <c>true</c> if this parameter is set within the collection.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.TryGetValue(System.String,System.String@)">
+            <summary>
+            Tries to find the a key within the specified key value collection. Returns true if the key was found.
+            If a pair was found the out parameter value will contain the value of that pair.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.GetFirstMatch(System.String)">
+            <summary>
+            Returns the value of the first matching key, or throws a KeyNotFoundException if the parameter is not
+            present within the collection.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.GetAllMatches(System.String)">
+            <summary>
+            Returns all matches for the specified key. May return an empty enumeration if the key is not present.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.FromQueryString(System.String)">
+            <summary>
+            Creates a parameter collection from the specified URL encoded query string.
+            Example: 
+                The query string "foo=bar&amp;chocolate=cookie" would result in two parameters (foo and bar)
+                with the values "bar" and "cookie" set.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterCollection.FromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Creates a parameter collection from the specified dictionary.
+            If the value is an enumerable, a parameter pair will be added for each value.
+            Otherwise the value will be converted into a string using the .ToString() method.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.Parameters.ParameterCollection.Item(System.String)">
+            <summary>
+            Returns all matches for the specified key. May return an empty enumeration if the key is not present.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Requests.Parameters.ParameterUtils">
+            <summary>
+            Utility class for iterating on <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> properties in a request object.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterUtils.CreateFormUrlEncodedContent(System.Object)">
+            <summary>
+            Creates a <see cref="T:System.Net.Http.FormUrlEncodedContent"/> with all the specified parameters in 
+            the input request. It uses reflection to iterate over all properties with
+            <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> attribute.
+            </summary>
+            <param name="request">
+            A request object which contains properties with 
+            <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> attribute. Those properties will be serialized
+            to the returned <see cref="T:System.Net.Http.FormUrlEncodedContent"/>.
+            </param>
+            <returns>
+            A <see cref="T:System.Net.Http.FormUrlEncodedContent"/> which contains the all the given object required 
+            values.
+            </returns>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterUtils.CreateParameterDictionary(System.Object)">
+            <summary>
+            Creates a parameter dictionary by using reflection to iterate over all properties with
+            <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> attribute.
+            </summary>
+            <param name="request">
+            A request object which contains properties with 
+            <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> attribute. Those properties will be set
+            in the output dictionary.
+            </param>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterUtils.InitParameters(Google.Apis.Requests.RequestBuilder,System.Object)">
+            <summary>
+            Sets query parameters in the given builder with all all properties with the
+            <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> attribute.
+            </summary>
+            <param name="builder">The request builder</param>
+            <param name="request">
+            A request object which contains properties with 
+            <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> attribute. Those properties will be set in the 
+            given request builder object
+            </param>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterUtils.IterateParameters(System.Object,System.Action{Google.Apis.Util.RequestParameterType,System.String,System.Object})">
+            <summary>
+            Iterates over all <see cref="T:Google.Apis.Util.RequestParameterAttribute"/> properties in the request
+            object and invokes the specified action for each of them.
+            </summary>
+            <param name="request">A request object</param>
+            <param name="action">An action to invoke which gets the parameter type, name and its value</param>
+        </member>
+        <member name="T:Google.Apis.Requests.Parameters.ParameterValidator">
+            <summary>Logic for validating a parameter.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterValidator.ValidateRegex(Google.Apis.Discovery.IParameter,System.String)">
+            <summary>Validates a parameter value against the methods regex.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.Parameters.ParameterValidator.ValidateParameter(Google.Apis.Discovery.IParameter,System.String)">
+            <summary>Validates if a parameter is valid.</summary>
+        </member>
+        <member name="T:Google.Apis.Requests.RequestBuilder">
+            <summary>Utility class for building a URI using <see cref="M:Google.Apis.Requests.RequestBuilder.BuildUri"/> or a HTTP request using 
+            <see cref="M:Google.Apis.Requests.RequestBuilder.CreateRequest"/> from the query and path parameters of a REST call.</summary>
+        </member>
+        <member name="F:Google.Apis.Requests.RequestBuilder.OPERATORS">
+            <summary>Operator list that can appear in the path argument.</summary>
+        </member>
+        <member name="F:Google.Apis.Requests.RequestBuilder.PathParametersPattern">
+            <summary>Pattern to get the groups that are part of the path.</summary>
+        </member>
+        <member name="F:Google.Apis.Requests.RequestBuilder.SupportedMethods">
+            <summary>Supported HTTP methods.</summary> 
+        </member>
+        <member name="F:Google.Apis.Requests.RequestBuilder.method">
+            <summary>The HTTP method used for this request.</summary> 
+        </member>
+        <member name="M:Google.Apis.Requests.RequestBuilder.#ctor">
+            <summary>Construct a new request builder.</summary> 
+            TODO(peleyal): Consider using the Factory pattern here.
+        </member>
+        <member name="M:Google.Apis.Requests.RequestBuilder.BuildUri">
+            <summary>Constructs a Uri as defined by the parts of this request builder.</summary> 
+        </member>
+        <member name="M:Google.Apis.Requests.RequestBuilder.BuildRestPath">
+            <summary>
+            Builds the REST path string builder based on <see cref="P:Google.Apis.Requests.RequestBuilder.PathParameters"/> and the URI template spec
+            http://tools.ietf.org/html/rfc6570.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Google.Apis.Requests.RequestBuilder.AddParameter(Google.Apis.Util.RequestParameterType,System.String,System.String)">
+            <summary>Adds a parameter value.</summary> 
+            <param name="type">Type of the parameter (must be 'Path' or 'Query').</param>
+            <param name="name">Parameter name.</param>
+            <param name="value">Parameter value.</param>
+        </member>
+        <member name="M:Google.Apis.Requests.RequestBuilder.CreateRequest">
+            <summary>Creates a new HTTP request message.</summary> 
+        </member>
+        <member name="P:Google.Apis.Requests.RequestBuilder.PathParameters">
+            <summary>
+            A dictionary containing the parameters which will be inserted into the path of the URI. These parameters 
+            will be substituted into the URI path where the path contains "{key}". See 
+            http://tools.ietf.org/html/rfc6570 for more information.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.RequestBuilder.QueryParameters">
+            <summary>
+            A dictionary containing the parameters which will apply to the query portion of this request.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.RequestBuilder.BaseUri">
+            <summary>The base URI for this request (usually applies to the service itself).</summary>
+        </member>
+        <member name="P:Google.Apis.Requests.RequestBuilder.Path">
+            <summary>
+            The path portion of this request. It's appended to the <see cref="P:Google.Apis.Requests.RequestBuilder.BaseUri"/> and the parameters are 
+            substituted from the <see cref="P:Google.Apis.Requests.RequestBuilder.PathParameters"/> dictionary.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.RequestBuilder.Method">
+            <summary>The HTTP method used for this request (such as GET, PUT, POST, etc...).</summary>
+            <remarks>The default Value is <see cref="F:Google.Apis.Http.HttpConsts.Get"/>.</remarks>
+        </member>
+        <member name="T:Google.Apis.Requests.RequestError">
+            <summary>
+            Collection of server errors
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.RequestError.Errors">
+            <summary>
+            Contains a list of all errors
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.RequestError.Code">
+            <summary>
+            The error code returned
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.RequestError.Message">
+            <summary>
+            The error message returned
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Requests.RequestError.ErrorCodes">
+            <summary>
+            Enumeration of known error codes which may occur during a request.
+            </summary>
+        </member>
+        <member name="F:Google.Apis.Requests.RequestError.ErrorCodes.ETagConditionFailed">
+            <summary>
+            The ETag condition specified caused the ETag verification to fail. 
+            Depending on the ETagAction of the request this either means that a change to the object has been
+            made on the server, or that the object in question is still the same and has not been changed.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Requests.SingleError">
+            <summary>
+            A single server error
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.SingleError.Domain">
+            <summary>
+            The domain in which the error occured
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.SingleError.Reason">
+            <summary>
+            The reason the error was thrown
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.SingleError.Message">
+            <summary>
+            The error message
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.SingleError.LocationType">
+            <summary>
+            Type of the location
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Requests.SingleError.Location">
+            <summary>
+            Location where the error was thrown
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Testing.VisibleForTestOnly">
+            <summary>
+            Marker Attribute to indicate a Method/Class/Property has been made more visible for
+            purpose of testing. Mark as internal and makr the testing assembly as friend using
+            <code>[assembly: InternalsVisibleTo("Full.Name.Of.Testing.Assembly")]</code>
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Util.ExponentialBackOff">
+            <summary>
+            Implementation of <see cref="T:Google.Apis.Util.IBackOff"/> that increases the back-off period for each retry attempt using a 
+            randomization function that grows exponentially. In addition, it also adds a randomize number of milliseconds 
+            for each attempt.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Util.IBackOff">
+            <summary>Strategy interface to control back-off between retry attempts.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.IBackOff.GetNextBackOff(System.Int32)">
+            <summary>
+            Gets the a time span to wait before next retry. If the current retry reached the maximum number of retries,
+            the returned value is <see cref="F:System.TimeSpan.MinValue"/>.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Util.IBackOff.MaxNumOfRetries">
+            <summary>Gets the maximum number of retries.</summary>
+        </member>
+        <member name="F:Google.Apis.Util.ExponentialBackOff.MaxAllowedNumRetries">
+            <summary>The maximum allowed number of retries.</summary>
+        </member>
+        <member name="F:Google.Apis.Util.ExponentialBackOff.random">
+            <summary>The random instance which generates a random number to add the to next back-off.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.ExponentialBackOff.#ctor">
+            <summary>Constructs a new exponential back-off with default values.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.ExponentialBackOff.#ctor(System.TimeSpan,System.Int32)">
+            <summary>Constructs a new exponential back-off with the given delta and maximum retries.</summary>
+        </member>
+        <member name="P:Google.Apis.Util.ExponentialBackOff.DeltaBackOff">
+            <summary>
+            Gets the delta time span used to generate a random milliseconds to add to the next back-off.
+            If the value is <see cref="F:System.TimeSpan.Zero"/> then the generated back-off will be exactly 1, 2, 4,
+            8, 16, etc. seconds. A valid value is between zero and one second. The default value is 250ms, which means
+            that the generated back-off will be [0.75-1.25]sec, [1.75-2.25]sec, [3.75-4.25]sec, and so on.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Util.ExponentialBackOff.MaxNumOfRetries">
+            <summary>Gets the maximum number of retries. Default value is <c>10</c>.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.IClock">
+            <summary>Clock wrapper for getting the current time.</summary>
+        </member>
+        <member name="P:Google.Apis.Util.IClock.Now">
+            <summary>
+            Gets a <see cref="T:System.DateTime"/> object that is set to the current date and time on this computer, 
+            expressed as the local time.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Util.IClock.UtcNow">
+            <summary>
+            Gets a <see cref="T:System.DateTime"/> object that is set to the current date and time on this computer, 
+            expressed as UTC time.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Util.SystemClock">
+            <summary>A default clock implementation that wraps the <see cref="P:System.DateTime.Now"/> property.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.SystemClock.#ctor">
+            <summary>Constructs a new system clock.</summary>
+        </member>
+        <member name="F:Google.Apis.Util.SystemClock.Default">
+            <summary>The default instance.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.Repeatable`1">
+            <summary>
+            Repeatable class which allows you to both pass a single element, as well as an array, as a parameter value.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.Repeatable`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>Creates a repeatable value.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Repeatable`1.op_Implicit(`0)~Google.Apis.Util.Repeatable{`0}">
+            <summary>Converts the single element into a repeatable.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Repeatable`1.op_Implicit(`0[])~Google.Apis.Util.Repeatable{`0}">
+            <summary>Converts a number of elements into a repeatable.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Repeatable`1.op_Implicit(System.Collections.Generic.List{`0})~Google.Apis.Util.Repeatable{`0}">
+            <summary>Converts a number of elements into a repeatable.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.RequestParameterAttribute">
+            <summary>
+            An attribute which is used to specially mark a property for reflective purposes, 
+            assign a name to the property and indicate it's location in the request as either
+            in the path or query portion of the request URL.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.RequestParameterAttribute.#ctor(System.String)">
+            <summary>
+            Constructs a new property attribute to be a part of a REST URI. 
+            This constructor uses <see cref="F:Google.Apis.Util.RequestParameterType.Query"/> as the parameter's type.
+            </summary>
+            <param name="name">
+            The name of the parameter. If the parameter is a path parameter this name will be used to substitute the 
+            string value into the path, replacing {name}. If the parameter is a query parameter, this parameter will be
+            added to the query string, in the format "name=value".
+            </param>
+        </member>
+        <member name="M:Google.Apis.Util.RequestParameterAttribute.#ctor(System.String,Google.Apis.Util.RequestParameterType)">
+            <summary>Constructs a new property attribute to be a part of a REST URI.</summary>
+            <param name="name">
+            The name of the parameter. If the parameter is a path parameter this name will be used to substitute the 
+            string value into the path, replacing {name}. If the parameter is a query parameter, this parameter will be
+            added to the query string, in the format "name=value".
+            </param>
+            <param name="type">The type of the parameter, either Path or Query.</param>
+        </member>
+        <member name="P:Google.Apis.Util.RequestParameterAttribute.Name">
+            <summary>Gets the name of the parameter.</summary>
+        </member>
+        <member name="P:Google.Apis.Util.RequestParameterAttribute.Type">
+            <summary>Gets the type of the parameter, Path or Query.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.RequestParameterType">
+            <summary>Describe the type of this parameter (Path or Query).</summary>
+        </member>
+        <member name="F:Google.Apis.Util.RequestParameterType.Path">
+            <summary>A path parameter which is inserted into the path portion of the request URI.</summary>
+        </member>
+        <member name="F:Google.Apis.Util.RequestParameterType.Query">
+            <summary>A query parameter which is inserted into the query portion of the request URI.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.StandardResponse`1">
+            <summary>
+            Calls to Google Api return StandardResponses as Json with
+            two properties Data, being the return type of the method called
+            and Error, being any errors that occure.
+            </summary>
+        </member>
+        <member name="P:Google.Apis.Util.StandardResponse`1.Data">
+            <summary>May be null if call failed.</summary>
+        </member>
+        <member name="P:Google.Apis.Util.StandardResponse`1.Error">
+            <summary>May be null if call succedded.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.Store.IDataStore">
+            <summary>
+            Stores and manages data objects, where the key is a string and the value is an object.
+            <para>
+            <c>null</c> keys are not allowed.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.Store.IDataStore.StoreAsync``1(System.String,``0)">
+            <summary>Asynchronously stores the given value for the given key (replacing any existing value).</summary>
+            <typeparam name="T">The type to store in the data store.</typeparam>
+            <param name="key">The key.</param>
+            <param name="value">The value to store.</param>
+        </member>
+        <member name="M:Google.Apis.Util.Store.IDataStore.DeleteAsync``1(System.String)">
+            <summary>
+            Asynchronously deletes the given key. The type is provided here as well because the "real" saved key should
+            contain type information as well, so the data store will be able to store the same key for different types.
+            </summary>
+            <typeparam name="T">The type to delete from the data store.</typeparam>
+            <param name="key">The key to delete.</param>
+        </member>
+        <member name="M:Google.Apis.Util.Store.IDataStore.GetAsync``1(System.String)">
+            <summary>Asynchronously returns the stored value for the given key or <c>null</c> if not found.</summary>
+            <typeparam name="T">The type to retrieve from the data store.</typeparam>
+            <param name="key">The key to retrieve its value.</param>
+            <returns>The stored object.</returns>
+        </member>
+        <member name="M:Google.Apis.Util.Store.IDataStore.ClearAsync">
+            <summary>Asynchronously clears all values in the data store.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.StringValueAttribute">
+            <summary>Defines an attribute containing a string representation of the member.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.StringValueAttribute.#ctor(System.String)">
+            <summary>Creates a new string value attribute with the specified text.</summary>
+        </member>
+        <member name="P:Google.Apis.Util.StringValueAttribute.Text">
+            <summary>The text which belongs to this member.</summary>
+        </member>
+        <member name="T:Google.Apis.Util.Utilities">
+            <summary>A utility class which contains helper methods and extension methods.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.GetLibraryVersion">
+            <summary>Returns the version of the core library.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.ThrowIfNull``1(``0,System.String)">
+            <summary>Throws an <see cref="T:System.ArgumentNullException"/> if the object is null.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.ThrowIfNullOrEmpty(System.String,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentNullException"/> if the string is <c>null</c> or empty.
+            </summary>
+            <returns>The original string.</returns>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>Returns <c>true</c> in case the enumerable is <c>null</c> or empty.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.GetCustomAttribute``1(System.Reflection.MemberInfo)">
+            <summary>Returns the first matching custom attribute (or <c>null</c>) of the specified member.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.GetStringValue(System.Enum)">
+            <summary>Returns the defined string value of an Enum.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.ConvertToString(System.Object)">
+            <summary>
+            Tries to convert the specified object to a string. Uses custom type converters if available.
+            Returns null for a null object.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.ConvertToRFC3339(System.DateTime)">
+            <summary>Converts the input date into a RFC3339 string (http://www.ietf.org/rfc/rfc3339.txt).</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.GetDateTimeFromString(System.String)">
+            <summary>
+            Parses the input string and returns <see cref="T:System.DateTime"/> if the input is a valid 
+            representation of a date. Otherwise it returns <c>null</c>.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Util.Utilities.GetStringFromDateTime(System.Nullable{System.DateTime})">
+            <summary>Returns a string (by RFC3339) form the input <see cref="T:System.DateTime"/> instance.</summary>
+        </member>
+        <member name="T:Google.ApplicationContext">
+            <summary>Defines the context in which this library runs. It allows setting up custom loggers.</summary>
+        </member>
+        <member name="M:Google.ApplicationContext.RegisterLogger(Google.Apis.Logging.ILogger)">
+            <summary>Registers a logger with this application context.</summary>
+            <exception cref="T:System.InvalidOperationException">Thrown if a logger was already registered.</exception>
+        </member>
+        <member name="P:Google.ApplicationContext.Logger">
+            <summary>Returns the logger used within this application context.</summary>
+            <remarks>It creates a <see cref="T:Google.Apis.Logging.NullLogger"/> if no logger was registered previously</remarks>
+        </member>
+        <member name="T:Google.GoogleApiException">
+            <summary>Represents an exception thrown by an API Service.</summary>
+        </member>
+        <member name="M:Google.GoogleApiException.#ctor(System.String,System.String,System.Exception)">
+            <summary>Creates an API Service exception.</summary>
+        </member>
+        <member name="M:Google.GoogleApiException.#ctor(System.String,System.String)">
+            <summary>Creates an API Service exception.</summary>
+        </member>
+        <member name="P:Google.GoogleApiException.ServiceName">
+            <summary>Gets the service name which related to this exception.</summary>
+        </member>
+        <member name="P:Google.GoogleApiException.HttpStatusCode">
+            <summary>The HTTP status code which was returned along with this error, or 0 if unavailable.</summary>
+        </member>
+    </members>
+</doc>

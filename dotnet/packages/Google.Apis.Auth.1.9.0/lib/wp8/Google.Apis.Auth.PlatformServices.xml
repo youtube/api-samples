@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Apis.Auth.PlatformServices</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Apis.Auth.OAuth2.AuthorizationCodeBroker">
+            <summary>
+            OAuth 2.0 verification code receiver for Windows Phone that opens an embedded Google account form to enter the
+            user's credentials and accepts the application access to its token.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.AuthorizationCodeBroker.ReceivedCodeCoreAsync(Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeRequestUrl,System.Threading.CancellationToken)">
+            <summary>
+            The core logic for retrieving the authorization code. It MUST be called from the UI thread.
+            </summary>
+            <param name="url">The authorization code request URL.</param>
+            <param name="taskCancellationToken">Cancellation token.</param>
+            <returns>The authorization code response.</returns>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.AuthorizationCodeWPInstalledApp">
+            <summary>
+            Thread-safe OAuth 2.0 authorization code flow for a Windows Phone installed application that persists end-user 
+            credentials.
+            <remarks>
+            The <see cref="M:Google.Apis.Auth.OAuth2.AuthorizationCodeWPInstalledApp.AuthorizeAsync(System.String,System.Threading.CancellationToken)"/> method MUST be called from the dispatcher thread!
+            This installed app class uses an internal <see cref="T:Google.Apis.Auth.OAuth2.AuthorizationCodeInstalledApp"/> with a
+            <see cref="T:Google.Apis.Auth.OAuth2.AuthorizationCodeBroker"/> for retrieving the authorization code. 
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.AuthorizationCodeWPInstalledApp.#ctor(Google.Apis.Auth.OAuth2.Flows.AuthorizationCodeFlow.Initializer)">
+            <summary>
+            Constructs a new authorization code for Windows Phone targeting an installed application flow.
+            </summary>
+            <param name="authorizationCodeFlowInitializer">An authorization code flow initializer.</param>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.AuthorizationCodeWPInstalledApp.#ctor(Google.Apis.Auth.OAuth2.Flows.IAuthorizationCodeFlow)">
+            <summary>
+            Constructs a new authorization code for Windows Phone targeting an installed application flow.
+            </summary>
+            <param name="flow">An authorization code flow.</param>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.GoogleWebAuthorizationBroker">
+            <summary>A helper utility to manage the authorization code flow.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.GoogleWebAuthorizationBroker.AuthorizeAsync(Google.Apis.Auth.OAuth2.ClientSecrets,System.Collections.Generic.IEnumerable{System.String},System.String,System.Threading.CancellationToken)">
+            <summary>Asynchronously authorizes the specified user.</summary>
+            <remarks>
+            It uses <see cref="T:Google.Apis.Util.Store.StorageDataStore"/> as the flow's data store by default.
+            </remarks>
+            <param name="clientSecrets">The client secrets.</param>
+            <param name="scopes">
+            The scopes which indicate the Google API access your application is requesting.
+            </param>
+            <param name="user">The user to authorize.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation.</param>
+            <returns>User credential.</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.GoogleWebAuthorizationBroker.AuthorizeAsync(System.IO.Stream,System.Collections.Generic.IEnumerable{System.String},System.String,System.Threading.CancellationToken)">
+            <summary>Asynchronously authorizes the specified user.</summary>
+            <remarks>
+            It uses <see cref="T:Google.Apis.Util.Store.StorageDataStore"/> as the flow's data store by default.
+            </remarks>
+            <param name="clientSecretsStream">
+            The client secrets stream. The AuthorizationCodeFlow constructor is responsible for disposing the stream.
+            Note that it's more secured to use the authenticate method which gets <see cref="T:Google.Apis.Auth.OAuth2.ClientSecrets"/>, and
+            hard code your secrets in your app rather than storing the secrets in a separate unsecured file.
+            </param>
+            <param name="scopes">
+            The scopes which indicate the Google API access your application is requesting.
+            </param>
+            <param name="user">The user to authorize.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation.</param>
+            <returns>User credential.</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.GoogleWebAuthorizationBroker.ReauthorizeAsync(Google.Apis.Auth.OAuth2.UserCredential,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously reauthorizes the user. This method should be called if the users want to authorize after 
+            they revoked the token.
+            </summary>
+            <param name="userCredential">The current user credential. Its <see cref="P:Google.Apis.Auth.OAuth2.UserCredential.Token"/> will be
+            updated. </param>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation.</param>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.GoogleWebAuthorizationBroker.AuthorizeAsyncCore(Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Initializer,System.Collections.Generic.IEnumerable{System.String},System.String,System.Threading.CancellationToken)">
+            <summary>The core logic for asynchronously authorizing the specified user.</summary>
+            <param name="initializer">The authorization code initializer.</param>
+            <param name="scopes">
+            The scopes which indicate the Google API access your application is requesting.
+            </param>
+            <param name="user">The user to authenticate.</param>
+            <param name="taskCancellationToken">Cancellation token to cancel an operation.</param>
+            <returns>User credential.</returns>
+        </member>
+        <member name="T:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl">
+            <summary>
+            Web authentication broker user control for retrieving
+            <see cref="T:Google.Apis.Auth.OAuth2.Responses.AuthorizationCodeResponseUrl"/>
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.#ctor">
+            <summary>Constructs a new authentication broker user control.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.StartLoading">
+            <summary>Displays the loading animation.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.StopLoading">
+            <summary>Removes the loading animation.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.OnBrowserNavigating(System.Object,Microsoft.Phone.Controls.NavigatingEventArgs)">
+            <summary>Callback of browser navigating.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.OnBrowserNavigationFailed(System.Object,System.Windows.Navigation.NavigationFailedEventArgs)">
+            <summary>Callback of browser navigation failed.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.OnBrowserNavigated(System.Object,System.Windows.Navigation.NavigationEventArgs)">
+            <summary>Callback of browser navigated.</summary>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.Launch(System.Uri)">
+            <summary>The window launcher that starts browse the browser controller to the given URI.</summary>
+            <param name="uri">The authorization code request URI</param>
+            <returns>The authorization code response</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.RootPage_BackKeyPress(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>A callback handler for when the user presses the back key.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.RemoveBackKeyPressCallback" -->
+        <member name="M:Google.Apis.Auth.OAuth2.WebAuthenticationBrokerUserControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+    </members>
+</doc>

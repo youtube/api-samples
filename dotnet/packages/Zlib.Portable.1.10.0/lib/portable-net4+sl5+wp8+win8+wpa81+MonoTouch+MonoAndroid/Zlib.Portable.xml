@@ -1,0 +1,3415 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Zlib.Portable</name>
+    </assembly>
+    <members>
+        <member name="T:Ionic.Crc.CRC32">
+            <summary>
+              Computes a CRC-32. The CRC-32 algorithm is parameterized - you
+              can set the polynomial and enable or disable bit
+              reversal. This can be used for GZIP, BZip2, or ZIP.
+            </summary>
+            <remarks>
+              This type is used internally by DotNetZip; it is generally not used
+              directly by applications wishing to create, read, or manipulate zip
+              archive files.
+            </remarks>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.GetCrc32(System.IO.Stream)">
+            <summary>
+            Returns the CRC32 for the specified stream.
+            </summary>
+            <param name="input">The stream over which to calculate the CRC32</param>
+            <returns>the CRC32 calculation</returns>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.GetCrc32AndCopy(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Returns the CRC32 for the specified stream, and writes the input into the
+            output stream.
+            </summary>
+            <param name="input">The stream over which to calculate the CRC32</param>
+            <param name="output">The stream into which to deflate the input</param>
+            <returns>the CRC32 calculation</returns>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.ComputeCrc32(System.Int32,System.Byte)">
+            <summary>
+              Get the CRC32 for the given (word,byte) combo.  This is a
+              computation defined by PKzip for PKZIP 2.0 (weak) encryption.
+            </summary>
+            <param name="W">The word to start with.</param>
+            <param name="B">The byte to combine it with.</param>
+            <returns>The CRC-ized result.</returns>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.SlurpBlock(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Update the value for the running CRC32 using the given block of bytes.
+            This is useful when using the CRC32() class in a Stream.
+            </summary>
+            <param name="block">block of bytes to slurp</param>
+            <param name="offset">starting point in the block</param>
+            <param name="count">how many bytes within the block to slurp</param>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.UpdateCRC(System.Byte)">
+            <summary>
+              Process one byte in the CRC.
+            </summary>
+            <param name = "b">the byte to include into the CRC .  </param>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.UpdateCRC(System.Byte,System.Int32)">
+            <summary>
+              Process a run of N identical bytes into the CRC.
+            </summary>
+            <remarks>
+              <para>
+                This method serves as an optimization for updating the CRC when a
+                run of identical bytes is found. Rather than passing in a buffer of
+                length n, containing all identical bytes b, this method accepts the
+                byte value and the length of the (virtual) buffer - the length of
+                the run.
+              </para>
+            </remarks>
+            <param name = "b">the byte to include into the CRC.  </param>
+            <param name = "n">the number of times that byte should be repeated. </param>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.Combine(System.Int32,System.Int32)">
+            <summary>
+              Combines the given CRC32 value with the current running total.
+            </summary>
+            <remarks>
+              This is useful when using a divide-and-conquer approach to
+              calculating a CRC.  Multiple threads can each calculate a
+              CRC32 on a segment of the data, and then combine the
+              individual CRC32 values at the end.
+            </remarks>
+            <param name="crc">the crc value to be combined with this one</param>
+            <param name="length">the length of data the CRC value was calculated on</param>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.#ctor">
+            <summary>
+              Create an instance of the CRC32 class using the default settings: no
+              bit reversal, and a polynomial of 0xEDB88320.
+            </summary>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.#ctor(System.Boolean)">
+            <summary>
+              Create an instance of the CRC32 class, specifying whether to reverse
+              data bits or not.
+            </summary>
+            <param name='reverseBits'>
+              specify true if the instance should reverse data bits.
+            </param>
+            <remarks>
+              <para>
+                In the CRC-32 used by BZip2, the bits are reversed. Therefore if you
+                want a CRC32 with compatibility with BZip2, you should pass true
+                here. In the CRC-32 used by GZIP and PKZIP, the bits are not
+                reversed; Therefore if you want a CRC32 with compatibility with
+                those, you should pass false.
+              </para>
+            </remarks>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.#ctor(System.Int32,System.Boolean)">
+             <summary>
+               Create an instance of the CRC32 class, specifying the polynomial and
+               whether to reverse data bits or not.
+             </summary>
+             <param name='polynomial'>
+               The polynomial to use for the CRC, expressed in the reversed (LSB)
+               format: the highest ordered bit in the polynomial value is the
+               coefficient of the 0th power; the second-highest order bit is the
+               coefficient of the 1 power, and so on. Expressed this way, the
+               polynomial for the CRC-32C used in IEEE 802.3, is 0xEDB88320.
+             </param>
+             <param name='reverseBits'>
+               specify true if the instance should reverse data bits.
+             </param>
+            
+             <remarks>
+               <para>
+                 In the CRC-32 used by BZip2, the bits are reversed. Therefore if you
+                 want a CRC32 with compatibility with BZip2, you should pass true
+                 here for the <c>reverseBits</c> parameter. In the CRC-32 used by
+                 GZIP and PKZIP, the bits are not reversed; Therefore if you want a
+                 CRC32 with compatibility with those, you should pass false for the
+                 <c>reverseBits</c> parameter.
+               </para>
+             </remarks>
+        </member>
+        <member name="M:Ionic.Crc.CRC32.Reset">
+            <summary>
+              Reset the CRC-32 class - clear the CRC "remainder register."
+            </summary>
+            <remarks>
+              <para>
+                Use this when employing a single instance of this class to compute
+                multiple, distinct CRCs on multiple, distinct data blocks.
+              </para>
+            </remarks>
+        </member>
+        <member name="P:Ionic.Crc.CRC32.TotalBytesRead">
+            <summary>
+              Indicates the total number of bytes applied to the CRC.
+            </summary>
+        </member>
+        <member name="P:Ionic.Crc.CRC32.Crc32Result">
+            <summary>
+            Indicates the current CRC for all blocks slurped in.
+            </summary>
+        </member>
+        <member name="T:Ionic.Crc.CrcCalculatorStream">
+             <summary>
+             A Stream that calculates a CRC32 (a checksum) on all bytes read,
+             or on all bytes written.
+             </summary>
+            
+             <remarks>
+             <para>
+             This class can be used to verify the CRC of a ZipEntry when
+             reading from a stream, or to calculate a CRC when writing to a
+             stream.  The stream should be used to either read, or write, but
+             not both.  If you intermix reads and writes, the results are not
+             defined.
+             </para>
+            
+             <para>
+             This class is intended primarily for use internally by the
+             DotNetZip library.
+             </para>
+             </remarks>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.#ctor(System.IO.Stream)">
+            <summary>
+            The default constructor.
+            </summary>
+            <remarks>
+              <para>
+                Instances returned from this constructor will leave the underlying
+                stream open upon Close().  The stream uses the default CRC32
+                algorithm, which implies a polynomial of 0xEDB88320.
+              </para>
+            </remarks>
+            <param name="stream">The underlying stream</param>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.#ctor(System.IO.Stream,System.Boolean)">
+            <summary>
+              The constructor allows the caller to specify how to handle the
+              underlying stream at close.
+            </summary>
+            <remarks>
+              <para>
+                The stream uses the default CRC32 algorithm, which implies a
+                polynomial of 0xEDB88320.
+              </para>
+            </remarks>
+            <param name="stream">The underlying stream</param>
+            <param name="leaveOpen">true to leave the underlying stream
+            open upon close of the <c>CrcCalculatorStream</c>; false otherwise.</param>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.#ctor(System.IO.Stream,System.Int64)">
+            <summary>
+              A constructor allowing the specification of the length of the stream
+              to read.
+            </summary>
+            <remarks>
+              <para>
+                The stream uses the default CRC32 algorithm, which implies a
+                polynomial of 0xEDB88320.
+              </para>
+              <para>
+                Instances returned from this constructor will leave the underlying
+                stream open upon Close().
+              </para>
+            </remarks>
+            <param name="stream">The underlying stream</param>
+            <param name="length">The length of the stream to slurp</param>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.#ctor(System.IO.Stream,System.Int64,System.Boolean)">
+            <summary>
+              A constructor allowing the specification of the length of the stream
+              to read, as well as whether to keep the underlying stream open upon
+              Close().
+            </summary>
+            <remarks>
+              <para>
+                The stream uses the default CRC32 algorithm, which implies a
+                polynomial of 0xEDB88320.
+              </para>
+            </remarks>
+            <param name="stream">The underlying stream</param>
+            <param name="length">The length of the stream to slurp</param>
+            <param name="leaveOpen">true to leave the underlying stream
+            open upon close of the <c>CrcCalculatorStream</c>; false otherwise.</param>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.#ctor(System.IO.Stream,System.Int64,System.Boolean,Ionic.Crc.CRC32)">
+            <summary>
+              A constructor allowing the specification of the length of the stream
+              to read, as well as whether to keep the underlying stream open upon
+              Close(), and the CRC32 instance to use.
+            </summary>
+            <remarks>
+              <para>
+                The stream uses the specified CRC32 instance, which allows the
+                application to specify how the CRC gets calculated.
+              </para>
+            </remarks>
+            <param name="stream">The underlying stream</param>
+            <param name="length">The length of the stream to slurp</param>
+            <param name="leaveOpen">true to leave the underlying stream
+            open upon close of the <c>CrcCalculatorStream</c>; false otherwise.</param>
+            <param name="crc32">the CRC32 instance to use to calculate the CRC32</param>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Read from the stream
+            </summary>
+            <param name="buffer">the buffer to read</param>
+            <param name="offset">the offset at which to start</param>
+            <param name="count">the number of bytes to read</param>
+            <returns>the number of bytes actually read</returns>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Write to the stream.
+            </summary>
+            <param name="buffer">the buffer from which to write</param>
+            <param name="offset">the offset at which to start writing</param>
+            <param name="count">the number of bytes to write</param>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.Flush">
+            <summary>
+            Flush the stream.
+            </summary>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Seeking is not supported on this stream. This method always throws
+            <see cref="T:System.NotSupportedException"/>
+            </summary>
+            <param name="offset">N/A</param>
+            <param name="origin">N/A</param>
+            <returns>N/A</returns>
+        </member>
+        <member name="M:Ionic.Crc.CrcCalculatorStream.SetLength(System.Int64)">
+            <summary>
+            This method always throws
+            <see cref="T:System.NotSupportedException"/>
+            </summary>
+            <param name="value">N/A</param>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.TotalBytesSlurped">
+             <summary>
+               Gets the total number of bytes run through the CRC32 calculator.
+             </summary>
+            
+             <remarks>
+               This is either the total number of bytes read, or the total number of
+               bytes written, depending on the direction of this stream.
+             </remarks>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.Crc">
+            <summary>
+              Provides the current CRC for all blocks slurped in.
+            </summary>
+            <remarks>
+              <para>
+                The running total of the CRC is kept as data is written or read
+                through the stream.  read this property after all reads or writes to
+                get an accurate CRC for the entire stream.
+              </para>
+            </remarks>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.LeaveOpen">
+            <summary>
+              Indicates whether the underlying stream will be left open when the
+              <c>CrcCalculatorStream</c> is Closed.
+            </summary>
+            <remarks>
+              <para>
+                Set this at any point before calling <see cref="!:Close()"/>.
+              </para>
+            </remarks>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.CanRead">
+            <summary>
+            Indicates whether the stream supports reading.
+            </summary>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.CanSeek">
+            <summary>
+              Indicates whether the stream supports seeking.
+            </summary>
+            <remarks>
+              <para>
+                Always returns false.
+              </para>
+            </remarks>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.CanWrite">
+            <summary>
+            Indicates whether the stream supports writing.
+            </summary>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.Length">
+            <summary>
+              Returns the length of the underlying stream.
+            </summary>
+        </member>
+        <member name="P:Ionic.Crc.CrcCalculatorStream.Position">
+            <summary>
+              The getter for this property returns the total bytes read.
+              If you use the setter, it will throw
+            <see cref="T:System.NotSupportedException"/>.
+            </summary>
+        </member>
+        <member name="T:Ionic.Zlib.DeflateStream">
+             <summary>
+             A class for compressing and decompressing streams using the Deflate algorithm.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               The DeflateStream is a <see href="http://en.wikipedia.org/wiki/Decorator_pattern">Decorator</see> on a <see cref="T:System.IO.Stream"/>.  It adds DEFLATE compression or decompression to any
+               stream.
+             </para>
+            
+             <para>
+               Using this stream, applications can compress or decompress data via stream
+               <c>Read</c> and <c>Write</c> operations.  Either compresssion or decompression
+               can occur through either reading or writing. The compression format used is
+               DEFLATE, which is documented in <see href="http://www.ietf.org/rfc/rfc1951.txt">IETF RFC 1951</see>, "DEFLATE
+               Compressed Data Format Specification version 1.3.".
+             </para>
+            
+             <para>
+               This class is similar to <see cref="T:Ionic.Zlib.ZlibStream"/>, except that
+               <c>ZlibStream</c> adds the <see href="http://www.ietf.org/rfc/rfc1950.txt">RFC
+               1950 - ZLIB</see> framing bytes to a compressed stream when compressing, or
+               expects the RFC1950 framing bytes when decompressing. The <c>DeflateStream</c>
+               does not.
+             </para>
+            
+             </remarks>
+            
+             <seealso cref="T:Ionic.Zlib.ZlibStream"/>
+             <seealso cref="T:Ionic.Zlib.GZipStream"/>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode)">
+             <summary>
+               Create a DeflateStream using the specified CompressionMode.
+             </summary>
+            
+             <remarks>
+               When mode is <c>CompressionMode.Compress</c>, the DeflateStream will use
+               the default compression level. The "captive" stream will be closed when
+               the DeflateStream is closed.
+             </remarks>
+            
+             <example>
+             This example uses a DeflateStream to compress data from a file, and writes
+             the compressed data to another file.
+             <code>
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(fileToCompress + ".deflated"))
+                 {
+                     using (Stream compressor = new DeflateStream(raw, CompressionMode.Compress))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n;
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+            
+             <code lang="VB">
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(fileToCompress &amp; ".deflated")
+                     Using compressor As Stream = New DeflateStream(raw, CompressionMode.Compress)
+                         Dim buffer As Byte() = New Byte(4096) {}
+                         Dim n As Integer = -1
+                         Do While (n &lt;&gt; 0)
+                             If (n &gt; 0) Then
+                                 compressor.Write(buffer, 0, n)
+                             End If
+                             n = input.Read(buffer, 0, buffer.Length)
+                         Loop
+                     End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+             <param name="stream">The stream which will be read or written.</param>
+             <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel)">
+             <summary>
+             Create a DeflateStream using the specified CompressionMode and the specified CompressionLevel.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               When mode is <c>CompressionMode.Decompress</c>, the level parameter is
+               ignored.  The "captive" stream will be closed when the DeflateStream is
+               closed.
+             </para>
+            
+             </remarks>
+            
+             <example>
+            
+               This example uses a DeflateStream to compress data from a file, and writes
+               the compressed data to another file.
+            
+             <code>
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(fileToCompress + ".deflated"))
+                 {
+                     using (Stream compressor = new DeflateStream(raw,
+                                                                  CompressionMode.Compress,
+                                                                  CompressionLevel.BestCompression))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n= -1;
+                         while (n != 0)
+                         {
+                             if (n &gt; 0)
+                                 compressor.Write(buffer, 0, n);
+                             n= input.Read(buffer, 0, buffer.Length);
+                         }
+                     }
+                 }
+             }
+             </code>
+            
+             <code lang="VB">
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(fileToCompress &amp; ".deflated")
+                     Using compressor As Stream = New DeflateStream(raw, CompressionMode.Compress, CompressionLevel.BestCompression)
+                         Dim buffer As Byte() = New Byte(4096) {}
+                         Dim n As Integer = -1
+                         Do While (n &lt;&gt; 0)
+                             If (n &gt; 0) Then
+                                 compressor.Write(buffer, 0, n)
+                             End If
+                             n = input.Read(buffer, 0, buffer.Length)
+                         Loop
+                     End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+             <param name="stream">The stream to be read or written while deflating or inflating.</param>
+             <param name="mode">Indicates whether the <c>DeflateStream</c> will compress or decompress.</param>
+             <param name="level">A tuning knob to trade speed for effectiveness.</param>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,System.Boolean)">
+             <summary>
+               Create a <c>DeflateStream</c> using the specified
+               <c>CompressionMode</c>, and explicitly specify whether the
+               stream should be left open after Deflation or Inflation.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               This constructor allows the application to request that the captive stream
+               remain open after the deflation or inflation occurs.  By default, after
+               <c>Close()</c> is called on the stream, the captive stream is also
+               closed. In some cases this is not desired, for example if the stream is a
+               memory stream that will be re-read after compression.  Specify true for
+               the <paramref name="leaveOpen"/> parameter to leave the stream open.
+             </para>
+            
+             <para>
+               The <c>DeflateStream</c> will use the default compression level.
+             </para>
+            
+             <para>
+               See the other overloads of this constructor for example code.
+             </para>
+             </remarks>
+            
+             <param name="stream">
+               The stream which will be read or written. This is called the
+               "captive" stream in other places in this documentation.
+             </param>
+            
+             <param name="mode">
+               Indicates whether the <c>DeflateStream</c> will compress or decompress.
+             </param>
+            
+             <param name="leaveOpen">true if the application would like the stream to
+             remain open after inflation/deflation.</param>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)">
+             <summary>
+               Create a <c>DeflateStream</c> using the specified <c>CompressionMode</c>
+               and the specified <c>CompressionLevel</c>, and explicitly specify whether
+               the stream should be left open after Deflation or Inflation.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               When mode is <c>CompressionMode.Decompress</c>, the level parameter is ignored.
+             </para>
+            
+             <para>
+               This constructor allows the application to request that the captive stream
+               remain open after the deflation or inflation occurs.  By default, after
+               <c>Close()</c> is called on the stream, the captive stream is also
+               closed. In some cases this is not desired, for example if the stream is a
+               <see cref="T:System.IO.MemoryStream"/> that will be re-read after
+               compression.  Specify true for the <paramref name="leaveOpen"/> parameter
+               to leave the stream open.
+             </para>
+            
+             </remarks>
+            
+             <example>
+            
+               This example shows how to use a <c>DeflateStream</c> to compress data from
+               a file, and store the compressed data into another file.
+            
+             <code>
+             using (var output = System.IO.File.Create(fileToCompress + ".deflated"))
+             {
+                 using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+                 {
+                     using (Stream compressor = new DeflateStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, true))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n= -1;
+                         while (n != 0)
+                         {
+                             if (n &gt; 0)
+                                 compressor.Write(buffer, 0, n);
+                             n= input.Read(buffer, 0, buffer.Length);
+                         }
+                     }
+                 }
+                 // can write additional data to the output stream here
+             }
+             </code>
+            
+             <code lang="VB">
+             Using output As FileStream = File.Create(fileToCompress &amp; ".deflated")
+                 Using input As Stream = File.OpenRead(fileToCompress)
+                     Using compressor As Stream = New DeflateStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, True)
+                         Dim buffer As Byte() = New Byte(4096) {}
+                         Dim n As Integer = -1
+                         Do While (n &lt;&gt; 0)
+                             If (n &gt; 0) Then
+                                 compressor.Write(buffer, 0, n)
+                             End If
+                             n = input.Read(buffer, 0, buffer.Length)
+                         Loop
+                     End Using
+                 End Using
+                 ' can write additional data to the output stream here.
+             End Using
+             </code>
+             </example>
+             <param name="stream">The stream which will be read or written.</param>
+             <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
+             <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
+             <param name="level">A tuning knob to trade speed for effectiveness.</param>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.Dispose(System.Boolean)">
+            <summary>
+              Dispose the stream.
+            </summary>
+            <remarks>
+              <para>
+                This may or may not result in a <c>Close()</c> call on the captive
+                stream.  See the constructors that have a <c>leaveOpen</c> parameter
+                for more information.
+              </para>
+              <para>
+                Application code won't call this code directly.  This method may be
+                invoked in two distinct scenarios.  If disposing == true, the method
+                has been called directly or indirectly by a user's code, for example
+                via the public Dispose() method. In this case, both managed and
+                unmanaged resources can be referenced and disposed.  If disposing ==
+                false, the method has been called by the runtime from inside the
+                object finalizer and this method should not reference other objects;
+                in that case only unmanaged resources must be referenced or
+                disposed.
+              </para>
+            </remarks>
+            <param name="disposing">
+              true if the Dispose method was invoked by user code.
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.Flush">
+            <summary>
+            Flush the stream.
+            </summary>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.Read(System.Byte[],System.Int32,System.Int32)">
+             <summary>
+             Read data from the stream.
+             </summary>
+             <remarks>
+            
+             <para>
+               If you wish to use the <c>DeflateStream</c> to compress data while
+               reading, you can create a <c>DeflateStream</c> with
+               <c>CompressionMode.Compress</c>, providing an uncompressed data stream.
+               Then call Read() on that <c>DeflateStream</c>, and the data read will be
+               compressed as you read.  If you wish to use the <c>DeflateStream</c> to
+               decompress data while reading, you can create a <c>DeflateStream</c> with
+               <c>CompressionMode.Decompress</c>, providing a readable compressed data
+               stream.  Then call Read() on that <c>DeflateStream</c>, and the data read
+               will be decompressed as you read.
+             </para>
+            
+             <para>
+               A <c>DeflateStream</c> can be used for <c>Read()</c> or <c>Write()</c>, but not both.
+             </para>
+            
+             </remarks>
+             <param name="buffer">The buffer into which the read data should be placed.</param>
+             <param name="offset">the offset within that data array to put the first byte read.</param>
+             <param name="count">the number of bytes to read.</param>
+             <returns>the number of bytes actually read</returns>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Calling this method always throws a <see cref="T:System.NotImplementedException"/>.
+            </summary>
+            <param name="offset">this is irrelevant, since it will always throw!</param>
+            <param name="origin">this is irrelevant, since it will always throw!</param>
+            <returns>irrelevant!</returns>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.SetLength(System.Int64)">
+            <summary>
+            Calling this method always throws a <see cref="T:System.NotImplementedException"/>.
+            </summary>
+            <param name="value">this is irrelevant, since it will always throw!</param>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.Write(System.Byte[],System.Int32,System.Int32)">
+             <summary>
+               Write data to the stream.
+             </summary>
+             <remarks>
+            
+             <para>
+               If you wish to use the <c>DeflateStream</c> to compress data while
+               writing, you can create a <c>DeflateStream</c> with
+               <c>CompressionMode.Compress</c>, and a writable output stream.  Then call
+               <c>Write()</c> on that <c>DeflateStream</c>, providing uncompressed data
+               as input.  The data sent to the output stream will be the compressed form
+               of the data written.  If you wish to use the <c>DeflateStream</c> to
+               decompress data while writing, you can create a <c>DeflateStream</c> with
+               <c>CompressionMode.Decompress</c>, and a writable output stream.  Then
+               call <c>Write()</c> on that stream, providing previously compressed
+               data. The data sent to the output stream will be the decompressed form of
+               the data written.
+             </para>
+            
+             <para>
+               A <c>DeflateStream</c> can be used for <c>Read()</c> or <c>Write()</c>,
+               but not both.
+             </para>
+            
+             </remarks>
+            
+             <param name="buffer">The buffer holding data to write to the stream.</param>
+             <param name="offset">the offset within that data array to find the first byte to write.</param>
+             <param name="count">the number of bytes to write.</param>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.CompressString(System.String)">
+             <summary>
+               Compress a string into a byte array using DEFLATE (RFC 1951).
+             </summary>
+            
+             <remarks>
+               Uncompress it with <see cref="M:Ionic.Zlib.DeflateStream.UncompressString(System.Byte[])"/>.
+             </remarks>
+            
+             <seealso cref="M:Ionic.Zlib.DeflateStream.UncompressString(System.Byte[])">DeflateStream.UncompressString(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.DeflateStream.CompressBuffer(System.Byte[])">DeflateStream.CompressBuffer(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.GZipStream.CompressString(System.String)">GZipStream.CompressString(string)</seealso>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.CompressString(System.String)">ZlibStream.CompressString(string)</seealso>
+            
+             <param name="s">
+               A string to compress. The string will first be encoded
+               using UTF8, then compressed.
+             </param>
+            
+             <returns>The string in compressed form</returns>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.CompressBuffer(System.Byte[])">
+             <summary>
+               Compress a byte array into a new byte array using DEFLATE.
+             </summary>
+            
+             <remarks>
+               Uncompress it with <see cref="M:Ionic.Zlib.DeflateStream.UncompressBuffer(System.Byte[])"/>.
+             </remarks>
+            
+             <seealso cref="M:Ionic.Zlib.DeflateStream.CompressString(System.String)">DeflateStream.CompressString(string)</seealso>
+             <seealso cref="M:Ionic.Zlib.DeflateStream.UncompressBuffer(System.Byte[])">DeflateStream.UncompressBuffer(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.GZipStream.CompressBuffer(System.Byte[])">GZipStream.CompressBuffer(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.CompressBuffer(System.Byte[])">ZlibStream.CompressBuffer(byte[])</seealso>
+            
+             <param name="b">
+               A buffer to compress.
+             </param>
+            
+             <returns>The data in compressed form</returns>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.UncompressString(System.Byte[])">
+             <summary>
+               Uncompress a DEFLATE'd byte array into a single string.
+             </summary>
+            
+             <seealso cref="M:Ionic.Zlib.DeflateStream.CompressString(System.String)">DeflateStream.CompressString(String)</seealso>
+             <seealso cref="M:Ionic.Zlib.DeflateStream.UncompressBuffer(System.Byte[])">DeflateStream.UncompressBuffer(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.GZipStream.UncompressString(System.Byte[])">GZipStream.UncompressString(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.UncompressString(System.Byte[])">ZlibStream.UncompressString(byte[])</seealso>
+            
+             <param name="compressed">
+               A buffer containing DEFLATE-compressed data.
+             </param>
+            
+             <returns>The uncompressed string</returns>
+        </member>
+        <member name="M:Ionic.Zlib.DeflateStream.UncompressBuffer(System.Byte[])">
+             <summary>
+               Uncompress a DEFLATE'd byte array into a byte array.
+             </summary>
+            
+             <seealso cref="M:Ionic.Zlib.DeflateStream.CompressBuffer(System.Byte[])">DeflateStream.CompressBuffer(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.DeflateStream.UncompressString(System.Byte[])">DeflateStream.UncompressString(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.GZipStream.UncompressBuffer(System.Byte[])">GZipStream.UncompressBuffer(byte[])</seealso>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.UncompressBuffer(System.Byte[])">ZlibStream.UncompressBuffer(byte[])</seealso>
+            
+             <param name="compressed">
+               A buffer containing data that has been compressed with DEFLATE.
+             </param>
+            
+             <returns>The data in uncompressed form</returns>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.FlushMode">
+            <summary>
+            This property sets the flush behavior on the stream.
+            </summary>
+            <remarks> See the ZLIB documentation for the meaning of the flush behavior.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.BufferSize">
+             <summary>
+               The size of the working buffer for the compression codec.
+             </summary>
+            
+             <remarks>
+             <para>
+               The working buffer is used for all stream operations.  The default size is
+               1024 bytes.  The minimum size is 128 bytes. You may get better performance
+               with a larger buffer.  Then again, you might not.  You would have to test
+               it.
+             </para>
+            
+             <para>
+               Set this before the first call to <c>Read()</c> or <c>Write()</c> on the
+               stream. If you try to set it afterwards, it will throw.
+             </para>
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.Strategy">
+             <summary>
+               The ZLIB strategy to be used during compression.
+             </summary>
+            
+             <remarks>
+               By tweaking this parameter, you may be able to optimize the compression for
+               data with particular characteristics.
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.TotalIn">
+            <summary> Returns the total number of bytes input so far.</summary>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.TotalOut">
+            <summary> Returns the total number of bytes output so far.</summary>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.CanRead">
+            <summary>
+            Indicates whether the stream can be read.
+            </summary>
+            <remarks>
+            The return value depends on whether the captive stream supports reading.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.CanSeek">
+            <summary>
+            Indicates whether the stream supports Seek operations.
+            </summary>
+            <remarks>
+            Always returns false.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.CanWrite">
+            <summary>
+            Indicates whether the stream can be written.
+            </summary>
+            <remarks>
+            The return value depends on whether the captive stream supports writing.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.Length">
+            <summary>
+            Reading this property always throws a <see cref="T:System.NotImplementedException"/>.
+            </summary>
+        </member>
+        <member name="P:Ionic.Zlib.DeflateStream.Position">
+             <summary>
+             The position of the stream pointer.
+             </summary>
+            
+             <remarks>
+               Setting this property always throws a <see cref="T:System.NotImplementedException"/>. Reading will return the total bytes
+               written out, if used in writing, or the total bytes read in, if used in
+               reading.  The count may refer to compressed bytes or uncompressed bytes,
+               depending on how you've used the stream.
+             </remarks>
+        </member>
+        <member name="T:Ionic.Zlib.GZipStream">
+             <summary>
+               A class for compressing and decompressing GZIP streams.
+             </summary>
+             <remarks>
+            
+             <para>
+               The <c>GZipStream</c> is a <see href="http://en.wikipedia.org/wiki/Decorator_pattern">Decorator</see> on a
+               <see cref="T:System.IO.Stream"/>. It adds GZIP compression or decompression to any
+               stream.
+             </para>
+            
+             <para>
+               Like the <c>System.IO.Compression.GZipStream</c> in the .NET Base Class Library, the
+               <c>Ionic.Zlib.GZipStream</c> can compress while writing, or decompress while
+               reading, but not vice versa.  The compression method used is GZIP, which is
+               documented in <see href="http://www.ietf.org/rfc/rfc1952.txt">IETF RFC
+               1952</see>, "GZIP file format specification version 4.3".</para>
+            
+             <para>
+               A <c>GZipStream</c> can be used to decompress data (through <c>Read()</c>) or
+               to compress data (through <c>Write()</c>), but not both.
+             </para>
+            
+             <para>
+               If you wish to use the <c>GZipStream</c> to compress data, you must wrap it
+               around a write-able stream. As you call <c>Write()</c> on the <c>GZipStream</c>, the
+               data will be compressed into the GZIP format.  If you want to decompress data,
+               you must wrap the <c>GZipStream</c> around a readable stream that contains an
+               IETF RFC 1952-compliant stream.  The data will be decompressed as you call
+               <c>Read()</c> on the <c>GZipStream</c>.
+             </para>
+            
+             <para>
+               Though the GZIP format allows data from multiple files to be concatenated
+               together, this stream handles only a single segment of GZIP format, typically
+               representing a single file.
+             </para>
+            
+             <para>
+               This class is similar to <see cref="T:Ionic.Zlib.ZlibStream"/> and <see cref="T:Ionic.Zlib.DeflateStream"/>.
+               <c>ZlibStream</c> handles RFC1950-compliant streams.  <see cref="T:Ionic.Zlib.DeflateStream"/>
+               handles RFC1951-compliant streams. This class handles RFC1952-compliant streams.
+             </para>
+            
+             </remarks>
+            
+             <seealso cref="T:Ionic.Zlib.DeflateStream"/>
+             <seealso cref="T:Ionic.Zlib.ZlibStream"/>
+        </member>
+        <member name="F:Ionic.Zlib.GZipStream.LastModified">
+             <summary>
+               The last modified time for the GZIP stream.
+             </summary>
+            
+             <remarks>
+               GZIP allows the storage of a last modified time with each GZIP entry.
+               When compressing data, you can set this before the first call to
+               <c>Write()</c>.  When decompressing, you can retrieve this value any time
+               after the first call to <c>Read()</c>.
+             </remarks>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode)">
+             <summary>
+               Create a <c>GZipStream</c> using the specified <c>CompressionMode</c>.
+             </summary>
+             <remarks>
+            
+             <para>
+               When mode is <c>CompressionMode.Compress</c>, the <c>GZipStream</c> will use the
+               default compression level.
+             </para>
+            
+             <para>
+               As noted in the class documentation, the <c>CompressionMode</c> (Compress
+               or Decompress) also establishes the "direction" of the stream.  A
+               <c>GZipStream</c> with <c>CompressionMode.Compress</c> works only through
+               <c>Write()</c>.  A <c>GZipStream</c> with
+               <c>CompressionMode.Decompress</c> works only through <c>Read()</c>.
+             </para>
+            
+             </remarks>
+            
+             <example>
+               This example shows how to use a GZipStream to compress data.
+             <code>
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(outputFile))
+                 {
+                     using (Stream compressor = new GZipStream(raw, CompressionMode.Compress))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n;
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+             <code lang="VB">
+             Dim outputFile As String = (fileToCompress &amp; ".compressed")
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(outputFile)
+                 Using compressor As Stream = New GZipStream(raw, CompressionMode.Compress)
+                     Dim buffer As Byte() = New Byte(4096) {}
+                     Dim n As Integer = -1
+                     Do While (n &lt;&gt; 0)
+                         If (n &gt; 0) Then
+                             compressor.Write(buffer, 0, n)
+                         End If
+                         n = input.Read(buffer, 0, buffer.Length)
+                     Loop
+                 End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+            
+             <example>
+             This example shows how to use a GZipStream to uncompress a file.
+             <code>
+             private void GunZipFile(string filename)
+             {
+                 if (!filename.EndsWith(".gz))
+                     throw new ArgumentException("filename");
+                 var DecompressedFile = filename.Substring(0,filename.Length-3);
+                 byte[] working = new byte[WORKING_BUFFER_SIZE];
+                 int n= 1;
+                 using (System.IO.Stream input = System.IO.File.OpenRead(filename))
+                 {
+                     using (Stream decompressor= new Ionic.Zlib.GZipStream(input, CompressionMode.Decompress, true))
+                     {
+                         using (var output = System.IO.File.Create(DecompressedFile))
+                         {
+                             while (n !=0)
+                             {
+                                 n= decompressor.Read(working, 0, working.Length);
+                                 if (n > 0)
+                                 {
+                                     output.Write(working, 0, n);
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+             </code>
+            
+             <code lang="VB">
+             Private Sub GunZipFile(ByVal filename as String)
+                 If Not (filename.EndsWith(".gz)) Then
+                     Throw New ArgumentException("filename")
+                 End If
+                 Dim DecompressedFile as String = filename.Substring(0,filename.Length-3)
+                 Dim working(WORKING_BUFFER_SIZE) as Byte
+                 Dim n As Integer = 1
+                 Using input As Stream = File.OpenRead(filename)
+                     Using decompressor As Stream = new Ionic.Zlib.GZipStream(input, CompressionMode.Decompress, True)
+                         Using output As Stream = File.Create(UncompressedFile)
+                             Do
+                                 n= decompressor.Read(working, 0, working.Length)
+                                 If n > 0 Then
+                                     output.Write(working, 0, n)
+                                 End IF
+                             Loop While (n  > 0)
+                         End Using
+                     End Using
+                 End Using
+             End Sub
+             </code>
+             </example>
+            
+             <param name="stream">The stream which will be read or written.</param>
+             <param name="mode">Indicates whether the GZipStream will compress or decompress.</param>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel)">
+             <summary>
+               Create a <c>GZipStream</c> using the specified <c>CompressionMode</c> and
+               the specified <c>CompressionLevel</c>.
+             </summary>
+             <remarks>
+            
+             <para>
+               The <c>CompressionMode</c> (Compress or Decompress) also establishes the
+               "direction" of the stream.  A <c>GZipStream</c> with
+               <c>CompressionMode.Compress</c> works only through <c>Write()</c>.  A
+               <c>GZipStream</c> with <c>CompressionMode.Decompress</c> works only
+               through <c>Read()</c>.
+             </para>
+            
+             </remarks>
+            
+             <example>
+            
+             This example shows how to use a <c>GZipStream</c> to compress a file into a .gz file.
+            
+             <code>
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(fileToCompress + ".gz"))
+                 {
+                     using (Stream compressor = new GZipStream(raw,
+                                                               CompressionMode.Compress,
+                                                               CompressionLevel.BestCompression))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n;
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+            
+             <code lang="VB">
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(fileToCompress &amp; ".gz")
+                     Using compressor As Stream = New GZipStream(raw, CompressionMode.Compress, CompressionLevel.BestCompression)
+                         Dim buffer As Byte() = New Byte(4096) {}
+                         Dim n As Integer = -1
+                         Do While (n &lt;&gt; 0)
+                             If (n &gt; 0) Then
+                                 compressor.Write(buffer, 0, n)
+                             End If
+                             n = input.Read(buffer, 0, buffer.Length)
+                         Loop
+                     End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+             <param name="stream">The stream to be read or written while deflating or inflating.</param>
+             <param name="mode">Indicates whether the <c>GZipStream</c> will compress or decompress.</param>
+             <param name="level">A tuning knob to trade speed for effectiveness.</param>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,System.Boolean)">
+             <summary>
+               Create a <c>GZipStream</c> using the specified <c>CompressionMode</c>, and
+               explicitly specify whether the stream should be left open after Deflation
+               or Inflation.
+             </summary>
+            
+             <remarks>
+             <para>
+               This constructor allows the application to request that the captive stream
+               remain open after the deflation or inflation occurs.  By default, after
+               <c>Close()</c> is called on the stream, the captive stream is also
+               closed. In some cases this is not desired, for example if the stream is a
+               memory stream that will be re-read after compressed data has been written
+               to it.  Specify true for the <paramref name="leaveOpen"/> parameter to leave
+               the stream open.
+             </para>
+            
+             <para>
+               The <see cref="T:Ionic.Zlib.CompressionMode"/> (Compress or Decompress) also
+               establishes the "direction" of the stream.  A <c>GZipStream</c> with
+               <c>CompressionMode.Compress</c> works only through <c>Write()</c>.  A <c>GZipStream</c>
+               with <c>CompressionMode.Decompress</c> works only through <c>Read()</c>.
+             </para>
+            
+             <para>
+               The <c>GZipStream</c> will use the default compression level. If you want
+               to specify the compression level, see <see cref="M:Ionic.Zlib.GZipStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)"/>.
+             </para>
+            
+             <para>
+               See the other overloads of this constructor for example code.
+             </para>
+            
+             </remarks>
+            
+             <param name="stream">
+               The stream which will be read or written. This is called the "captive"
+               stream in other places in this documentation.
+             </param>
+            
+             <param name="mode">Indicates whether the GZipStream will compress or decompress.
+             </param>
+            
+             <param name="leaveOpen">
+               true if the application would like the base stream to remain open after
+               inflation/deflation.
+             </param>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)">
+             <summary>
+               Create a <c>GZipStream</c> using the specified <c>CompressionMode</c> and the
+               specified <c>CompressionLevel</c>, and explicitly specify whether the
+               stream should be left open after Deflation or Inflation.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               This constructor allows the application to request that the captive stream
+               remain open after the deflation or inflation occurs.  By default, after
+               <c>Close()</c> is called on the stream, the captive stream is also
+               closed. In some cases this is not desired, for example if the stream is a
+               memory stream that will be re-read after compressed data has been written
+               to it.  Specify true for the <paramref name="leaveOpen"/> parameter to
+               leave the stream open.
+             </para>
+            
+             <para>
+               As noted in the class documentation, the <c>CompressionMode</c> (Compress
+               or Decompress) also establishes the "direction" of the stream.  A
+               <c>GZipStream</c> with <c>CompressionMode.Compress</c> works only through
+               <c>Write()</c>.  A <c>GZipStream</c> with <c>CompressionMode.Decompress</c> works only
+               through <c>Read()</c>.
+             </para>
+            
+             </remarks>
+            
+             <example>
+               This example shows how to use a <c>GZipStream</c> to compress data.
+             <code>
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(outputFile))
+                 {
+                     using (Stream compressor = new GZipStream(raw, CompressionMode.Compress, CompressionLevel.BestCompression, true))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n;
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+             <code lang="VB">
+             Dim outputFile As String = (fileToCompress &amp; ".compressed")
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(outputFile)
+                 Using compressor As Stream = New GZipStream(raw, CompressionMode.Compress, CompressionLevel.BestCompression, True)
+                     Dim buffer As Byte() = New Byte(4096) {}
+                     Dim n As Integer = -1
+                     Do While (n &lt;&gt; 0)
+                         If (n &gt; 0) Then
+                             compressor.Write(buffer, 0, n)
+                         End If
+                         n = input.Read(buffer, 0, buffer.Length)
+                     Loop
+                 End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+             <param name="stream">The stream which will be read or written.</param>
+             <param name="mode">Indicates whether the GZipStream will compress or decompress.</param>
+             <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
+             <param name="level">A tuning knob to trade speed for effectiveness.</param>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.Dispose(System.Boolean)">
+            <summary>
+              Dispose the stream.
+            </summary>
+            <remarks>
+              <para>
+                This may or may not result in a <c>Close()</c> call on the captive
+                stream.  See the constructors that have a <c>leaveOpen</c> parameter
+                for more information.
+              </para>
+              <para>
+                This method may be invoked in two distinct scenarios.  If disposing
+                == true, the method has been called directly or indirectly by a
+                user's code, for example via the public Dispose() method. In this
+                case, both managed and unmanaged resources can be referenced and
+                disposed.  If disposing == false, the method has been called by the
+                runtime from inside the object finalizer and this method should not
+                reference other objects; in that case only unmanaged resources must
+                be referenced or disposed.
+              </para>
+            </remarks>
+            <param name="disposing">
+              indicates whether the Dispose method was invoked by user code.
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.Flush">
+            <summary>
+            Flush the stream.
+            </summary>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.Read(System.Byte[],System.Int32,System.Int32)">
+             <summary>
+               Read and decompress data from the source stream.
+             </summary>
+            
+             <remarks>
+               With a <c>GZipStream</c>, decompression is done through reading.
+             </remarks>
+            
+             <example>
+             <code>
+             byte[] working = new byte[WORKING_BUFFER_SIZE];
+             using (System.IO.Stream input = System.IO.File.OpenRead(_CompressedFile))
+             {
+                 using (Stream decompressor= new Ionic.Zlib.GZipStream(input, CompressionMode.Decompress, true))
+                 {
+                     using (var output = System.IO.File.Create(_DecompressedFile))
+                     {
+                         int n;
+                         while ((n= decompressor.Read(working, 0, working.Length)) !=0)
+                         {
+                             output.Write(working, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+             </example>
+             <param name="buffer">The buffer into which the decompressed data should be placed.</param>
+             <param name="offset">the offset within that data array to put the first byte read.</param>
+             <param name="count">the number of bytes to read.</param>
+             <returns>the number of bytes actually read</returns>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+              Calling this method always throws a <see cref="T:System.NotImplementedException"/>.
+            </summary>
+            <param name="offset">irrelevant; it will always throw!</param>
+            <param name="origin">irrelevant; it will always throw!</param>
+            <returns>irrelevant!</returns>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.SetLength(System.Int64)">
+            <summary>
+              Calling this method always throws a <see cref="T:System.NotImplementedException"/>.
+            </summary>
+            <param name="value">irrelevant; this method will always throw!</param>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.Write(System.Byte[],System.Int32,System.Int32)">
+             <summary>
+               Write data to the stream.
+             </summary>
+            
+             <remarks>
+             <para>
+               If you wish to use the <c>GZipStream</c> to compress data while writing,
+               you can create a <c>GZipStream</c> with <c>CompressionMode.Compress</c>, and a
+               writable output stream.  Then call <c>Write()</c> on that <c>GZipStream</c>,
+               providing uncompressed data as input.  The data sent to the output stream
+               will be the compressed form of the data written.
+             </para>
+            
+             <para>
+               A <c>GZipStream</c> can be used for <c>Read()</c> or <c>Write()</c>, but not
+               both. Writing implies compression.  Reading implies decompression.
+             </para>
+            
+             </remarks>
+             <param name="buffer">The buffer holding data to write to the stream.</param>
+             <param name="offset">the offset within that data array to find the first byte to write.</param>
+             <param name="count">the number of bytes to write.</param>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.CompressString(System.String)">
+             <summary>
+               Compress a string into a byte array using GZip.
+             </summary>
+            
+             <remarks>
+               Uncompress it with <see cref="M:Ionic.Zlib.GZipStream.UncompressString(System.Byte[])"/>.
+             </remarks>
+            
+             <seealso cref="M:Ionic.Zlib.GZipStream.UncompressString(System.Byte[])"/>
+             <seealso cref="M:Ionic.Zlib.GZipStream.CompressBuffer(System.Byte[])"/>
+            
+             <param name="s">
+               A string to compress. The string will first be encoded
+               using UTF8, then compressed.
+             </param>
+            
+             <returns>The string in compressed form</returns>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.CompressBuffer(System.Byte[])">
+             <summary>
+               Compress a byte array into a new byte array using GZip.
+             </summary>
+            
+             <remarks>
+               Uncompress it with <see cref="M:Ionic.Zlib.GZipStream.UncompressBuffer(System.Byte[])"/>.
+             </remarks>
+            
+             <seealso cref="M:Ionic.Zlib.GZipStream.CompressString(System.String)"/>
+             <seealso cref="M:Ionic.Zlib.GZipStream.UncompressBuffer(System.Byte[])"/>
+            
+             <param name="b">
+               A buffer to compress.
+             </param>
+            
+             <returns>The data in compressed form</returns>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.UncompressString(System.Byte[])">
+             <summary>
+               Uncompress a GZip'ed byte array into a single string.
+             </summary>
+            
+             <seealso cref="M:Ionic.Zlib.GZipStream.CompressString(System.String)"/>
+             <seealso cref="M:Ionic.Zlib.GZipStream.UncompressBuffer(System.Byte[])"/>
+            
+             <param name="compressed">
+               A buffer containing GZIP-compressed data.
+             </param>
+            
+             <returns>The uncompressed string</returns>
+        </member>
+        <member name="M:Ionic.Zlib.GZipStream.UncompressBuffer(System.Byte[])">
+             <summary>
+               Uncompress a GZip'ed byte array into a byte array.
+             </summary>
+            
+             <seealso cref="M:Ionic.Zlib.GZipStream.CompressBuffer(System.Byte[])"/>
+             <seealso cref="M:Ionic.Zlib.GZipStream.UncompressString(System.Byte[])"/>
+            
+             <param name="compressed">
+               A buffer containing data that has been compressed with GZip.
+             </param>
+            
+             <returns>The data in uncompressed form</returns>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.Comment">
+             <summary>
+               The comment on the GZIP stream.
+             </summary>
+            
+             <remarks>
+             <para>
+               The GZIP format allows for each file to optionally have an associated
+               comment stored with the file.  The comment is encoded with the ISO-8859-1
+               code page.  To include a comment in a GZIP stream you create, set this
+               property before calling <c>Write()</c> for the first time on the
+               <c>GZipStream</c>.
+             </para>
+            
+             <para>
+               When using <c>GZipStream</c> to decompress, you can retrieve this property
+               after the first call to <c>Read()</c>.  If no comment has been set in the
+               GZIP bytestream, the Comment property will return <c>null</c>
+               (<c>Nothing</c> in VB).
+             </para>
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.FileName">
+             <summary>
+               The FileName for the GZIP stream.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               The GZIP format optionally allows each file to have an associated
+               filename.  When compressing data (through <c>Write()</c>), set this
+               FileName before calling <c>Write()</c> the first time on the <c>GZipStream</c>.
+               The actual filename is encoded into the GZIP bytestream with the
+               ISO-8859-1 code page, according to RFC 1952. It is the application's
+               responsibility to insure that the FileName can be encoded and decoded
+               correctly with this code page.
+             </para>
+            
+             <para>
+               When decompressing (through <c>Read()</c>), you can retrieve this value
+               any time after the first <c>Read()</c>.  In the case where there was no filename
+               encoded into the GZIP bytestream, the property will return <c>null</c> (<c>Nothing</c>
+               in VB).
+             </para>
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.Crc32">
+            <summary>
+            The CRC on the GZIP stream.
+            </summary>
+            <remarks>
+            This is used for internal error checking. You probably don't need to look at this property.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.FlushMode">
+            <summary>
+            This property sets the flush behavior on the stream.
+            </summary>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.BufferSize">
+             <summary>
+               The size of the working buffer for the compression codec.
+             </summary>
+            
+             <remarks>
+             <para>
+               The working buffer is used for all stream operations.  The default size is
+               1024 bytes.  The minimum size is 128 bytes. You may get better performance
+               with a larger buffer.  Then again, you might not.  You would have to test
+               it.
+             </para>
+            
+             <para>
+               Set this before the first call to <c>Read()</c> or <c>Write()</c> on the
+               stream. If you try to set it afterwards, it will throw.
+             </para>
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.TotalIn">
+            <summary> Returns the total number of bytes input so far.</summary>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.TotalOut">
+            <summary> Returns the total number of bytes output so far.</summary>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.CanRead">
+            <summary>
+            Indicates whether the stream can be read.
+            </summary>
+            <remarks>
+            The return value depends on whether the captive stream supports reading.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.CanSeek">
+            <summary>
+            Indicates whether the stream supports Seek operations.
+            </summary>
+            <remarks>
+            Always returns false.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.CanWrite">
+            <summary>
+            Indicates whether the stream can be written.
+            </summary>
+            <remarks>
+            The return value depends on whether the captive stream supports writing.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.Length">
+            <summary>
+            Reading this property always throws a <see cref="T:System.NotImplementedException"/>.
+            </summary>
+        </member>
+        <member name="P:Ionic.Zlib.GZipStream.Position">
+             <summary>
+               The position of the stream pointer.
+             </summary>
+            
+             <remarks>
+               Setting this property always throws a <see cref="T:System.NotImplementedException"/>. Reading will return the total bytes
+               written out, if used in writing, or the total bytes read in, if used in
+               reading.  The count may refer to compressed bytes or uncompressed bytes,
+               depending on how you've used the stream.
+             </remarks>
+        </member>
+        <member name="T:Ionic.Encoding.Iso8859Dash1Encoding">
+            <summary>
+            Provides a text encoder for the iso-8859-1 encoding, aka Latin1 encoding,
+            for platforms that do not support it, for example on Silverlight or some
+            Compact Framework platforms.
+            </summary>
+        </member>
+        <member name="M:Ionic.Encoding.Iso8859Dash1Encoding.GetBytes(System.Char[],System.Int32,System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Encodes a set of characters from a character array into
+            a byte array.
+            </summary>
+            <returns>
+            The actual number of bytes written into <paramref name="bytes"/>.
+            </returns>
+            <param name="chars">The character array containing the set of characters to encode.
+            </param><param name="start">The index of the first character to encode.
+            </param><param name="count">The number of characters to encode.
+            </param><param name="bytes">The byte array to contain the resulting sequence of bytes.
+            </param><param name="byteIndex">The index at which to start writing the resulting sequence of bytes.
+            </param>
+        </member>
+        <member name="M:Ionic.Encoding.Iso8859Dash1Encoding.GetChars(System.Byte[],System.Int32,System.Int32,System.Char[],System.Int32)">
+            <summary>
+            Decodes a sequence of bytes from the specified byte array into the specified character array.
+            </summary>
+            <returns>
+            The actual number of characters written into <paramref name="chars"/>.
+            </returns>
+            <param name="bytes">The byte array containing the sequence of bytes to decode.
+            </param><param name="start">The index of the first byte to decode.
+            </param><param name="count">The number of bytes to decode.
+            </param><param name="chars">The character array to contain the resulting set of characters.
+            </param><param name="charIndex">The index at which to start writing the resulting set of characters.
+            </param>
+        </member>
+        <member name="M:Ionic.Encoding.Iso8859Dash1Encoding.GetByteCount(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Calculates the number of bytes produced by encoding a set of characters
+            from the specified character array.
+            </summary>
+            <returns>
+            The number of bytes produced by encoding the specified characters. This class
+            alwas returns the value of <paramref name="count"/>.
+            </returns>
+        </member>
+        <member name="M:Ionic.Encoding.Iso8859Dash1Encoding.GetCharCount(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Calculates the number of characters produced by decoding a sequence
+            of bytes from the specified byte array.
+            </summary>
+            <returns>
+            The number of characters produced by decoding the specified sequence of bytes. This class
+            alwas returns the value of <paramref name="count"/>.
+            </returns>
+        </member>
+        <member name="M:Ionic.Encoding.Iso8859Dash1Encoding.GetMaxByteCount(System.Int32)">
+            <summary>
+            Calculates the maximum number of bytes produced by encoding the specified number of characters.
+            </summary>
+            <returns>
+            The maximum number of bytes produced by encoding the specified number of characters. This
+            class alwas returns the value of <paramref name="charCount"/>.
+            </returns>
+            <param name="charCount">The number of characters to encode.
+            </param>
+        </member>
+        <member name="M:Ionic.Encoding.Iso8859Dash1Encoding.GetMaxCharCount(System.Int32)">
+            <summary>
+            Calculates the maximum number of characters produced by decoding the specified number of bytes.
+            </summary>
+            <returns>
+            The maximum number of characters produced by decoding the specified number of bytes. This class
+            alwas returns the value of <paramref name="byteCount"/>.
+            </returns>
+            <param name="byteCount">The number of bytes to decode.</param>
+        </member>
+        <member name="P:Ionic.Encoding.Iso8859Dash1Encoding.WebName">
+            <summary>
+            Gets the name registered with the
+            Internet Assigned Numbers Authority (IANA) for the current encoding.
+            </summary>
+            <returns>
+            Always returns "iso-8859-1".
+            </returns>
+        </member>
+        <member name="P:Ionic.Encoding.Iso8859Dash1Encoding.CharacterCount">
+            <summary>
+            Gets the number of characters that are supported by this encoding.
+            This property returns a maximum value of 256, as the encoding class
+            only supports single byte encodings (1 byte == 256 possible values).
+            </summary>
+        </member>
+        <member name="T:Ionic.Zlib.ParallelDeflateOutputStream">
+             <summary>
+               A class for compressing streams using the
+               Deflate algorithm with multiple threads.
+             </summary>
+            
+             <remarks>
+             <para>
+               This class performs DEFLATE compression through writing.  For
+               more information on the Deflate algorithm, see IETF RFC 1951,
+               "DEFLATE Compressed Data Format Specification version 1.3."
+             </para>
+            
+             <para>
+               This class is similar to <see cref="T:Ionic.Zlib.DeflateStream"/>, except
+               that this class is for compression only, and this implementation uses an
+               approach that employs multiple worker threads to perform the DEFLATE.  On
+               a multi-cpu or multi-core computer, the performance of this class can be
+               significantly higher than the single-threaded DeflateStream, particularly
+               for larger streams.  How large?  Anything over 10mb is a good candidate
+               for parallel compression.
+             </para>
+            
+             <para>
+               The tradeoff is that this class uses more memory and more CPU than the
+               vanilla DeflateStream, and also is less efficient as a compressor. For
+               large files the size of the compressed data stream can be less than 1%
+               larger than the size of a compressed data stream from the vanialla
+               DeflateStream.  For smaller files the difference can be larger.  The
+               difference will also be larger if you set the BufferSize to be lower than
+               the default value.  Your mileage may vary. Finally, for small files, the
+               ParallelDeflateOutputStream can be much slower than the vanilla
+               DeflateStream, because of the overhead associated to using the thread
+               pool.
+             </para>
+            
+             </remarks>
+             <seealso cref="T:Ionic.Zlib.DeflateStream"/>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream)">
+             <summary>
+             Create a ParallelDeflateOutputStream.
+             </summary>
+             <remarks>
+            
+             <para>
+               This stream compresses data written into it via the DEFLATE
+               algorithm (see RFC 1951), and writes out the compressed byte stream.
+             </para>
+            
+             <para>
+               The instance will use the default compression level, the default
+               buffer sizes and the default number of threads and buffers per
+               thread.
+             </para>
+            
+             <para>
+               This class is similar to <see cref="T:Ionic.Zlib.DeflateStream"/>,
+               except that this implementation uses an approach that employs
+               multiple worker threads to perform the DEFLATE.  On a multi-cpu or
+               multi-core computer, the performance of this class can be
+               significantly higher than the single-threaded DeflateStream,
+               particularly for larger streams.  How large?  Anything over 10mb is
+               a good candidate for parallel compression.
+             </para>
+            
+             </remarks>
+            
+             <example>
+            
+             This example shows how to use a ParallelDeflateOutputStream to compress
+             data.  It reads a file, compresses it, and writes the compressed data to
+             a second, output file.
+            
+             <code>
+             byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+             int n= -1;
+             String outputFile = fileToCompress + ".compressed";
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(outputFile))
+                 {
+                     using (Stream compressor = new ParallelDeflateOutputStream(raw))
+                     {
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+             <code lang="VB">
+             Dim buffer As Byte() = New Byte(4096) {}
+             Dim n As Integer = -1
+             Dim outputFile As String = (fileToCompress &amp; ".compressed")
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(outputFile)
+                     Using compressor As Stream = New ParallelDeflateOutputStream(raw)
+                         Do While (n &lt;&gt; 0)
+                             If (n &gt; 0) Then
+                                 compressor.Write(buffer, 0, n)
+                             End If
+                             n = input.Read(buffer, 0, buffer.Length)
+                         Loop
+                     End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+             <param name="stream">The stream to which compressed data will be written.</param>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionLevel)">
+            <summary>
+              Create a ParallelDeflateOutputStream using the specified CompressionLevel.
+            </summary>
+            <remarks>
+              See the <see cref="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream)"/>
+              constructor for example code.
+            </remarks>
+            <param name="stream">The stream to which compressed data will be written.</param>
+            <param name="level">A tuning knob to trade speed for effectiveness.</param>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream,System.Boolean)">
+            <summary>
+            Create a ParallelDeflateOutputStream and specify whether to leave the captive stream open
+            when the ParallelDeflateOutputStream is closed.
+            </summary>
+            <remarks>
+              See the <see cref="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream)"/>
+              constructor for example code.
+            </remarks>
+            <param name="stream">The stream to which compressed data will be written.</param>
+            <param name="leaveOpen">
+               true if the application would like the stream to remain open after inflation/deflation.
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionLevel,System.Boolean)">
+            <summary>
+            Create a ParallelDeflateOutputStream and specify whether to leave the captive stream open
+            when the ParallelDeflateOutputStream is closed.
+            </summary>
+            <remarks>
+              See the <see cref="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream)"/>
+              constructor for example code.
+            </remarks>
+            <param name="stream">The stream to which compressed data will be written.</param>
+            <param name="level">A tuning knob to trade speed for effectiveness.</param>
+            <param name="leaveOpen">
+               true if the application would like the stream to remain open after inflation/deflation.
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionLevel,Ionic.Zlib.CompressionStrategy,System.Boolean)">
+            <summary>
+            Create a ParallelDeflateOutputStream using the specified
+            CompressionLevel and CompressionStrategy, and specifying whether to
+            leave the captive stream open when the ParallelDeflateOutputStream is
+            closed.
+            </summary>
+            <remarks>
+              See the <see cref="M:Ionic.Zlib.ParallelDeflateOutputStream.#ctor(System.IO.Stream)"/>
+              constructor for example code.
+            </remarks>
+            <param name="stream">The stream to which compressed data will be written.</param>
+            <param name="level">A tuning knob to trade speed for effectiveness.</param>
+            <param name="strategy">
+              By tweaking this parameter, you may be able to optimize the compression for
+              data with particular characteristics.
+            </param>
+            <param name="leaveOpen">
+               true if the application would like the stream to remain open after inflation/deflation.
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.Write(System.Byte[],System.Int32,System.Int32)">
+             <summary>
+               Write data to the stream.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               To use the ParallelDeflateOutputStream to compress data, create a
+               ParallelDeflateOutputStream with CompressionMode.Compress, passing a
+               writable output stream.  Then call Write() on that
+               ParallelDeflateOutputStream, providing uncompressed data as input.  The
+               data sent to the output stream will be the compressed form of the data
+               written.
+             </para>
+            
+             <para>
+               To decompress data, use the <see cref="T:Ionic.Zlib.DeflateStream"/> class.
+             </para>
+            
+             </remarks>
+             <param name="buffer">The buffer holding data to write to the stream.</param>
+             <param name="offset">the offset within that data array to find the first byte to write.</param>
+             <param name="count">the number of bytes to write.</param>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.Flush">
+            <summary>
+            Flush the stream.
+            </summary>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.Close">
+            <summary>
+            Close the stream.
+            </summary>
+            <remarks>
+            You must call Close on the stream to guarantee that all of the data written in has
+            been compressed, and the compressed data has been written out.
+            </remarks>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.Dispose(System.Boolean)">
+            <summary>Dispose the object</summary>
+            <remarks>
+              <para>
+                Because ParallelDeflateOutputStream is IDisposable, the
+                application must call this method when finished using the instance.
+              </para>
+              <para>
+                This method is generally called implicitly upon exit from
+                a <c>using</c> scope in C# (<c>Using</c> in VB).
+              </para>
+            </remarks>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.Reset(System.IO.Stream)">
+             <summary>
+               Resets the stream for use with another stream.
+             </summary>
+             <remarks>
+               Because the ParallelDeflateOutputStream is expensive to create, it
+               has been designed so that it can be recycled and re-used.  You have
+               to call Close() on the stream first, then you can call Reset() on
+               it, to use it again on another stream.
+             </remarks>
+            
+             <param name="stream">
+               The new output stream for this era.
+             </param>
+            
+             <example>
+             <code>
+             ParallelDeflateOutputStream deflater = null;
+             foreach (var inputFile in listOfFiles)
+             {
+                 string outputFile = inputFile + ".compressed";
+                 using (System.IO.Stream input = System.IO.File.OpenRead(inputFile))
+                 {
+                     using (var outStream = System.IO.File.Create(outputFile))
+                     {
+                         if (deflater == null)
+                             deflater = new ParallelDeflateOutputStream(outStream,
+                                                                        CompressionLevel.Best,
+                                                                        CompressionStrategy.Default,
+                                                                        true);
+                         deflater.Reset(outStream);
+            
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             deflater.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+             </example>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            This method always throws a NotSupportedException.
+            </summary>
+            <param name="buffer">
+              The buffer into which data would be read, IF THIS METHOD
+              ACTUALLY DID ANYTHING.
+            </param>
+            <param name="offset">
+              The offset within that data array at which to insert the
+              data that is read, IF THIS METHOD ACTUALLY DID
+              ANYTHING.
+            </param>
+            <param name="count">
+              The number of bytes to write, IF THIS METHOD ACTUALLY DID
+              ANYTHING.
+            </param>
+            <returns>nothing.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            This method always throws a NotSupportedException.
+            </summary>
+            <param name="offset">
+              The offset to seek to....
+              IF THIS METHOD ACTUALLY DID ANYTHING.
+            </param>
+            <param name="origin">
+              The reference specifying how to apply the offset....  IF
+              THIS METHOD ACTUALLY DID ANYTHING.
+            </param>
+            <returns>nothing. It always throws.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ParallelDeflateOutputStream.SetLength(System.Int64)">
+            <summary>
+            This method always throws a NotSupportedException.
+            </summary>
+            <param name="value">
+              The new value for the stream length....  IF
+              THIS METHOD ACTUALLY DID ANYTHING.
+            </param>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.Strategy">
+             <summary>
+               The ZLIB strategy to be used during compression.
+             </summary>
+            
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.MaxBufferPairs">
+             <summary>
+               The maximum number of buffer pairs to use.
+             </summary>
+            
+             <remarks>
+             <para>
+               This property sets an upper limit on the number of memory buffer
+               pairs to create.  The implementation of this stream allocates
+               multiple buffers to facilitate parallel compression.  As each buffer
+               fills up, this stream uses <see cref="M:System.Threading.ThreadPool.QueueUserWorkItem(System.Threading.WaitCallback)">
+               ThreadPool.QueueUserWorkItem()</see>
+               to compress those buffers in a background threadpool thread. After a
+               buffer is compressed, it is re-ordered and written to the output
+               stream.
+             </para>
+            
+             <para>
+               A higher number of buffer pairs enables a higher degree of
+               parallelism, which tends to increase the speed of compression on
+               multi-cpu computers.  On the other hand, a higher number of buffer
+               pairs also implies a larger memory consumption, more active worker
+               threads, and a higher cpu utilization for any compression. This
+               property enables the application to limit its memory consumption and
+               CPU utilization behavior depending on requirements.
+             </para>
+            
+             <para>
+               For each compression "task" that occurs in parallel, there are 2
+               buffers allocated: one for input and one for output.  This property
+               sets a limit for the number of pairs.  The total amount of storage
+               space allocated for buffering will then be (N*S*2), where N is the
+               number of buffer pairs, S is the size of each buffer (<see cref="P:Ionic.Zlib.ParallelDeflateOutputStream.BufferSize"/>).  By default, DotNetZip allocates 4 buffer
+               pairs per CPU core, so if your machine has 4 cores, and you retain
+               the default buffer size of 128k, then the
+               ParallelDeflateOutputStream will use 4 * 4 * 2 * 128kb of buffer
+               memory in total, or 4mb, in blocks of 128kb.  If you then set this
+               property to 8, then the number will be 8 * 2 * 128kb of buffer
+               memory, or 2mb.
+             </para>
+            
+             <para>
+               CPU utilization will also go up with additional buffers, because a
+               larger number of buffer pairs allows a larger number of background
+               threads to compress in parallel. If you find that parallel
+               compression is consuming too much memory or CPU, you can adjust this
+               value downward.
+             </para>
+            
+             <para>
+               The default value is 16. Different values may deliver better or
+               worse results, depending on your priorities and the dynamic
+               performance characteristics of your storage and compute resources.
+             </para>
+            
+             <para>
+               This property is not the number of buffer pairs to use; it is an
+               upper limit. An illustration: Suppose you have an application that
+               uses the default value of this property (which is 16), and it runs
+               on a machine with 2 CPU cores. In that case, DotNetZip will allocate
+               4 buffer pairs per CPU core, for a total of 8 pairs.  The upper
+               limit specified by this property has no effect.
+             </para>
+            
+             <para>
+               The application can set this value at any time, but it is effective
+               only before the first call to Write(), which is when the buffers are
+               allocated.
+             </para>
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.BufferSize">
+             <summary>
+               The size of the buffers used by the compressor threads.
+             </summary>
+             <remarks>
+            
+             <para>
+               The default buffer size is 128k. The application can set this value
+               at any time, but it is effective only before the first Write().
+             </para>
+            
+             <para>
+               Larger buffer sizes implies larger memory consumption but allows
+               more efficient compression. Using smaller buffer sizes consumes less
+               memory but may result in less effective compression.  For example,
+               using the default buffer size of 128k, the compression delivered is
+               within 1% of the compression delivered by the single-threaded <see cref="T:Ionic.Zlib.DeflateStream"/>.  On the other hand, using a
+               BufferSize of 8k can result in a compressed data stream that is 5%
+               larger than that delivered by the single-threaded
+               <c>DeflateStream</c>.  Excessively small buffer sizes can also cause
+               the speed of the ParallelDeflateOutputStream to drop, because of
+               larger thread scheduling overhead dealing with many many small
+               buffers.
+             </para>
+            
+             <para>
+               The total amount of storage space allocated for buffering will be
+               (N*S*2), where N is the number of buffer pairs, and S is the size of
+               each buffer (this property). There are 2 buffers used by the
+               compressor, one for input and one for output.  By default, DotNetZip
+               allocates 4 buffer pairs per CPU core, so if your machine has 4
+               cores, then the number of buffer pairs used will be 16. If you
+               accept the default value of this property, 128k, then the
+               ParallelDeflateOutputStream will use 16 * 2 * 128kb of buffer memory
+               in total, or 4mb, in blocks of 128kb.  If you set this property to
+               64kb, then the number will be 16 * 2 * 64kb of buffer memory, or
+               2mb.
+             </para>
+            
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.Crc32">
+            <summary>
+            The CRC32 for the data that was written out, prior to compression.
+            </summary>
+            <remarks>
+            This value is meaningful only after a call to Close().
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.BytesProcessed">
+            <summary>
+            The total number of uncompressed bytes processed by the ParallelDeflateOutputStream.
+            </summary>
+            <remarks>
+            This value is meaningful only after a call to Close().
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.CanSeek">
+            <summary>
+            Indicates whether the stream supports Seek operations.
+            </summary>
+            <remarks>
+            Always returns false.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.CanRead">
+            <summary>
+            Indicates whether the stream supports Read operations.
+            </summary>
+            <remarks>
+            Always returns false.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.CanWrite">
+            <summary>
+            Indicates whether the stream supports Write operations.
+            </summary>
+            <remarks>
+            Returns true if the provided stream is writable.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.Length">
+            <summary>
+            Reading this property always throws a NotSupportedException.
+            </summary>
+        </member>
+        <member name="P:Ionic.Zlib.ParallelDeflateOutputStream.Position">
+            <summary>
+            Returns the current position of the output stream.
+            </summary>
+            <remarks>
+              <para>
+                Because the output gets written by a background thread,
+                the value may change asynchronously.  Setting this
+                property always throws a NotSupportedException.
+              </para>
+            </remarks>
+        </member>
+        <member name="F:System.IO.Path2.DirectorySeparatorChar">
+            <summary>Provides a platform-specific character used to separate directory levels in a path string that reflects a hierarchical file system organization.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:System.IO.Path2.AltDirectorySeparatorChar">
+            <summary>Provides a platform-specific alternate character used to separate directory levels in a path string that reflects a hierarchical file system organization.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:System.IO.Path2.VolumeSeparatorChar">
+            <summary>Provides a platform-specific volume separator character.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:System.IO.Path2.InvalidPathChars">
+            <summary>Provides a platform-specific array of characters that cannot be specified in path string arguments passed to members of the <see cref="T:System.IO.Path" /> class.</summary>
+            <returns>A character array of invalid path characters for the current platform.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:System.IO.Path2.PathSeparator">
+            <summary>A platform-specific separator character used to separate path strings in environment variables.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:Ionic.Zlib.Tree.DistanceCode(System.Int32)">
+            <summary>
+            Map from a distance to a distance code.
+            </summary>
+            <remarks> 
+            No side effects. _dist_code[256] and _dist_code[257] are never used.
+            </remarks>
+        </member>
+        <member name="T:Ionic.Zlib.FlushType">
+            <summary>
+            Describes how to flush the current deflate operation.
+            </summary>
+            <remarks>
+            The different FlushType values are useful when using a Deflate in a streaming application.
+            </remarks>
+        </member>
+        <member name="F:Ionic.Zlib.FlushType.None">
+            <summary>No flush at all.</summary>
+        </member>
+        <member name="F:Ionic.Zlib.FlushType.Partial">
+            <summary>Closes the current block, but doesn't flush it to
+            the output. Used internally only in hypothetical
+            scenarios.  This was supposed to be removed by Zlib, but it is
+            still in use in some edge cases.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.FlushType.Sync">
+            <summary>
+            Use this during compression to specify that all pending output should be
+            flushed to the output buffer and the output should be aligned on a byte
+            boundary.  You might use this in a streaming communication scenario, so that
+            the decompressor can get all input data available so far.  When using this
+            with a ZlibCodec, <c>AvailableBytesIn</c> will be zero after the call if
+            enough output space has been provided before the call.  Flushing will
+            degrade compression and so it should be used only when necessary.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.FlushType.Full">
+            <summary>
+            Use this during compression to specify that all output should be flushed, as
+            with <c>FlushType.Sync</c>, but also, the compression state should be reset
+            so that decompression can restart from this point if previous compressed
+            data has been damaged or if random access is desired.  Using
+            <c>FlushType.Full</c> too often can significantly degrade the compression.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.FlushType.Finish">
+            <summary>Signals the end of the compression/decompression stream.</summary>
+        </member>
+        <member name="T:Ionic.Zlib.CompressionLevel">
+            <summary>
+            The compression level to be used when using a DeflateStream or ZlibStream with CompressionMode.Compress.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.None">
+            <summary>
+            None means that the data will be simply stored, with no change at all.
+            If you are producing ZIPs for use on Mac OSX, be aware that archives produced with CompressionLevel.None
+            cannot be opened with the default zip reader. Use a different CompressionLevel.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level0">
+            <summary>
+            Same as None.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.BestSpeed">
+            <summary>
+            The fastest but least effective compression.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level1">
+            <summary>
+            A synonym for BestSpeed.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level2">
+            <summary>
+            A little slower, but better, than level 1.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level3">
+            <summary>
+            A little slower, but better, than level 2.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level4">
+            <summary>
+            A little slower, but better, than level 3.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level5">
+            <summary>
+            A little slower than level 4, but with better compression.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Default">
+            <summary>
+            The default compression level, with a good balance of speed and compression efficiency.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level6">
+            <summary>
+            A synonym for Default.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level7">
+            <summary>
+            Pretty good compression!
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level8">
+            <summary>
+             Better compression than Level7!
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.BestCompression">
+            <summary>
+            The "best" compression, where best means greatest reduction in size of the input data stream.
+            This is also the slowest compression.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionLevel.Level9">
+            <summary>
+            A synonym for BestCompression.
+            </summary>
+        </member>
+        <member name="T:Ionic.Zlib.CompressionStrategy">
+            <summary>
+            Describes options for how the compression algorithm is executed.  Different strategies
+            work better on different sorts of data.  The strategy parameter can affect the compression
+            ratio and the speed of compression but not the correctness of the compresssion.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionStrategy.Default">
+            <summary>
+            The default strategy is probably the best for normal data.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionStrategy.Filtered">
+            <summary>
+            The <c>Filtered</c> strategy is intended to be used most effectively with data produced by a
+            filter or predictor.  By this definition, filtered data consists mostly of small
+            values with a somewhat random distribution.  In this case, the compression algorithm
+            is tuned to compress them better.  The effect of <c>Filtered</c> is to force more Huffman
+            coding and less string matching; it is a half-step between <c>Default</c> and <c>HuffmanOnly</c>.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionStrategy.HuffmanOnly">
+            <summary>
+            Using <c>HuffmanOnly</c> will force the compressor to do Huffman encoding only, with no
+            string matching.
+            </summary>
+        </member>
+        <member name="T:Ionic.Zlib.CompressionMode">
+            <summary>
+            An enum to specify the direction of transcoding - whether to compress or decompress.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionMode.Compress">
+            <summary>
+            Used to specify that the stream should compress the data.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.CompressionMode.Decompress">
+            <summary>
+            Used to specify that the stream should decompress the data.
+            </summary>
+        </member>
+        <member name="T:Ionic.Zlib.ZlibException">
+            <summary>
+            A general purpose exception class for exceptions in the Zlib library.
+            </summary>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibException.#ctor">
+            <summary>
+            The ZlibException class captures exception information generated
+            by the Zlib library.
+            </summary>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibException.#ctor(System.String)">
+            <summary>
+            This ctor collects a message attached to the exception.
+            </summary>
+            <param name="s">the message for the exception.</param>
+        </member>
+        <member name="M:Ionic.Zlib.SharedUtils.URShift(System.Int32,System.Int32)">
+            <summary>
+            Performs an unsigned bitwise right shift with the specified number
+            </summary>
+            <param name="number">Number to operate on</param>
+            <param name="bits">Ammount of bits to shift</param>
+            <returns>The resulting number from the shift operation</returns>
+        </member>
+        <member name="M:Ionic.Zlib.SharedUtils.ReadInput(System.IO.TextReader,System.Byte[],System.Int32,System.Int32)">
+             <summary>
+               Reads a number of characters from the current source TextReader and writes
+               the data to the target array at the specified index.
+             </summary>
+            
+             <param name="sourceTextReader">The source TextReader to read from</param>
+             <param name="target">Contains the array of characteres read from the source TextReader.</param>
+             <param name="start">The starting index of the target array.</param>
+             <param name="count">The maximum number of characters to read from the source TextReader.</param>
+            
+             <returns>
+               The number of characters read. The number will be less than or equal to
+               count depending on the data available in the source TextReader. Returns -1
+               if the end of the stream is reached.
+             </returns>
+        </member>
+        <member name="T:Ionic.Zlib.Adler">
+             <summary>
+             Computes an Adler-32 checksum.
+             </summary>
+             <remarks>
+             The Adler checksum is similar to a CRC checksum, but faster to compute, though less
+             reliable.  It is used in producing RFC1950 compressed streams.  The Adler checksum
+             is a required part of the "ZLIB" standard.  Applications will almost never need to
+             use this class directly.
+             </remarks>
+            
+             <exclude/>
+        </member>
+        <member name="M:Ionic.Zlib.Adler.Adler32(System.UInt32,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+              Calculates the Adler32 checksum.
+            </summary>
+            <remarks>
+              <para>
+                This is used within ZLIB.  You probably don't need to use this directly.
+              </para>
+            </remarks>
+            <example>
+               To compute an Adler32 checksum on a byte array:
+             <code>
+               var adler = Adler.Adler32(0, null, 0, 0);
+               adler = Adler.Adler32(adler, buffer, index, length);
+             </code>
+            </example>
+        </member>
+        <member name="T:Ionic.Zlib.ZlibCodec">
+             <summary>
+             Encoder and Decoder for ZLIB and DEFLATE (IETF RFC1950 and RFC1951).
+             </summary>
+            
+             <remarks>
+             This class compresses and decompresses data according to the Deflate algorithm
+             and optionally, the ZLIB format, as documented in <see
+             href="http://www.ietf.org/rfc/rfc1950.txt">RFC 1950 - ZLIB</see> and <see
+             href="http://www.ietf.org/rfc/rfc1951.txt">RFC 1951 - DEFLATE</see>.
+             </remarks>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.InputBuffer">
+            <summary>
+            The buffer from which data is taken.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.NextIn">
+            <summary>
+            An index into the InputBuffer array, indicating where to start reading. 
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.AvailableBytesIn">
+            <summary>
+            The number of bytes available in the InputBuffer, starting at NextIn. 
+            </summary>
+            <remarks>
+            Generally you should set this to InputBuffer.Length before the first Inflate() or Deflate() call. 
+            The class will update this number as calls to Inflate/Deflate are made.
+            </remarks>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.TotalBytesIn">
+            <summary>
+            Total number of bytes read so far, through all calls to Inflate()/Deflate().
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.OutputBuffer">
+            <summary>
+            Buffer to store output data.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.NextOut">
+            <summary>
+            An index into the OutputBuffer array, indicating where to start writing. 
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.AvailableBytesOut">
+            <summary>
+            The number of bytes available in the OutputBuffer, starting at NextOut. 
+            </summary>
+            <remarks>
+            Generally you should set this to OutputBuffer.Length before the first Inflate() or Deflate() call. 
+            The class will update this number as calls to Inflate/Deflate are made.
+            </remarks>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.TotalBytesOut">
+            <summary>
+            Total number of bytes written to the output so far, through all calls to Inflate()/Deflate().
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.Message">
+            <summary>
+            used for diagnostics, when something goes wrong!
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.CompressLevel">
+            <summary>
+            The compression level to use in this codec.  Useful only in compression mode.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.WindowBits">
+            <summary>
+            The number of Window Bits to use.  
+            </summary>
+            <remarks>
+            This gauges the size of the sliding window, and hence the 
+            compression effectiveness as well as memory consumption. It's best to just leave this 
+            setting alone if you don't know what it is.  The maximum value is 15 bits, which implies
+            a 32k window.  
+            </remarks>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibCodec.Strategy">
+            <summary>
+            The compression strategy to use.
+            </summary>
+            <remarks>
+            This is only effective in compression.  The theory offered by ZLIB is that different
+            strategies could potentially produce significant differences in compression behavior
+            for different data sets.  Unfortunately I don't have any good recommendations for how
+            to set it differently.  When I tested changing the strategy I got minimally different
+            compression performance. It's best to leave this property alone if you don't have a
+            good feel for it.  Or, you may want to produce a test harness that runs through the
+            different strategy options and evaluates them on different file types. If you do that,
+            let me know your results.
+            </remarks>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.#ctor">
+            <summary>
+            Create a ZlibCodec.
+            </summary>
+            <remarks>
+            If you use this default constructor, you will later have to explicitly call 
+            InitializeInflate() or InitializeDeflate() before using the ZlibCodec to compress 
+            or decompress. 
+            </remarks>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.#ctor(Ionic.Zlib.CompressionMode)">
+            <summary>
+            Create a ZlibCodec that either compresses or decompresses.
+            </summary>
+            <param name="mode">
+            Indicates whether the codec should compress (deflate) or decompress (inflate).
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeInflate">
+            <summary>
+            Initialize the inflation state. 
+            </summary>
+            <remarks>
+            It is not necessary to call this before using the ZlibCodec to inflate data; 
+            It is implicitly called when you call the constructor.
+            </remarks>
+            <returns>Z_OK if everything goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeInflate(System.Boolean)">
+             <summary>
+             Initialize the inflation state with an explicit flag to
+             govern the handling of RFC1950 header bytes.
+             </summary>
+            
+             <remarks>
+             By default, the ZLIB header defined in <see
+             href="http://www.ietf.org/rfc/rfc1950.txt">RFC 1950</see> is expected.  If
+             you want to read a zlib stream you should specify true for
+             expectRfc1950Header.  If you have a deflate stream, you will want to specify
+             false. It is only necessary to invoke this initializer explicitly if you
+             want to specify false.
+             </remarks>
+            
+             <param name="expectRfc1950Header">whether to expect an RFC1950 header byte
+             pair when reading the stream of data to be inflated.</param>
+            
+             <returns>Z_OK if everything goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeInflate(System.Int32)">
+            <summary>
+            Initialize the ZlibCodec for inflation, with the specified number of window bits. 
+            </summary>
+            <param name="windowBits">The number of window bits to use. If you need to ask what that is, 
+            then you shouldn't be calling this initializer.</param>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeInflate(System.Int32,System.Boolean)">
+             <summary>
+             Initialize the inflation state with an explicit flag to govern the handling of
+             RFC1950 header bytes. 
+             </summary>
+            
+             <remarks>
+             If you want to read a zlib stream you should specify true for
+             expectRfc1950Header. In this case, the library will expect to find a ZLIB
+             header, as defined in <see href="http://www.ietf.org/rfc/rfc1950.txt">RFC
+             1950</see>, in the compressed stream.  If you will be reading a DEFLATE or
+             GZIP stream, which does not have such a header, you will want to specify
+             false.
+             </remarks>
+            
+             <param name="expectRfc1950Header">whether to expect an RFC1950 header byte pair when reading 
+             the stream of data to be inflated.</param>
+             <param name="windowBits">The number of window bits to use. If you need to ask what that is, 
+             then you shouldn't be calling this initializer.</param>
+             <returns>Z_OK if everything goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.Inflate(Ionic.Zlib.FlushType)">
+             <summary>
+             Inflate the data in the InputBuffer, placing the result in the OutputBuffer.
+             </summary>
+             <remarks>
+             You must have set InputBuffer and OutputBuffer, NextIn and NextOut, and AvailableBytesIn and 
+             AvailableBytesOut  before calling this method.
+             </remarks>
+             <example>
+             <code>
+             private void InflateBuffer()
+             {
+                 int bufferSize = 1024;
+                 byte[] buffer = new byte[bufferSize];
+                 ZlibCodec decompressor = new ZlibCodec();
+             
+                 Console.WriteLine("\n============================================");
+                 Console.WriteLine("Size of Buffer to Inflate: {0} bytes.", CompressedBytes.Length);
+                 MemoryStream ms = new MemoryStream(DecompressedBytes);
+             
+                 int rc = decompressor.InitializeInflate();
+             
+                 decompressor.InputBuffer = CompressedBytes;
+                 decompressor.NextIn = 0;
+                 decompressor.AvailableBytesIn = CompressedBytes.Length;
+             
+                 decompressor.OutputBuffer = buffer;
+             
+                 // pass 1: inflate 
+                 do
+                 {
+                     decompressor.NextOut = 0;
+                     decompressor.AvailableBytesOut = buffer.Length;
+                     rc = decompressor.Inflate(FlushType.None);
+             
+                     if (rc != ZlibConstants.Z_OK &amp;&amp; rc != ZlibConstants.Z_STREAM_END)
+                         throw new Exception("inflating: " + decompressor.Message);
+             
+                     ms.Write(decompressor.OutputBuffer, 0, buffer.Length - decompressor.AvailableBytesOut);
+                 }
+                 while (decompressor.AvailableBytesIn &gt; 0 || decompressor.AvailableBytesOut == 0);
+             
+                 // pass 2: finish and flush
+                 do
+                 {
+                     decompressor.NextOut = 0;
+                     decompressor.AvailableBytesOut = buffer.Length;
+                     rc = decompressor.Inflate(FlushType.Finish);
+             
+                     if (rc != ZlibConstants.Z_STREAM_END &amp;&amp; rc != ZlibConstants.Z_OK)
+                         throw new Exception("inflating: " + decompressor.Message);
+             
+                     if (buffer.Length - decompressor.AvailableBytesOut &gt; 0)
+                         ms.Write(buffer, 0, buffer.Length - decompressor.AvailableBytesOut);
+                 }
+                 while (decompressor.AvailableBytesIn &gt; 0 || decompressor.AvailableBytesOut == 0);
+             
+                 decompressor.EndInflate();
+             }
+            
+             </code>
+             </example>
+             <param name="flush">The flush to use when inflating.</param>
+             <returns>Z_OK if everything goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.EndInflate">
+            <summary>
+            Ends an inflation session. 
+            </summary>
+            <remarks>
+            Call this after successively calling Inflate().  This will cause all buffers to be flushed. 
+            After calling this you cannot call Inflate() without a intervening call to one of the
+            InitializeInflate() overloads.
+            </remarks>
+            <returns>Z_OK if everything goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.SyncInflate">
+            <summary>
+            I don't know what this does!
+            </summary>
+            <returns>Z_OK if everything goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeDeflate">
+            <summary>
+            Initialize the ZlibCodec for deflation operation.
+            </summary>
+            <remarks>
+            The codec will use the MAX window bits and the default level of compression.
+            </remarks>
+            <example>
+            <code>
+             int bufferSize = 40000;
+             byte[] CompressedBytes = new byte[bufferSize];
+             byte[] DecompressedBytes = new byte[bufferSize];
+             
+             ZlibCodec compressor = new ZlibCodec();
+             
+             compressor.InitializeDeflate(CompressionLevel.Default);
+             
+             compressor.InputBuffer = System.Text.ASCIIEncoding.ASCII.GetBytes(TextToCompress);
+             compressor.NextIn = 0;
+             compressor.AvailableBytesIn = compressor.InputBuffer.Length;
+             
+             compressor.OutputBuffer = CompressedBytes;
+             compressor.NextOut = 0;
+             compressor.AvailableBytesOut = CompressedBytes.Length;
+             
+             while (compressor.TotalBytesIn != TextToCompress.Length &amp;&amp; compressor.TotalBytesOut &lt; bufferSize)
+             {
+               compressor.Deflate(FlushType.None);
+             }
+             
+             while (true)
+             {
+               int rc= compressor.Deflate(FlushType.Finish);
+               if (rc == ZlibConstants.Z_STREAM_END) break;
+             }
+             
+             compressor.EndDeflate();
+              
+            </code>
+            </example>
+            <returns>Z_OK if all goes well. You generally don't need to check the return code.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeDeflate(Ionic.Zlib.CompressionLevel)">
+            <summary>
+            Initialize the ZlibCodec for deflation operation, using the specified CompressionLevel.
+            </summary>
+            <remarks>
+            The codec will use the maximum window bits (15) and the specified
+            CompressionLevel.  It will emit a ZLIB stream as it compresses.
+            </remarks>
+            <param name="level">The compression level for the codec.</param>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeDeflate(Ionic.Zlib.CompressionLevel,System.Boolean)">
+            <summary>
+            Initialize the ZlibCodec for deflation operation, using the specified CompressionLevel, 
+            and the explicit flag governing whether to emit an RFC1950 header byte pair.
+            </summary>
+            <remarks>
+            The codec will use the maximum window bits (15) and the specified CompressionLevel.
+            If you want to generate a zlib stream, you should specify true for
+            wantRfc1950Header. In this case, the library will emit a ZLIB
+            header, as defined in <see href="http://www.ietf.org/rfc/rfc1950.txt">RFC
+            1950</see>, in the compressed stream.  
+            </remarks>
+            <param name="level">The compression level for the codec.</param>
+            <param name="wantRfc1950Header">whether to emit an initial RFC1950 byte pair in the compressed stream.</param>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeDeflate(Ionic.Zlib.CompressionLevel,System.Int32)">
+            <summary>
+            Initialize the ZlibCodec for deflation operation, using the specified CompressionLevel, 
+            and the specified number of window bits. 
+            </summary>
+            <remarks>
+            The codec will use the specified number of window bits and the specified CompressionLevel.
+            </remarks>
+            <param name="level">The compression level for the codec.</param>
+            <param name="bits">the number of window bits to use.  If you don't know what this means, don't use this method.</param>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.InitializeDeflate(Ionic.Zlib.CompressionLevel,System.Int32,System.Boolean)">
+             <summary>
+             Initialize the ZlibCodec for deflation operation, using the specified
+             CompressionLevel, the specified number of window bits, and the explicit flag
+             governing whether to emit an RFC1950 header byte pair.
+             </summary>
+            
+             <param name="level">The compression level for the codec.</param>
+             <param name="wantRfc1950Header">whether to emit an initial RFC1950 byte pair in the compressed stream.</param>
+             <param name="bits">the number of window bits to use.  If you don't know what this means, don't use this method.</param>
+             <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.Deflate(Ionic.Zlib.FlushType)">
+            <summary>
+            Deflate one batch of data.
+            </summary>
+            <remarks>
+            You must have set InputBuffer and OutputBuffer before calling this method.
+            </remarks>
+            <example>
+            <code>
+            private void DeflateBuffer(CompressionLevel level)
+            {
+                int bufferSize = 1024;
+                byte[] buffer = new byte[bufferSize];
+                ZlibCodec compressor = new ZlibCodec();
+            
+                Console.WriteLine("\n============================================");
+                Console.WriteLine("Size of Buffer to Deflate: {0} bytes.", UncompressedBytes.Length);
+                MemoryStream ms = new MemoryStream();
+            
+                int rc = compressor.InitializeDeflate(level);
+            
+                compressor.InputBuffer = UncompressedBytes;
+                compressor.NextIn = 0;
+                compressor.AvailableBytesIn = UncompressedBytes.Length;
+            
+                compressor.OutputBuffer = buffer;
+            
+                // pass 1: deflate 
+                do
+                {
+                    compressor.NextOut = 0;
+                    compressor.AvailableBytesOut = buffer.Length;
+                    rc = compressor.Deflate(FlushType.None);
+            
+                    if (rc != ZlibConstants.Z_OK &amp;&amp; rc != ZlibConstants.Z_STREAM_END)
+                        throw new Exception("deflating: " + compressor.Message);
+            
+                    ms.Write(compressor.OutputBuffer, 0, buffer.Length - compressor.AvailableBytesOut);
+                }
+                while (compressor.AvailableBytesIn &gt; 0 || compressor.AvailableBytesOut == 0);
+            
+                // pass 2: finish and flush
+                do
+                {
+                    compressor.NextOut = 0;
+                    compressor.AvailableBytesOut = buffer.Length;
+                    rc = compressor.Deflate(FlushType.Finish);
+            
+                    if (rc != ZlibConstants.Z_STREAM_END &amp;&amp; rc != ZlibConstants.Z_OK)
+                        throw new Exception("deflating: " + compressor.Message);
+            
+                    if (buffer.Length - compressor.AvailableBytesOut &gt; 0)
+                        ms.Write(buffer, 0, buffer.Length - compressor.AvailableBytesOut);
+                }
+                while (compressor.AvailableBytesIn &gt; 0 || compressor.AvailableBytesOut == 0);
+            
+                compressor.EndDeflate();
+            
+                ms.Seek(0, SeekOrigin.Begin);
+                CompressedBytes = new byte[compressor.TotalBytesOut];
+                ms.Read(CompressedBytes, 0, CompressedBytes.Length);
+            }
+            </code>
+            </example>
+            <param name="flush">whether to flush all data as you deflate. Generally you will want to 
+            use Z_NO_FLUSH here, in a series of calls to Deflate(), and then call EndDeflate() to 
+            flush everything. 
+            </param>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.EndDeflate">
+            <summary>
+            End a deflation session.
+            </summary>
+            <remarks>
+            Call this after making a series of one or more calls to Deflate(). All buffers are flushed.
+            </remarks>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.ResetDeflate">
+            <summary>
+            Reset a codec for another deflation session.
+            </summary>
+            <remarks>
+            Call this to reset the deflation state.  For example if a thread is deflating
+            non-consecutive blocks, you can call Reset() after the Deflate(Sync) of the first
+            block and before the next Deflate(None) of the second block.
+            </remarks>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.SetDeflateParams(Ionic.Zlib.CompressionLevel,Ionic.Zlib.CompressionStrategy)">
+            <summary>
+            Set the CompressionStrategy and CompressionLevel for a deflation session.
+            </summary>
+            <param name="level">the level of compression to use.</param>
+            <param name="strategy">the strategy to use for compression.</param>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibCodec.SetDictionary(System.Byte[])">
+            <summary>
+            Set the dictionary to be used for either Inflation or Deflation.
+            </summary>
+            <param name="dictionary">The dictionary bytes to use.</param>
+            <returns>Z_OK if all goes well.</returns>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibCodec.Adler32">
+            <summary>
+            The Adler32 checksum on the data transferred through the codec so far. You probably don't need to look at this.
+            </summary>
+        </member>
+        <member name="T:Ionic.Zlib.ZlibConstants">
+            <summary>
+            A bunch of constants used in the Zlib interface.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.WindowBitsMax">
+            <summary>
+            The maximum number of window bits for the Deflate algorithm.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.WindowBitsDefault">
+            <summary>
+            The default number of window bits for the Deflate algorithm.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.Z_OK">
+            <summary>
+            indicates everything is A-OK
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.Z_STREAM_END">
+            <summary>
+            Indicates that the last operation reached the end of the stream.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.Z_NEED_DICT">
+            <summary>
+            The operation ended in need of a dictionary. 
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.Z_STREAM_ERROR">
+            <summary>
+            There was an error with the stream - not enough data, not open and readable, etc.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.Z_DATA_ERROR">
+            <summary>
+            There was an error with the data - not enough data, bad data, etc.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.Z_BUF_ERROR">
+            <summary>
+            There was an error with the working buffer.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.WorkingBufferSizeDefault">
+            <summary>
+            The size of the working buffer used in the ZlibCodec class. Defaults to 8192 bytes.
+            </summary>
+        </member>
+        <member name="F:Ionic.Zlib.ZlibConstants.WorkingBufferSizeMin">
+            <summary>
+            The minimum size of the working buffer used in the ZlibCodec class.  Currently it is 128 bytes.
+            </summary>
+        </member>
+        <member name="T:Ionic.Zlib.ZlibStream">
+             <summary>
+             Represents a Zlib stream for compression or decompression.
+             </summary>
+             <remarks>
+            
+             <para>
+             The ZlibStream is a <see href="http://en.wikipedia.org/wiki/Decorator_pattern">Decorator</see> on a <see cref="T:System.IO.Stream"/>.  It adds ZLIB compression or decompression to any
+             stream.
+             </para>
+            
+             <para> Using this stream, applications can compress or decompress data via
+             stream <c>Read()</c> and <c>Write()</c> operations.  Either compresssion or
+             decompression can occur through either reading or writing. The compression
+             format used is ZLIB, which is documented in <see href="http://www.ietf.org/rfc/rfc1950.txt">IETF RFC 1950</see>, "ZLIB Compressed
+             Data Format Specification version 3.3". This implementation of ZLIB always uses
+             DEFLATE as the compression method.  (see <see href="http://www.ietf.org/rfc/rfc1951.txt">IETF RFC 1951</see>, "DEFLATE
+             Compressed Data Format Specification version 1.3.") </para>
+            
+             <para>
+             The ZLIB format allows for varying compression methods, window sizes, and dictionaries.
+             This implementation always uses the DEFLATE compression method, a preset dictionary,
+             and 15 window bits by default.
+             </para>
+            
+             <para>
+             This class is similar to <see cref="T:Ionic.Zlib.DeflateStream"/>, except that it adds the
+             RFC1950 header and trailer bytes to a compressed stream when compressing, or expects
+             the RFC1950 header and trailer bytes when decompressing.  It is also similar to the
+             <see cref="T:Ionic.Zlib.GZipStream"/>.
+             </para>
+             </remarks>
+             <seealso cref="T:Ionic.Zlib.DeflateStream"/>
+             <seealso cref="T:Ionic.Zlib.GZipStream"/>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode)">
+             <summary>
+             Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c>.
+             </summary>
+             <remarks>
+            
+             <para>
+               When mode is <c>CompressionMode.Compress</c>, the <c>ZlibStream</c>
+               will use the default compression level. The "captive" stream will be
+               closed when the <c>ZlibStream</c> is closed.
+             </para>
+            
+             </remarks>
+            
+             <example>
+             This example uses a <c>ZlibStream</c> to compress a file, and writes the
+             compressed data to another file.
+             <code>
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(fileToCompress + ".zlib"))
+                 {
+                     using (Stream compressor = new ZlibStream(raw, CompressionMode.Compress))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n;
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+             <code lang="VB">
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(fileToCompress &amp; ".zlib")
+                 Using compressor As Stream = New ZlibStream(raw, CompressionMode.Compress)
+                     Dim buffer As Byte() = New Byte(4096) {}
+                     Dim n As Integer = -1
+                     Do While (n &lt;&gt; 0)
+                         If (n &gt; 0) Then
+                             compressor.Write(buffer, 0, n)
+                         End If
+                         n = input.Read(buffer, 0, buffer.Length)
+                     Loop
+                 End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+            
+             <param name="stream">The stream which will be read or written.</param>
+             <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel)">
+             <summary>
+               Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c> and
+               the specified <c>CompressionLevel</c>.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               When mode is <c>CompressionMode.Decompress</c>, the level parameter is ignored.
+               The "captive" stream will be closed when the <c>ZlibStream</c> is closed.
+             </para>
+            
+             </remarks>
+            
+             <example>
+               This example uses a <c>ZlibStream</c> to compress data from a file, and writes the
+               compressed data to another file.
+            
+             <code>
+             using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+             {
+                 using (var raw = System.IO.File.Create(fileToCompress + ".zlib"))
+                 {
+                     using (Stream compressor = new ZlibStream(raw,
+                                                               CompressionMode.Compress,
+                                                               CompressionLevel.BestCompression))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n;
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+             }
+             </code>
+            
+             <code lang="VB">
+             Using input As Stream = File.OpenRead(fileToCompress)
+                 Using raw As FileStream = File.Create(fileToCompress &amp; ".zlib")
+                     Using compressor As Stream = New ZlibStream(raw, CompressionMode.Compress, CompressionLevel.BestCompression)
+                         Dim buffer As Byte() = New Byte(4096) {}
+                         Dim n As Integer = -1
+                         Do While (n &lt;&gt; 0)
+                             If (n &gt; 0) Then
+                                 compressor.Write(buffer, 0, n)
+                             End If
+                             n = input.Read(buffer, 0, buffer.Length)
+                         Loop
+                     End Using
+                 End Using
+             End Using
+             </code>
+             </example>
+            
+             <param name="stream">The stream to be read or written while deflating or inflating.</param>
+             <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+             <param name="level">A tuning knob to trade speed for effectiveness.</param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,System.Boolean)">
+             <summary>
+               Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c>, and
+               explicitly specify whether the captive stream should be left open after
+               Deflation or Inflation.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               When mode is <c>CompressionMode.Compress</c>, the <c>ZlibStream</c> will use
+               the default compression level.
+             </para>
+            
+             <para>
+               This constructor allows the application to request that the captive stream
+               remain open after the deflation or inflation occurs.  By default, after
+               <c>Close()</c> is called on the stream, the captive stream is also
+               closed. In some cases this is not desired, for example if the stream is a
+               <see cref="T:System.IO.MemoryStream"/> that will be re-read after
+               compression.  Specify true for the <paramref name="leaveOpen"/> parameter to leave the stream
+               open.
+             </para>
+            
+             <para>
+             See the other overloads of this constructor for example code.
+             </para>
+            
+             </remarks>
+            
+             <param name="stream">The stream which will be read or written. This is called the
+             "captive" stream in other places in this documentation.</param>
+             <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+             <param name="leaveOpen">true if the application would like the stream to remain
+             open after inflation/deflation.</param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)">
+             <summary>
+               Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c>
+               and the specified <c>CompressionLevel</c>, and explicitly specify
+               whether the stream should be left open after Deflation or Inflation.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               This constructor allows the application to request that the captive
+               stream remain open after the deflation or inflation occurs.  By
+               default, after <c>Close()</c> is called on the stream, the captive
+               stream is also closed. In some cases this is not desired, for example
+               if the stream is a <see cref="T:System.IO.MemoryStream"/> that will be
+               re-read after compression.  Specify true for the <paramref name="leaveOpen"/> parameter to leave the stream open.
+             </para>
+            
+             <para>
+               When mode is <c>CompressionMode.Decompress</c>, the level parameter is
+               ignored.
+             </para>
+            
+             </remarks>
+            
+             <example>
+            
+             This example shows how to use a ZlibStream to compress the data from a file,
+             and store the result into another file. The filestream remains open to allow
+             additional data to be written to it.
+            
+             <code>
+             using (var output = System.IO.File.Create(fileToCompress + ".zlib"))
+             {
+                 using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+                 {
+                     using (Stream compressor = new ZlibStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, true))
+                     {
+                         byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                         int n;
+                         while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+                         {
+                             compressor.Write(buffer, 0, n);
+                         }
+                     }
+                 }
+                 // can write additional data to the output stream here
+             }
+             </code>
+             <code lang="VB">
+             Using output As FileStream = File.Create(fileToCompress &amp; ".zlib")
+                 Using input As Stream = File.OpenRead(fileToCompress)
+                     Using compressor As Stream = New ZlibStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, True)
+                         Dim buffer As Byte() = New Byte(4096) {}
+                         Dim n As Integer = -1
+                         Do While (n &lt;&gt; 0)
+                             If (n &gt; 0) Then
+                                 compressor.Write(buffer, 0, n)
+                             End If
+                             n = input.Read(buffer, 0, buffer.Length)
+                         Loop
+                     End Using
+                 End Using
+                 ' can write additional data to the output stream here.
+             End Using
+             </code>
+             </example>
+            
+             <param name="stream">The stream which will be read or written.</param>
+            
+             <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+            
+             <param name="leaveOpen">
+             true if the application would like the stream to remain open after
+             inflation/deflation.
+             </param>
+            
+             <param name="level">
+             A tuning knob to trade speed for effectiveness. This parameter is
+             effective only when mode is <c>CompressionMode.Compress</c>.
+             </param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.Dispose(System.Boolean)">
+            <summary>
+              Dispose the stream.
+            </summary>
+            <remarks>
+              <para>
+                This may or may not result in a <c>Close()</c> call on the captive
+                stream.  See the constructors that have a <c>leaveOpen</c> parameter
+                for more information.
+              </para>
+              <para>
+                This method may be invoked in two distinct scenarios.  If disposing
+                == true, the method has been called directly or indirectly by a
+                user's code, for example via the public Dispose() method. In this
+                case, both managed and unmanaged resources can be referenced and
+                disposed.  If disposing == false, the method has been called by the
+                runtime from inside the object finalizer and this method should not
+                reference other objects; in that case only unmanaged resources must
+                be referenced or disposed.
+              </para>
+            </remarks>
+            <param name="disposing">
+              indicates whether the Dispose method was invoked by user code.
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.Flush">
+            <summary>
+            Flush the stream.
+            </summary>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.Read(System.Byte[],System.Int32,System.Int32)">
+             <summary>
+             Read data from the stream.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               If you wish to use the <c>ZlibStream</c> to compress data while reading,
+               you can create a <c>ZlibStream</c> with <c>CompressionMode.Compress</c>,
+               providing an uncompressed data stream.  Then call <c>Read()</c> on that
+               <c>ZlibStream</c>, and the data read will be compressed.  If you wish to
+               use the <c>ZlibStream</c> to decompress data while reading, you can create
+               a <c>ZlibStream</c> with <c>CompressionMode.Decompress</c>, providing a
+               readable compressed data stream.  Then call <c>Read()</c> on that
+               <c>ZlibStream</c>, and the data will be decompressed as it is read.
+             </para>
+            
+             <para>
+               A <c>ZlibStream</c> can be used for <c>Read()</c> or <c>Write()</c>, but
+               not both.
+             </para>
+            
+             </remarks>
+            
+             <param name="buffer">
+             The buffer into which the read data should be placed.</param>
+            
+             <param name="offset">
+             the offset within that data array to put the first byte read.</param>
+            
+             <param name="count">the number of bytes to read.</param>
+            
+             <returns>the number of bytes read</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.Seek(System.Int64,System.IO.SeekOrigin)">
+             <summary>
+             Calling this method always throws a <see cref="T:System.NotSupportedException"/>.
+             </summary>
+             <param name="offset">
+               The offset to seek to....
+               IF THIS METHOD ACTUALLY DID ANYTHING.
+             </param>
+             <param name="origin">
+               The reference specifying how to apply the offset....  IF
+               THIS METHOD ACTUALLY DID ANYTHING.
+             </param>
+            
+             <returns>nothing. This method always throws.</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.SetLength(System.Int64)">
+            <summary>
+            Calling this method always throws a <see cref="T:System.NotSupportedException"/>.
+            </summary>
+            <param name="value">
+              The new value for the stream length....  IF
+              THIS METHOD ACTUALLY DID ANYTHING.
+            </param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.Write(System.Byte[],System.Int32,System.Int32)">
+             <summary>
+             Write data to the stream.
+             </summary>
+            
+             <remarks>
+            
+             <para>
+               If you wish to use the <c>ZlibStream</c> to compress data while writing,
+               you can create a <c>ZlibStream</c> with <c>CompressionMode.Compress</c>,
+               and a writable output stream.  Then call <c>Write()</c> on that
+               <c>ZlibStream</c>, providing uncompressed data as input.  The data sent to
+               the output stream will be the compressed form of the data written.  If you
+               wish to use the <c>ZlibStream</c> to decompress data while writing, you
+               can create a <c>ZlibStream</c> with <c>CompressionMode.Decompress</c>, and a
+               writable output stream.  Then call <c>Write()</c> on that stream,
+               providing previously compressed data. The data sent to the output stream
+               will be the decompressed form of the data written.
+             </para>
+            
+             <para>
+               A <c>ZlibStream</c> can be used for <c>Read()</c> or <c>Write()</c>, but not both.
+             </para>
+             </remarks>
+             <param name="buffer">The buffer holding data to write to the stream.</param>
+             <param name="offset">the offset within that data array to find the first byte to write.</param>
+             <param name="count">the number of bytes to write.</param>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.CompressString(System.String)">
+             <summary>
+               Compress a string into a byte array using ZLIB.
+             </summary>
+            
+             <remarks>
+               Uncompress it with <see cref="M:Ionic.Zlib.ZlibStream.UncompressString(System.Byte[])"/>.
+             </remarks>
+            
+             <seealso cref="M:Ionic.Zlib.ZlibStream.UncompressString(System.Byte[])"/>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.CompressBuffer(System.Byte[])"/>
+             <seealso cref="M:Ionic.Zlib.GZipStream.CompressString(System.String)"/>
+            
+             <param name="s">
+               A string to compress.  The string will first be encoded
+               using UTF8, then compressed.
+             </param>
+            
+             <returns>The string in compressed form</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.CompressBuffer(System.Byte[])">
+             <summary>
+               Compress a byte array into a new byte array using ZLIB.
+             </summary>
+            
+             <remarks>
+               Uncompress it with <see cref="M:Ionic.Zlib.ZlibStream.UncompressBuffer(System.Byte[])"/>.
+             </remarks>
+            
+             <seealso cref="M:Ionic.Zlib.ZlibStream.CompressString(System.String)"/>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.UncompressBuffer(System.Byte[])"/>
+            
+             <param name="b">
+             A buffer to compress.
+             </param>
+            
+             <returns>The data in compressed form</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.UncompressString(System.Byte[])">
+             <summary>
+               Uncompress a ZLIB-compressed byte array into a single string.
+             </summary>
+            
+             <seealso cref="M:Ionic.Zlib.ZlibStream.CompressString(System.String)"/>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.UncompressBuffer(System.Byte[])"/>
+            
+             <param name="compressed">
+               A buffer containing ZLIB-compressed data.
+             </param>
+            
+             <returns>The uncompressed string</returns>
+        </member>
+        <member name="M:Ionic.Zlib.ZlibStream.UncompressBuffer(System.Byte[])">
+             <summary>
+               Uncompress a ZLIB-compressed byte array into a byte array.
+             </summary>
+            
+             <seealso cref="M:Ionic.Zlib.ZlibStream.CompressBuffer(System.Byte[])"/>
+             <seealso cref="M:Ionic.Zlib.ZlibStream.UncompressString(System.Byte[])"/>
+            
+             <param name="compressed">
+               A buffer containing ZLIB-compressed data.
+             </param>
+            
+             <returns>The data in uncompressed form</returns>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.FlushMode">
+            <summary>
+            This property sets the flush behavior on the stream.
+            Sorry, though, not sure exactly how to describe all the various settings.
+            </summary>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.BufferSize">
+             <summary>
+               The size of the working buffer for the compression codec.
+             </summary>
+            
+             <remarks>
+             <para>
+               The working buffer is used for all stream operations.  The default size is
+               1024 bytes. The minimum size is 128 bytes. You may get better performance
+               with a larger buffer.  Then again, you might not.  You would have to test
+               it.
+             </para>
+            
+             <para>
+               Set this before the first call to <c>Read()</c> or <c>Write()</c> on the
+               stream. If you try to set it afterwards, it will throw.
+             </para>
+             </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.TotalIn">
+            <summary> Returns the total number of bytes input so far.</summary>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.TotalOut">
+            <summary> Returns the total number of bytes output so far.</summary>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.CanRead">
+            <summary>
+            Indicates whether the stream can be read.
+            </summary>
+            <remarks>
+            The return value depends on whether the captive stream supports reading.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.CanSeek">
+            <summary>
+            Indicates whether the stream supports Seek operations.
+            </summary>
+            <remarks>
+            Always returns false.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.CanWrite">
+            <summary>
+            Indicates whether the stream can be written.
+            </summary>
+            <remarks>
+            The return value depends on whether the captive stream supports writing.
+            </remarks>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.Length">
+            <summary>
+            Reading this property always throws a <see cref="T:System.NotSupportedException"/>.
+            </summary>
+        </member>
+        <member name="P:Ionic.Zlib.ZlibStream.Position">
+             <summary>
+               The position of the stream pointer.
+             </summary>
+            
+             <remarks>
+               Setting this property always throws a <see cref="T:System.NotSupportedException"/>. Reading will return the total bytes
+               written out, if used in writing, or the total bytes read in, if used in
+               reading.  The count may refer to compressed bytes or uncompressed bytes,
+               depending on how you've used the stream.
+             </remarks>
+        </member>
+    </members>
+</doc>
