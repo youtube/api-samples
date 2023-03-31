@@ -12,7 +12,6 @@ import argparse
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-
 # Set DEVELOPER_KEY to the API key value from the APIs & auth > Registered apps
 # tab of
 #   https://cloud.google.com/console
@@ -53,7 +52,6 @@ def youtube_search(options):
   print 'Videos:\n', '\n'.join(videos), '\n'
   print 'Channels:\n', '\n'.join(channels), '\n'
   print 'Playlists:\n', '\n'.join(playlists), '\n'
-
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
