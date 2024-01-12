@@ -1,0 +1,85 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "InsertLiveChatMessage",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.live.InsertLiveChatMessage",
+            "projectName": "samples"
+        },
+        {
+            "type": "java",
+            "name": "GetLiveChatId",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.live.GetLiveChatId",
+            "projectName": "samples"
+        },
+        {
+            "type": "java",
+            "name": "CreateBroadcast",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.live.CreateBroadcast",
+            "projectName": "samples"
+        },
+        {
+            "type": "java",
+            "name": "Quickstart",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.data.Quickstart",
+            "projectName": "samples"
+        },
+        {
+            "type": "java",
+            "name": "CommentThreads",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.data.CommentThreads",
+            "projectName": "samples"
+        },
+        {
+            "type": "java",
+            "name": "Captions",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.data.Captions",
+            "projectName": "samples"
+        },
+        {
+            "type": "java",
+            "name": "AddSubscription",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.data.AddSubscription",
+            "projectName": "samples"
+        },
+        {
+            "type": "java",
+            "name": "YouTubeAnalyticsReports",
+            "request": "launch",
+            "mainClass": "com.google.api.services.samples.youtube.cmdline.analytics.YouTubeAnalyticsReports",
+            "projectName": "samples"
+        },
+        {
+            "name": "Cloud Run: Run/Debug Locally",
+            "type": "cloudcode.cloudrun",
+            "request": "launch",
+            "build": {
+                "buildpacks": {
+                    "path": "dotnet/dotnet.csproj",
+                    "builder": "gcr.io/buildpacks/builder:v1"
+                }
+            },
+            "image": "api-samples",
+            "service": {
+                "name": "api-samples",
+                "containerPort": 8080,
+                "resources": {
+                    "limits": {
+                        "memory": "256Mi"
+                    }
+                }
+            },
+            "target": {
+                "minikube": {}
+            },
+            "watch": true
+        }
+    ]
+}

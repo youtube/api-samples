@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "demo",
+			"path": "../analytics/demo"
+		},
+		{
+			"path": "../../../../../../../../../../../.."
+		}
+	],
+	"settings": {
+		"java.compile.nullAnalysis.mode": "automatic",
+		"dotnet.preferCSharpExtension": true
+	}
+}

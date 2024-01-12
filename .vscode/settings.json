@@ -1,0 +1,9 @@
+{
+    "dotnet.preferCSharpExtension": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "githubPullRequests.ignoredPullRequestBranches": [
+        "master"
+    ]
+}
