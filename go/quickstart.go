@@ -105,7 +105,7 @@ func handleError(err error, message string) {
 }
 
 func channelsListByUsername(service *youtube.Service, part string, forUsername string) {
-  call := service.Channels.List(part)
+  call := service.Channels.List([]string{part})
   call = call.ForUsername(forUsername)
   response, err := call.Do()
   handleError(err, "")
