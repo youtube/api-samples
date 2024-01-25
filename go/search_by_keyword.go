@@ -18,19 +18,14 @@ var (
 const developerKey = "YOUR DEVELOPER KEY"
 
 func main() {
-	flag.Parse()
-
-	client := &http.Client{
-		Transport: &transport.APIKey{Key: developerKey},
-	}
-
-	service, err := youtube.New(client)
+	ctx := context.Background()
+	service, err := youtube.NewService(ctx, option.WithAPIKey(developerKey))
 	if err != nil {
 		log.Fatalf("Error creating new YouTube client: %v", err)
 	}
 
 	// Make the API call to YouTube.
-	call := service.Search.List("id,snippet").
+	call := service.Search.List([]string{"id", "snippet"}).
 		Q(*query).
 		MaxResults(*maxResults)
 	response, err := call.Do()
