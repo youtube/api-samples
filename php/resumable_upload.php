@@ -1,29 +1,29 @@
 <?php
 
 /**
- * Library Requirements
+ * Requisitos de la biblioteca
  *
- * 1. Install composer (https://getcomposer.org)
- * 2. On the command line, change to this directory (api-samples/php)
- * 3. Require the google/apiclient library
+ * 1. Instalar composer (https://getcomposer.org)
+ * 2. En la línea de comandos, cambiar a este directorio (api-samples/php)
+ * 3. Requerir la biblioteca google/apiclient
  *    $ composer require google/apiclient:~2.0
  */
 if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
-  throw new \Exception('please run "composer require google/apiclient:~2.0" in "' . __DIR__ .'"');
+  throw new \Exception('Por favor, ejecuta "composer require google/apiclient:~2.0" en "' . __DIR__ .'"');
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 
 /*
- * You can acquire an OAuth 2.0 client ID and client secret from the
+ * Puedes obtener un ID de cliente y un secreto de cliente OAuth 2.0 desde
  * {{ Google Cloud Console }} <{{ https://cloud.google.com/console }}>
- * For more information about using OAuth 2.0 to access Google APIs, please see:
+ * Para obtener más información sobre cómo usar OAuth 2.0 para acceder a las API de Google, consulta:
  * <https://developers.google.com/youtube/v3/guides/authentication>
- * Please ensure that you have enabled the YouTube Data API for your project.
+ * Asegúrate de haber habilitado la API de datos de YouTube para tu proyecto.
  */
-$OAUTH2_CLIENT_ID = 'REPLACE_ME';
-$OAUTH2_CLIENT_SECRET = 'REPLACE_ME';
+$OAUTH2_CLIENT_ID = 'REEMPLAZAR';
+$OAUTH2_CLIENT_SECRET = 'REEMPLAZAR';
 
 $client = new Google_Client();
 $client->setClientId($OAUTH2_CLIENT_ID);
@@ -33,14 +33,14 @@ $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],
     FILTER_SANITIZE_URL);
 $client->setRedirectUri($redirect);
 
-// Define an object that will be used to make all API requests.
+// Define un objeto que se utilizará para realizar todas las solicitudes a la API.
 $youtube = new Google_Service_YouTube($client);
 
-// Check if an auth token exists for the required scopes
+// Verifica si existe un token de autenticación para los ámbitos requeridos.
 $tokenSessionKey = 'token-' . $client->prepareScopes();
 if (isset($_GET['code'])) {
   if (strval($_SESSION['state']) !== strval($_GET['state'])) {
-    die('The session state did not match.');
+    die('El estado de la sesión no coincide.');
   }
 
   $client->authenticate($_GET['code']);
@@ -52,49 +52,49 @@ if (isset($_SESSION[$tokenSessionKey])) {
   $client->setAccessToken($_SESSION[$tokenSessionKey]);
 }
 
-// Check to ensure that the access token was successfully acquired.
+// Verifica que se haya adquirido el token de acceso con éxito.
 if ($client->getAccessToken()) {
   $htmlBody = '';
   try{
-    // REPLACE this value with the path to the file you are uploading.
-    $videoPath = "/path/to/file.mp4";
+    // REEMPLAZAR este valor con la ruta al archivo que estás subiendo.
+    $videoPath = "/ruta/al/archivo.mp4";
 
-    // Create a snippet with title, description, tags and category ID
-    // Create an asset resource and set its snippet metadata and type.
-    // This example sets the video's title, description, keyword tags, and
-    // video category.
+    // Crea un fragmento con título, descripción, etiquetas e ID de categoría.
+    // Crea un recurso de activo y establece su metadatos y tipo de fragmento.
+    // Este ejemplo establece el título, la descripción, las etiquetas y
+    // la categoría del video.
     $snippet = new Google_Service_YouTube_VideoSnippet();
-    $snippet->setTitle("Test title");
-    $snippet->setDescription("Test description");
-    $snippet->setTags(array("tag1", "tag2"));
+    $snippet->setTitle("Título de prueba");
+    $snippet->setDescription("Descripción de prueba");
+    $snippet->setTags(array("etiqueta1", "etiqueta2"));
 
-    // Numeric video category. See
+    // ID numérico de la categoría del video. Consulta
     // https://developers.google.com/youtube/v3/docs/videoCategories/list
     $snippet->setCategoryId("22");
 
-    // Set the video's status to "public". Valid statuses are "public",
-    // "private" and "unlisted".
+    // Establece el estado del video como "público". Los estados válidos son "público",
+    // "privado" y "no listado".
     $status = new Google_Service_YouTube_VideoStatus();
-    $status->privacyStatus = "public";
+    $status->privacyStatus = "público";
 
-    // Associate the snippet and status objects with a new video resource.
+    // Asocia los objetos de fragmento y estado con un nuevo recurso de video.
     $video = new Google_Service_YouTube_Video();
     $video->setSnippet($snippet);
     $video->setStatus($status);
 
-    // Specify the size of each chunk of data, in bytes. Set a higher value for
-    // reliable connection as fewer chunks lead to faster uploads. Set a lower
-    // value for better recovery on less reliable connections.
+    // Especifica el tamaño de cada fragmento de datos, en bytes. Establece un valor más alto para
+    // una conexión más confiable, ya que menos fragmentos conducen a una carga más rápida. Establece un valor más bajo
+    // para una mejor recuperación en conexiones menos confiables.
     $chunkSizeBytes = 1 * 1024 * 1024;
 
-    // Setting the defer flag to true tells the client to return a request which can be called
-    // with ->execute(); instead of making the API call immediately.
+    // Establecer la bandera de diferir en true indica al cliente que devuelva una solicitud que se puede llamar
+    // con ->execute(); en lugar de realizar la llamada a la API inmediatamente.
     $client->setDefer(true);
 
-    // Create a request for the API's videos.insert method to create and upload the video.
-    $insertRequest = $youtube->videos->insert("status,snippet", $video);
+    // Crea una solicitud para el método videos.insert de la API para crear y cargar el video.
+    $insertRequest = $youtube->videos->insert("estado,fragmento", $video);
 
-    // Create a MediaFileUpload object for resumable uploads.
+    // Crea un objeto MediaFileUpload para cargas resumibles.
     $media = new Google_Http_MediaFileUpload(
         $client,
         $insertRequest,
@@ -105,8 +105,7 @@ if ($client->getAccessToken()) {
     );
     $media->setFileSize(filesize($videoPath));
 
-
-    // Read the media file and upload it chunk by chunk.
+    // Lee el archivo multimedia y cárgalo fragmento por fragmento.
     $status = false;
     $handle = fopen($videoPath, "rb");
     while (!$status && !feof($handle)) {
@@ -116,44 +115,138 @@ if ($client->getAccessToken()) {
 
     fclose($handle);
 
-    // If you want to make other calls after the file upload, set setDefer back to false
+    // Si deseas realizar otras llamadas después de la carga del archivo, establece setDefer de nuevo en false.
     $client->setDefer(false);
 
-
-    $htmlBody .= "<h3>Video Uploaded</h3><ul>";
+    $htmlBody .= "<h3>Video cargado</h3><ul>";
     $htmlBody .= sprintf('<li>%s (%s)</li>',
-        $status['snippet']['title'],
+        $status['fragmento']['título'],
         $status['id']);
 
     $htmlBody .= '</ul>';
 
   } catch (Google_Service_Exception $e) {
-    $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
+    $htmlBody .= sprintf('<p>Ocurrió un error del servicio: <code>%s</code></p>',
         htmlspecialchars($e->getMessage()));
   } catch (Google_Exception $e) {
-    $htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
+    $htmlBody .= sprintf('<p>Ocurrió un error del cliente: <code>%s</code></p>',
+        htmlspecialchars($e->getMessage()));
+  }<?php
+
+// ... (código anterior)
+
+// Verifica si el usuario ha autorizado la aplicación
+if ($client->getAccessToken()) {
+  $htmlBody = '';
+  try {
+    // Ruta al archivo de video que se cargará
+    $videoPath = "/ruta/al/archivo.mp4";
+
+    // Crea un objeto de fragmento con metadatos del video
+    $snippet = new Google_Service_YouTube_VideoSnippet();
+    $snippet->setTitle("Título de prueba");
+    $snippet->setDescription("Descripción de prueba");
+    $snippet->setTags(array("etiqueta1", "etiqueta2"));
+    $snippet->setCategoryId("22"); // ID numérico de la categoría del video (ver la documentación)
+
+    // Crea un objeto de estado del video y establece la privacidad como "público"
+    $status = new Google_Service_YouTube_VideoStatus();
+    $status->privacyStatus = "public";
+
+    // Asocia los objetos de fragmento y estado con un nuevo recurso de video
+    $video = new Google_Service_YouTube_Video();
+    $video->setSnippet($snippet);
+    $video->setStatus($status);
+
+    // Configura el tamaño de cada fragmento para la carga en partes
+    $chunkSizeBytes = 1 * 1024 * 1024;
+
+    // Habilita la opción de diferir para obtener una solicitud que se puede ejecutar más adelante
+    $client->setDefer(true);
+
+    // Crea una solicitud para el método videos.insert de la API para crear y cargar el video
+    $insertRequest = $youtube->videos->insert("status,snippet", $video);
+
+    // Crea un objeto MediaFileUpload para las cargas en partes
+    $media = new Google_Http_MediaFileUpload(
+        $client,
+        $insertRequest,
+        'video/*',
+        null,
+        true,
+        $chunkSizeBytes
+    );
+    $media->setFileSize(filesize($videoPath));
+
+    // Lee el archivo de video y cárgalo en partes
+    $status = false;
+    $handle = fopen($videoPath, "rb");
+    while (!$status && !feof($handle)) {
+      $chunk = fread($handle, $chunkSizeBytes);
+      $status = $media->nextChunk($chunk);
+    }
+
+    fclose($handle);
+
+    // Si se desean realizar otras llamadas después de cargar el archivo, establecer setDefer nuevamente en false
+    $client->setDefer(false);
+
+    // Mensaje de éxito y detalles del video cargado
+    $htmlBody .= "<h3>Video cargado</h3><ul>";
+    $htmlBody .= sprintf('<li>%s (%s)</li>',
+        $status['snippet']['title'],
+        $status['id']);
+    $htmlBody .= '</ul>';
+
+  } catch (Google_Service_Exception $e) {
+    // Manejo de errores del servicio
+    $htmlBody .= sprintf('<p>Ocurrió un error del servicio: <code>%s</code></p>',
+        htmlspecialchars($e->getMessage()));
+  } catch (Google_Exception $e) {
+    // Manejo de errores del cliente
+    $htmlBody .= sprintf('<p>Ocurrió un error del cliente: <code>%s</code></p>',
         htmlspecialchars($e->getMessage()));
   }
 
+  // Almacena el token de acceso en la sesión
   $_SESSION[$tokenSessionKey] = $client->getAccessToken();
-} elseif ($OAUTH2_CLIENT_ID == 'REPLACE_ME') {
+} elseif ($OAUTH2_CLIENT_ID == 'REEMPLAZAR') {
+  // Mensaje si las credenciales del cliente no se han configurado
   $htmlBody = <<<END
-  <h3>Client Credentials Required</h3>
+  <h3>Se requieren credenciales del cliente</h3>
   <p>
-    You need to set <code>\$OAUTH2_CLIENT_ID</code> and
-    <code>\$OAUTH2_CLIENT_ID</code> before proceeding.
+    Necesitas establecer <code>\$OAUTH2_CLIENT_ID</code> y
+    <code>\$OAUTH2_CLIENT_ID</code> antes de continuar.
   <p>
 END;
 } else {
-  // If the user hasn't authorized the app, initiate the OAuth flow
+  // Si el usuario no ha autorizado la aplicación, inicia el flujo de OAuth
+  $state = mt_rand();
+  $client->setState($state);
+  $_SESSION['state'] = $state;
+
+  // Genera la URL de autorización y proporciona un enlace para que el usuario la apruebe
+  $authUrl = $client->createAuthUrl();
+  $htmlBody = <<<END
+  <h3>Se requiere autorización</h3>
+  <p>Necesitas <a href="$authUrl">autorizar el acceso</a> antes de continuar.<p>
+END;
+}
+
+
+
+
+
+} else {
+  // Si el usuario no ha autorizado la aplicación, inicia el flujo de OAuth
   $state = mt_rand();
   $client->setState($state);
   $_SESSION['state'] = $state;
 
   $authUrl = $client->createAuthUrl();
   $htmlBody = <<<END
-  <h3>Authorization Required</h3>
-  <p>You need to <a href="$authUrl">authorize access</a> before proceeding.<p>
+  <h3>Se requiere autorización</h3>
+  <p>Necesitas <a href="$authUrl">autorizar el acceso</a> antes de continuar.<p>
 END;
 }
 ?>
@@ -161,7 +254,7 @@ END;
 <!doctype html>
 <html>
 <head>
-<title>Video Uploaded</title>
+<title>Video Cargado</title>
 </head>
 <body>
   <?=$htmlBody?>
