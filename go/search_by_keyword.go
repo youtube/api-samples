@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"net/http"
 
-	"google.golang.org/api/googleapi/transport"
+	"golang.org/x/net/context"
+	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )
 
@@ -20,11 +20,7 @@ const developerKey = "YOUR DEVELOPER KEY"
 func main() {
 	flag.Parse()
 
-	client := &http.Client{
-		Transport: &transport.APIKey{Key: developerKey},
-	}
-
-	service, err := youtube.New(client)
+	service, err := youtube.NewService(context.Background(), option.WithAPIKey(developerKey))
 	if err != nil {
 		log.Fatalf("Error creating new YouTube client: %v", err)
 	}
